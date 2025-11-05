@@ -32,10 +32,11 @@ function handleError(error: unknown) {
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const hackathon = await getHackathonById(params.id);
+    const { id } = await context.params;
+    const hackathon = await getHackathonById(id);
     return NextResponse.json({ data: hackathon });
   } catch (error) {
     return handleError(error);
@@ -44,7 +45,7 @@ export async function GET(
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const authResult = verifyAdminRequest(request);
   if (authResult) {
@@ -53,9 +54,10 @@ export async function PATCH(
 
   try {
     const body = await request.json();
+    const { id } = await context.params;
     const hackathon = await updateHackathon({
       ...body,
-      id: params.id
+      id
     });
 
     return NextResponse.json({ data: hackathon });
@@ -66,7 +68,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const authResult = verifyAdminRequest(request);
   if (authResult) {
@@ -74,7 +76,8 @@ export async function DELETE(
   }
 
   try {
-    await deleteHackathon(params.id);
+    const { id } = await context.params;
+    await deleteHackathon(id);
     return NextResponse.json({ success: true });
   } catch (error) {
     return handleError(error);

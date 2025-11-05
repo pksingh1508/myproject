@@ -18,13 +18,14 @@ import { HackathonRegistrationButton } from "@/components/registration";
 export const revalidate = 120;
 
 interface HackathonPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({
   params
 }: HackathonPageProps): Promise<Metadata> {
-  const hackathon = await getHackathonBySlug(params.slug).catch(() => null);
+  const { slug } = await params;
+  const hackathon = await getHackathonBySlug(slug).catch(() => null);
 
   if (!hackathon) {
     return {
@@ -48,7 +49,8 @@ export async function generateMetadata({
 }
 
 export default async function HackathonPage({ params }: HackathonPageProps) {
-  const hackathon = await getHackathonBySlug(params.slug).catch(() => null);
+  const { slug } = await params;
+  const hackathon = await getHackathonBySlug(slug).catch(() => null);
 
   if (!hackathon) {
     notFound();

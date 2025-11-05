@@ -50,7 +50,7 @@ function handleError(error: unknown) {
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   let body: unknown;
 
@@ -64,11 +64,13 @@ export async function POST(
   }
 
   try {
+    const { id: hackathonId } = await context.params;
+
     const { profile } = await requireUserProfile({
       requireCompleteProfile: true
     });
 
-    const hackathon = await getHackathonById(params.id);
+    const hackathon = await getHackathonById(hackathonId);
 
     if (!["published", "ongoing"].includes(hackathon.status)) {
       return NextResponse.json(
@@ -104,7 +106,7 @@ export async function POST(
     }
 
     const parsed = participantRegistrationSchema.parse({
-      hackathonId: params.id,
+      hackathonId,
       userId: profile.id,
       teamName: (body as { teamName?: string }).teamName ?? undefined,
       teamMembers: (body as { teamMembers?: unknown }).teamMembers

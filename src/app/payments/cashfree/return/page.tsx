@@ -3,16 +3,19 @@ import type { Metadata } from "next";
 import { CashfreeReturnHandler } from "@/components/payments/cashfree-return-handler";
 
 type CashfreeReturnPageProps = {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
 export const metadata: Metadata = {
   title: "Payment Verification | Hackathon Hub"
 };
 
-export default function CashfreeReturnPage({ searchParams }: CashfreeReturnPageProps) {
+export default async function CashfreeReturnPage({
+  searchParams
+}: CashfreeReturnPageProps) {
+  const params = await searchParams;
   const orderIdParam =
-    (searchParams.order_id ?? searchParams.orderId ?? null) as string | null;
+    (params.order_id ?? params.orderId ?? null) as string | null;
 
   return (
     <div className="px-4">

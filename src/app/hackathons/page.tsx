@@ -9,11 +9,11 @@ import type { HackathonFilterInput } from "@/lib/validation/hackathons";
 export const revalidate = 120;
 
 interface HackathonsPageProps {
-  searchParams?: {
+  searchParams?: Promise<{
     status?: string;
     themes?: string;
     search?: string;
-  };
+  }>;
 }
 
 const STATUS_PRESETS = [
@@ -34,9 +34,10 @@ const STATUS_PRESETS = [
 export default async function HackathonsPage({
   searchParams
 }: HackathonsPageProps) {
-  const activeStatus = searchParams?.status ?? "published,ongoing";
-  const themesValue = searchParams?.themes;
-  const searchValue = searchParams?.search;
+  const resolvedParams = searchParams ? await searchParams : undefined;
+  const activeStatus = resolvedParams?.status ?? "published,ongoing";
+  const themesValue = resolvedParams?.themes;
+  const searchValue = resolvedParams?.search;
 
   const statusFilter = activeStatus.split(",") as HackathonFilterInput["status"];
 
@@ -66,7 +67,7 @@ export default async function HackathonsPage({
         <div className="flex flex-wrap items-center gap-2">
           {STATUS_PRESETS.map((preset) => {
             const isActive = preset.value === activeStatus;
-            const href = new URLSearchParams(searchParams ?? {});
+            const href = new URLSearchParams(resolvedParams ?? {});
             href.set("status", preset.value);
             return (
               <Button

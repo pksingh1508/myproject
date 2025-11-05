@@ -8,11 +8,12 @@ import { getParticipantForUser } from "@/lib/repos/participants";
 
 export async function GET(
   _request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id: hackathonId } = await context.params;
     const { profile } = await requireUserProfile();
-    const participant = await getParticipantForUser(profile.id, params.id);
+    const participant = await getParticipantForUser(profile.id, hackathonId);
 
     if (!participant) {
       return NextResponse.json({ registered: false });
