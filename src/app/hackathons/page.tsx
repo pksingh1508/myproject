@@ -39,7 +39,9 @@ export default async function HackathonsPage({
   const themesValue = resolvedParams?.themes;
   const searchValue = resolvedParams?.search;
 
-  const statusFilter = activeStatus.split(",") as HackathonFilterInput["status"];
+  const statusFilter = activeStatus.split(
+    ","
+  ) as HackathonFilterInput["status"];
 
   const hackathons = await listHackathons({
     status: statusFilter,
@@ -82,9 +84,6 @@ export default async function HackathonsPage({
               </Button>
             );
           })}
-          <Button asChild variant="link" size="sm" className="ml-auto">
-            <Link href="/#cta">Host a hackathon</Link>
-          </Button>
         </div>
       </section>
 
