@@ -10,8 +10,9 @@ export function HeroSection() {
   const router = useRouter();
 
   return (
-    <section className="bg-background" style={brandSansStyle}>
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-10 px-4 py-20 text-center sm:px-6">
+    <section className="relative bg-background" style={brandSansStyle}>
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),transparent_40%)]" />
+      <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-10 px-4 pt-24 pb-20 text-center sm:px-6">
         <div className="space-y-6">
           <span className="inline-flex items-center rounded-full border border-border/80 bg-muted/60 px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
             Compete. Create. Celebrate.
@@ -44,7 +45,7 @@ export function HeroSection() {
           </BrandButton>
         </div>
 
-        <div className="grid gap-6 text-left sm:grid-cols-3">
+        <div className="grid gap-6 text-left sm:grid-cols-3 mt-0 md:mt-3">
           <CustomCard className="h-full bg-muted/40">
             <p className="text-base font-semibold text-foreground">
               Build with confidence

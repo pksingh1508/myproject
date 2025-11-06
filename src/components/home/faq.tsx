@@ -7,16 +7,24 @@ import {
   AccordionTrigger
 } from "@/components/ui/accordion";
 import { FAQ as FAQ_ENTRIES } from "@/constants/data";
+const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
+const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
 
 export function FAQ() {
   return (
-    <section className="w-full bg-background py-10 sm:py-24">
+    <section
+      className="w-full bg-background py-10 sm:py-10"
+      style={brandSansStyle}
+    >
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-10 px-4 sm:px-6 lg:px-8">
         <div className="space-y-3 text-center sm:text-left">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
             FAQs
           </p>
-          <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          <h2
+            className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
+            style={brandDisplayStyle}
+          >
             Answers to your most common questions
           </h2>
           <p className="mx-auto max-w-2xl text-sm text-muted-foreground sm:mx-0">

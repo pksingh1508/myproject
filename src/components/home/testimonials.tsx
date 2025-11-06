@@ -5,9 +5,7 @@ import Image from "next/image";
 import {
   Carousel,
   CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious
+  CarouselItem
 } from "@/components/ui/carousel";
 import {
   Card,
@@ -17,6 +15,8 @@ import {
   CardTitle
 } from "@/components/ui/card";
 import { TESTIMONIALS } from "@/constants/data";
+const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
+const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
 
 function truncateWords(text: string, maxWords = 200) {
   const words = text.trim().split(/\s+/);
@@ -28,13 +28,19 @@ function truncateWords(text: string, maxWords = 200) {
 
 export function Testimonials() {
   return (
-    <section className="w-full bg-background py-10 sm:py-24">
+    <section
+      className="w-full bg-background py-10 sm:py-10"
+      style={brandSansStyle}
+    >
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 sm:px-6 lg:px-8">
         <div className="space-y-3 text-center sm:text-left">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
             Voices from the community
           </p>
-          <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          <h2
+            className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
+            style={brandDisplayStyle}
+          >
             Builders love shipping with Hackathon Wallah
           </h2>
           <p className="mx-auto max-w-2xl text-sm text-muted-foreground sm:mx-0">

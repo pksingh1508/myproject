@@ -3,6 +3,8 @@
 import { ShieldCheckIcon, SparklesIcon, UsersIcon } from "lucide-react";
 
 import { CustomCard } from "@/components/layout";
+const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
+const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
 
 const reasons = [
   {
@@ -27,13 +29,19 @@ const reasons = [
 
 export function WhyChooseUs() {
   return (
-    <section className="w-full bg-background py-10 sm:py-24">
+    <section
+      className="w-full bg-background py-10 sm:py-10"
+      style={brandSansStyle}
+    >
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 sm:px-6">
         <div className="space-y-3 text-center sm:text-left">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
             Why choose us
           </p>
-          <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          <h2
+            className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
+            style={brandDisplayStyle}
+          >
             Everything you need to win hackathons that matter
           </h2>
           <p className="mx-auto max-w-2xl text-sm text-muted-foreground sm:mx-0">

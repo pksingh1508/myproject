@@ -7,8 +7,8 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const quickLinks = [
-  { label: "Upcoming hackathons", href: "/hackathons" },
-  { label: "FAQ", href: "/#faq" },
+  { label: "Hackathons", href: "/hackathons" },
+  { label: "About", href: "/about" },
   { label: "Notifications", href: "/notifications" },
   { label: "Contact", href: "/contact" }
 ];
@@ -21,9 +21,10 @@ const socialLinks = [
 ];
 
 const legalLinks = [
-  { label: "Terms of service", href: "/legal/terms" },
-  { label: "Privacy policy", href: "/legal/privacy" },
-  { label: "Cookies policy", href: "/legal/cookies" }
+  { label: "Terms & Conditions", href: "/terms-and-conditions" },
+  { label: "Privacy policy", href: "/privacy-policy" },
+  { label: "Refund Policy", href: "/refund-policy" },
+  { label: "Cancellation Policy", href: "/cancellation-policy" }
 ];
 
 const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
@@ -76,33 +77,32 @@ export function Footer() {
         <div className="relative overflow-hidden rounded-3xl border border-border/30 bg-[#0d0a24] px-8 py-12 shadow-[0_45px_120px_-50px_rgba(59,130,246,0.32)] sm:px-12">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_rgba(79,70,229,0.18),transparent_55%)]" />
 
-          <div className="relative grid gap-10 text-sm text-muted-foreground/85 sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+          <div className="relative grid gap-10 text-sm text-muted-foreground/85 sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:grid-cols-[minmax(0,1.8fr)_minmax(0,1fr)]">
             <div className="space-y-6">
               <div>
                 <button
                   type="button"
                   onClick={() => router.push("/")}
-                  className="text-left text-lg font-semibold tracking-tight text-white transition-colors hover:text-primary"
+                  className="text-left text-lg font-semibold tracking-tight text-white transition-colors cursor-pointer"
                   style={brandDisplayStyle}
                 >
                   HackathonWallah
                 </button>
-                <p className="mt-2 text-xs uppercase tracking-[0.35em] text-primary/70 font-semibold">
+                <p className="mt-2 text-xs uppercase tracking-[0.35em] text-gray-200 font-semibold">
                   Build. Submit. Win.
                 </p>
               </div>
-              <div className="space-y-2 text-sm">
+              <div className="space-y-2 text-sm text-gray-300">
                 <p>Workspace 42, Indiranagar</p>
                 <p>Bengaluru, Karnataka 560038</p>
                 <p>India</p>
               </div>
-              <div className="grid gap-1 text-sm text-muted-foreground/80">
+              <div className="grid gap-1 text-sm text-gray-300">
                 <p>
-                  <span className="text-muted-foreground/45">Phone:</span>{" "}
-                  +91-98765-43210
+                  <span className="text-gray-300">Phone:</span> +91-98765-43210
                 </p>
                 <p>
-                  <span className="text-muted-foreground/45">Email:</span>{" "}
+                  <span className="text-gray-300">Email:</span>{" "}
                   hello@hackathonwallah.com
                 </p>
               </div>
@@ -116,8 +116,11 @@ export function Footer() {
           </div>
 
           <div className="relative mt-12 border-t border-white/10 pt-6 text-center text-xs text-muted-foreground/60 sm:flex sm:items-center sm:justify-between">
-            <p>© {new Date().getFullYear()} HackathonWallah. All rights reserved.</p>
-            <p className="mt-2 sm:mt-0">Crafted for makers, backed by community.</p>
+            <p>
+              © {new Date().getFullYear()} HackathonWallah. All rights reserved.</p>
+            <p className="mt-2 sm:mt-0 text-muted-foreground/60">
+              Crafted for makers, backed by community.
+            </p>
           </div>
         </div>
       </div>
@@ -140,7 +143,7 @@ function Column({ heading, links, external }: ColumnProps) {
       >
         {heading}
       </p>
-      <ul className="space-y-2 text-sm text-muted-foreground/80">
+      <ul className="space-y-2 text-sm text-muted-foreground/60">
         {links.map((link) => (
           <li key={link.label}>
             <Link
@@ -157,4 +160,8 @@ function Column({ heading, links, external }: ColumnProps) {
     </div>
   );
 }
+
+
+
+
 

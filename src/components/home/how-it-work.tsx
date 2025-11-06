@@ -11,6 +11,8 @@ import {
 
 import { CustomCard } from "@/components/layout";
 import { cn } from "@/lib/utils";
+const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
+const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
 
 const steps = [
   {
@@ -108,13 +110,19 @@ export function HowItWork() {
   }, []);
 
   return (
-    <section className="w-full bg-background py-16 sm:py-24">
+    <section
+      className="w-full bg-background py-10 sm:py-10"
+      style={brandSansStyle}
+    >
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 sm:px-6">
         <div className="space-y-3 text-center sm:text-left">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
             How it works
           </p>
-          <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          <h2
+            className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
+            style={brandDisplayStyle}
+          >
             Ship your best work in five simple steps
           </h2>
           <p className="mx-auto max-w-2xl text-sm text-muted-foreground sm:mx-0">
