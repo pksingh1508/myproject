@@ -1,6 +1,7 @@
-'use client'
+"use client"
 
 import { useCallback, useMemo } from "react";
+import type { ReactNode } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -11,17 +12,24 @@ import {
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface ProfileFormProps {
   defaultValues: Partial<UserProfileUpdateInput>;
   onSubmit: (values: UserProfileUpdateInput) => Promise<void>;
   submitting: boolean;
+  fullWidthSubmitButton?: boolean;
+  submitButtonClassName?: string;
+  renderSubmitContent?: (options: { submitting: boolean }) => ReactNode;
 }
 
 export function ProfileForm({
   defaultValues,
   onSubmit,
-  submitting
+  submitting,
+  fullWidthSubmitButton = true,
+  submitButtonClassName,
+  renderSubmitContent
 }: ProfileFormProps) {
   const form = useForm<UserProfileUpdateInput>({
     resolver: zodResolver(userProfileUpdateSchema),
@@ -122,10 +130,18 @@ export function ProfileForm({
 
         <Button
           type="submit"
-          className="w-full"
+          className={cn(
+            fullWidthSubmitButton ? "w-full" : "px-6",
+            "flex items-center justify-center gap-2",
+            submitButtonClassName
+          )}
           disabled={submitting}
         >
-          {submitting ? "Saving..." : "Save profile"}
+          {renderSubmitContent
+            ? renderSubmitContent({ submitting })
+            : submitting
+              ? "Saving..."
+              : "Save profile"}
         </Button>
       </form>
     </Form>

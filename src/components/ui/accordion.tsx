@@ -1,15 +1,15 @@
 "use client"
+import * as React from "react";
+import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import { ChevronDownIcon } from "lucide-react";
+import { gsap } from "gsap";
 
-import * as React from "react"
-import * as AccordionPrimitive from "@radix-ui/react-accordion"
-import { ChevronDownIcon } from "lucide-react"
-
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 function Accordion({
   ...props
 }: React.ComponentProps<typeof AccordionPrimitive.Root>) {
-  return <AccordionPrimitive.Root data-slot="accordion" {...props} />
+  return <AccordionPrimitive.Root data-slot="accordion" {...props} />;
 }
 
 function AccordionItem({
@@ -22,7 +22,7 @@ function AccordionItem({
       className={cn("border-b last:border-b-0", className)}
       {...props}
     />
-  )
+  );
 }
 
 function AccordionTrigger({
@@ -44,23 +44,93 @@ function AccordionTrigger({
         <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
-  )
+  );
 }
 
-function AccordionContent({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<typeof AccordionPrimitive.Content>) {
+const AccordionContent = React.forwardRef<
+  React.ElementRef<typeof AccordionPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
+>(({ className, children, ...props }, forwardedRef) => {
+  const contentRef = React.useRef<HTMLDivElement | null>(null);
+  const animationRef = React.useRef<gsap.core.Tween | null>(null);
+
+  React.useImperativeHandle(forwardedRef, () => contentRef.current as HTMLDivElement);
+
+  React.useEffect(() => {
+    const content = contentRef.current;
+    if (!content) return;
+
+    content.style.overflow = "hidden";
+
+    const animate = () => {
+      animationRef.current?.kill();
+      const state = content.getAttribute("data-state");
+      const isOpen = state === "open";
+
+      if (isOpen) {
+        const height = content.scrollHeight;
+        animationRef.current = gsap.fromTo(
+          content,
+          { height: 0, opacity: 0 },
+          {
+            height,
+            opacity: 1,
+            duration: 0.35,
+            ease: "power2.out",
+            onComplete: () => {
+              if (content.getAttribute("data-state") === "open") {
+                content.style.height = "auto";
+              }
+            }
+          }
+        );
+      } else {
+        const currentHeight = content.scrollHeight;
+        content.style.height = `${currentHeight}px`;
+        animationRef.current = gsap.to(content, {
+          height: 0,
+          opacity: 0,
+          duration: 0.28,
+          ease: "power2.inOut",
+          onComplete: () => {
+            content.style.height = "0px";
+          }
+        });
+      }
+    };
+
+    const observer = new MutationObserver(() => animate());
+    observer.observe(content, {
+      attributes: true,
+      attributeFilter: ["data-state"]
+    });
+
+    // set initial state if rendered open
+    if (content.getAttribute("data-state") === "open") {
+      content.style.height = "auto";
+      content.style.opacity = "1";
+    } else {
+      content.style.height = "0px";
+      content.style.opacity = "0";
+    }
+
+    return () => {
+      observer.disconnect();
+      animationRef.current?.kill();
+    };
+  }, []);
+
   return (
     <AccordionPrimitive.Content
+      ref={contentRef}
       data-slot="accordion-content"
-      className="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm"
+      className="overflow-hidden text-sm"
       {...props}
     >
       <div className={cn("pt-0 pb-4", className)}>{children}</div>
     </AccordionPrimitive.Content>
-  )
-}
+  );
+});
+AccordionContent.displayName = AccordionPrimitive.Content.displayName;
 
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent }
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };

@@ -4,6 +4,9 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { PostHogProvider } from "./provider";
 import "./globals.css";
 import { SiteNavigation } from "@/components/navigation/site-navigation";
+import { Toaster } from "sonner";
+import ReactLenis from "lenis/react";
+import { fontVariables } from "./fonts";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,9 +19,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
+  ),
   title: {
-    default: "Hackathon Hub",
+    default: "Hackathon Wallah",
     template: "%s | Hackathon Hub"
   },
   description:
@@ -33,16 +38,21 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          <PostHogProvider>
-            <div className="flex min-h-screen flex-col bg-background">
-              <SiteNavigation />
-              <main className="flex-1">{children}</main>
-            </div>
-          </PostHogProvider>
-        </body>
+        <ReactLenis root>
+          <body
+            className={`${geistSans.variable} ${geistMono.variable} ${fontVariables} antialiased`}
+          >
+            <PostHogProvider>
+              <div className="flex min-h-screen flex-col bg-background">
+                <SiteNavigation />
+                <main className="flex-1">
+                  {children}
+                  <Toaster richColors position="top-right" />
+                </main>
+              </div>
+            </PostHogProvider>
+          </body>
+        </ReactLenis>
       </html>
     </ClerkProvider>
   );

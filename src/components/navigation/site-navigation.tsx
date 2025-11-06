@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -39,18 +39,16 @@ export function SiteNavigation() {
       className={cn(
         "sticky top-0 z-50 w-full border-b border-transparent transition-all duration-300 ease-out",
         isScrolled
-          ? "border-border bg-background/80 shadow-sm backdrop-blur-md"
+          ? "border-border bg-background/80 shadow-sm backdrop-blur-lg"
           : "bg-background/95"
       )}
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="group flex items-center gap-2 text-lg font-semibold tracking-tight text-foreground transition-transform duration-300 ease-out hover:scale-[1.02]"
+          className="group flex items-center gap-2 text-lg font-semibold tracking-tight text-foreground transition-transform duration-300 ease-out hover:scale-[1.02] rounded-full border border-border/60 bg-muted/40 px-3 py-1.5"
         >
-          <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-primary">
-            Hackathonwallah
-          </span>
+          <span>Hackathonwallah</span>
         </Link>
 
         <nav className="hidden gap-1 rounded-full border border-border/60 bg-muted/40 px-3 py-1.5 text-sm font-medium md:flex">
@@ -94,29 +92,39 @@ export function SiteNavigation() {
             </div>
           </SignedOut>
           <SignedIn>
-            <UserButton
-              appearance={{
-                elements: {
-                  userButtonAvatarBox: "size-9",
-                  userButtonOuterIdentifier: "text-sm"
-                }
-              }}
-              afterSignOutUrl="/"
-            />
+            <div className="flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-3 py-1.5">
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/profile">Profile</Link>
+              </Button>
+              <UserButton
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: "size-9",
+                    userButtonOuterIdentifier: "text-sm"
+                  }
+                }}
+                afterSignOutUrl="/"
+              />
+            </div>
           </SignedIn>
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
           <SignedIn>
-            <UserButton
-              appearance={{
-                elements: {
-                  userButtonAvatarBox: "size-8",
-                  userButtonOuterIdentifier: "text-sm"
-                }
-              }}
-              afterSignOutUrl="/"
-            />
+            <div className="flex items-center gap-2">
+              <Button asChild variant="ghost" size="sm">
+                <Link href="/profile">Profile</Link>
+              </Button>
+              <UserButton
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox: "size-8",
+                    userButtonOuterIdentifier: "text-sm"
+                  }
+                }}
+                afterSignOutUrl="/"
+              />
+            </div>
           </SignedIn>
           <Sheet>
             <SheetTrigger asChild>

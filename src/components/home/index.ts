@@ -1,0 +1,10 @@
+export { HomePage } from "./home-page";
+export { HeroSection } from "./hero-section";
+export { UpcomingHackathonsSection } from "./upcoming-hackathons-section";
+export { CallToActionSection } from "./call-to-action-section";
+export { WhatYouGet } from "./what-you-get";
+export { HowItWork } from "./how-it-work";
+export { WhyChooseUs } from "./why-choose-us";
+export { FAQ } from "./faq";
+export { Testimonials } from "./testimonials";
+export { Footer } from "./footer";
