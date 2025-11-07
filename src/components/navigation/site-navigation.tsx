@@ -80,14 +80,20 @@ export function SiteNavigation() {
 
         <div className="hidden items-center gap-2 md:flex">
           <SignedOut>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-3 py-1.5">
               <SignInButton mode="modal">
-                <Button variant="ghost" size="sm">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="hover:bg-gray-600 hover:text-gray-50 rounded-full transition-all duration-300"
+                >
                   Log in
                 </Button>
               </SignInButton>
               <SignUpButton mode="modal">
-                <Button size="sm">Sign up</Button>
+                <Button size="sm" className="bg-gray-700 rounded-full">
+                  Sign up
+                </Button>
               </SignUpButton>
             </div>
           </SignedOut>
