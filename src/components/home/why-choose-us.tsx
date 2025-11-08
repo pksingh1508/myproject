@@ -45,7 +45,7 @@ export function WhyChooseUs() {
             Everything you need to win hackathons that matter
           </h2>
           <p className="mx-auto max-w-2xl text-sm text-muted-foreground sm:mx-0">
-            Hackathon Hub blends pro-grade tooling with a community that
+            Hackathon Wallah blends pro-grade tooling with a community that
             genuinely wants to see you ship. Here’s what sets us apart.
           </p>
         </div>

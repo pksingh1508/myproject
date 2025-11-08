@@ -29,12 +29,12 @@ export async function generateMetadata({
 
   if (!hackathon) {
     return {
-      title: "Hackathon not found | Hackathon Hub"
+      title: "Hackathon not found | Hackathon Wallah"
     };
   }
 
   return {
-    title: `${hackathon.title} | Hackathon Hub`,
+    title: `${hackathon.title} | Hackathon Wallah`,
     description:
       hackathon.short_description ?? hackathon.description.slice(0, 160),
     openGraph: {

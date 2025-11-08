@@ -68,41 +68,40 @@ export function Footer() {
       className="relative w-full bg-background text-muted-foreground"
       style={brandSansStyle}
     >
-      <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-primary/10 via-transparent to-transparent blur-3xl" />
-
       <div
         ref={footerRef}
-        className="relative mx-auto w-full max-w-6xl px-4 pb-12 pt-6 sm:px-6 lg:px-8"
+        className="relative mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:px-8"
       >
-        <div className="relative overflow-hidden rounded-3xl border border-border/30 bg-[#0d0a24] px-8 py-12 shadow-[0_45px_120px_-50px_rgba(59,130,246,0.32)] sm:px-12">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_rgba(79,70,229,0.18),transparent_55%)]" />
+        <div className="relative overflow-hidden rounded-3xl border-5 border-border/80 bg-gray-50 px-8 py-12 shadow-[0_10px_40px_rgba(15,23,42,0.08)] backdrop-blur-lg sm:px-12">
+          {/* <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent" /> */}
 
-          <div className="relative grid gap-10 text-sm text-muted-foreground/85 sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:grid-cols-[minmax(0,1.8fr)_minmax(0,1fr)]">
+          <div className="relative grid gap-10 text-sm text-muted-foreground sm:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
             <div className="space-y-6">
               <div>
                 <button
                   type="button"
                   onClick={() => router.push("/")}
-                  className="text-left text-lg font-semibold tracking-tight text-white transition-colors cursor-pointer"
+                  className="text-left text-2xl font-semibold tracking-tight text-foreground transition-colors"
                   style={brandDisplayStyle}
                 >
                   HackathonWallah
                 </button>
-                <p className="mt-2 text-xs uppercase tracking-[0.35em] text-gray-200 font-semibold">
-                  Build. Submit. Win.
+                <p className="mt-2 text-xs font-semibold uppercase tracking-[0.35em] text-primary">
+                  Build · Submit · Win
                 </p>
               </div>
-              <div className="space-y-2 text-sm text-gray-300">
+              <div className="grid gap-1 text-sm text-foreground/80">
                 <p>Workspace 42, Indiranagar</p>
                 <p>Bengaluru, Karnataka 560038</p>
                 <p>India</p>
               </div>
-              <div className="grid gap-1 text-sm text-gray-300">
+              <div className="grid gap-1 text-sm text-foreground/80">
                 <p>
-                  <span className="text-gray-300">Phone:</span> +91-98765-43210
+                  <span className="font-semibold text-foreground">Phone:</span>{" "}
+                  +91-98765-43210
                 </p>
                 <p>
-                  <span className="text-gray-300">Email:</span>{" "}
+                  <span className="font-semibold text-foreground">Email:</span>{" "}
                   hello@hackathonwallah.com
                 </p>
               </div>
@@ -115,10 +114,11 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="relative mt-12 border-t border-white/10 pt-6 text-center text-xs text-muted-foreground/60 sm:flex sm:items-center sm:justify-between">
-            <p>
-              © {new Date().getFullYear()} HackathonWallah. All rights reserved.</p>
-            <p className="mt-2 sm:mt-0 text-muted-foreground/60">
+          <div className="relative mt-10 grid gap-4 border-t border-border/40 pt-6 text-xs text-muted-foreground sm:flex sm:items-center sm:justify-between">
+            <p className="text-center sm:text-left">
+              © {new Date().getFullYear()} HackathonWallah. All rights reserved.
+            </p>
+            <p className="text-center sm:text-right text-muted-foreground">
               Crafted for makers, backed by community.
             </p>
           </div>
@@ -138,19 +138,19 @@ function Column({ heading, links, external }: ColumnProps) {
   return (
     <div className="space-y-3">
       <p
-        className="text-sm font-semibold uppercase tracking-[0.25em] text-white/80"
+        className="text-xs font-semibold uppercase tracking-[0.35em] text-foreground/70"
         style={brandDisplayStyle}
       >
         {heading}
       </p>
-      <ul className="space-y-2 text-sm text-muted-foreground/60">
+      <ul className="space-y-2 text-sm text-muted-foreground">
         {links.map((link) => (
           <li key={link.label}>
             <Link
               href={link.href}
               target={external ? "_blank" : undefined}
               rel={external ? "noreferrer" : undefined}
-              className="transition-colors duration-200 hover:text-white"
+              className="transition-colors duration-200 hover:text-foreground"
             >
               {link.label}
             </Link>
@@ -160,8 +160,3 @@ function Column({ heading, links, external }: ColumnProps) {
     </div>
   );
 }
-
-
-
-
-

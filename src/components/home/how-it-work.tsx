@@ -126,8 +126,8 @@ export function HowItWork() {
             Ship your best work in five simple steps
           </h2>
           <p className="mx-auto max-w-2xl text-sm text-muted-foreground sm:mx-0">
-            Create your profile, choose a hackathon, and let Hackathon Hub guide
-            you from onboarding to win.
+            Create your profile, choose a hackathon, and let Hackathon Wallah
+            guide you from onboarding to win.
           </p>
         </div>
         <div className="relative flex flex-col gap-12">

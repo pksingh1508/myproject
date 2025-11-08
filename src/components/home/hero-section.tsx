@@ -70,7 +70,7 @@ export function HeroSection() {
             </p>
             <p className="mt-2 text-sm text-muted-foreground">
               Cash rewards, internship offers, and swag for top teams across
-              every hackathon hosted on Hackathon Hub.
+              every hackathon hosted on Hackathon Wallah.
             </p>
           </CustomCard>
         </div>

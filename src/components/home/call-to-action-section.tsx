@@ -19,8 +19,8 @@ export function CallToActionSection() {
               Hosting a hackathon?
             </CardTitle>
             <CardDescription className="text-muted-foreground">
-              Use our end-to-end toolkit for registration, payments, and insights so
-              you can focus on crafting a remarkable experience.
+              Use our end-to-end toolkit for registration, payments, and
+              insights so you can focus on crafting a remarkable experience.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -38,17 +38,18 @@ export function CallToActionSection() {
         <Card className="border border-border/70 bg-background/90 backdrop-blur">
           <CardHeader>
             <CardTitle className="text-2xl font-semibold text-foreground">
-              Builders love Hackathon Hub
+              Builders love Hackathon Wallah
             </CardTitle>
             <CardDescription className="text-muted-foreground">
-              Designed for ambitious teams shipping production-quality prototypes.
+              Designed for ambitious teams shipping production-quality
+              prototypes.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-5 text-sm text-muted-foreground">
             <p>
-              From seamless registration to submission tracking, Hackathon Hub gives
-              you the infrastructure to iterate quickly and show up prepared on
-              demo day.
+              From seamless registration to submission tracking, Hackathon
+              Wallah gives you the infrastructure to iterate quickly and show up
+              prepared on demo day.
             </p>
             <ul className="list-inside list-disc space-y-2">
               <li>Granular team management and roster updates</li>

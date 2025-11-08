@@ -157,7 +157,8 @@ export function SeoContent() {
             id="seo-content-heading"
             className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
           >
-            India&apos;s home for student-led innovation and real-world hackathons
+            India&apos;s home for student-led innovation and real-world
+            hackathons
           </h2>
           <p className="text-base leading-relaxed text-muted-foreground">
             {BRAND_DESCRIPTION} From tier-1 colleges to emerging campuses, we
@@ -181,28 +182,6 @@ export function SeoContent() {
               </p>
             </article>
           ))}
-        </div>
-
-        <div className="rounded-3xl border border-border/80 bg-[#0d0a24] p-6 text-left shadow-lg">
-          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-primary/80">
-            Search themes we rank for
-          </p>
-          <p className="mt-3 text-sm text-muted-foreground/80">
-            These are the query clusters prospective participants use most often
-            when searching for HackathonWallah and similar events. Featuring
-            them on-page helps search engines clearly align our brand with their
-            intent.
-          </p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {keywordClusters.map((keyword) => (
-              <span
-                key={keyword}
-                className="rounded-full border border-white/20 bg-white/5 px-3 py-1 text-xs font-medium tracking-wide text-white/90"
-              >
-                {keyword}
-              </span>
-            ))}
-          </div>
         </div>
       </div>
 
