@@ -1,12 +1,18 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { requireUserProfile } from "@/lib/auth/require-user-profile";
 import { listNotificationsForUser } from "@/lib/repos/notifications";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { BRAND_NAME } from "@/constants/site";
 
-export const metadata = {
-  title: "Notifications | Hackathon Hub"
+export const metadata: Metadata = {
+  title: `Notifications | ${BRAND_NAME}`,
+  robots: {
+    index: false,
+    follow: false
+  }
 };
 
 export default async function NotificationsPage() {

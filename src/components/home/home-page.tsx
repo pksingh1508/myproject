@@ -5,6 +5,7 @@ import { WhyChooseUs } from "./why-choose-us";
 import { FAQ } from "./faq";
 import { Testimonials } from "./testimonials";
 import { Footer } from "./footer";
+import { SeoContent } from "./seo-content";
 
 export async function HomePage() {
   return (
@@ -15,6 +16,7 @@ export async function HomePage() {
       <WhyChooseUs />
       <FAQ />
       <Testimonials />
+      <SeoContent />
       <Footer />
     </main>
   );

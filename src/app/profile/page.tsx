@@ -1,11 +1,17 @@
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { requireUserProfile } from "@/lib/auth/require-user-profile";
 
 import { ProfilePageClient } from "./profile-page-client";
+import { BRAND_NAME } from "@/constants/site";
 
-export const metadata = {
-  title: "Profile | Hackathon Hub"
+export const metadata: Metadata = {
+  title: `Profile | ${BRAND_NAME}`,
+  robots: {
+    index: false,
+    follow: false
+  }
 };
 
 export default async function ProfilePage() {

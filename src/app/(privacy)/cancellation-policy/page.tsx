@@ -1,4 +1,25 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { BRAND_NAME } from "@/constants/site";
+
+export const metadata: Metadata = {
+  title: `Cancellation Policy | ${BRAND_NAME}`,
+  description:
+    "Understand how to cancel a HackathonWallah registration, replacement options, and applicable processing fees.",
+  alternates: {
+    canonical: "/cancellation-policy"
+  },
+  openGraph: {
+    title: `Cancellation Policy | ${BRAND_NAME}`,
+    description:
+      "Cancellation criteria and rebooking process for HackathonWallah events."
+  },
+  twitter: {
+    title: `Cancellation Policy | ${BRAND_NAME}`,
+    description:
+      "Cancellation criteria and rebooking process for HackathonWallah events."
+  }
+};
 
 const sections = [
   {

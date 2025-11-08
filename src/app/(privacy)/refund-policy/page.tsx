@@ -1,4 +1,25 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { BRAND_NAME } from "@/constants/site";
+
+export const metadata: Metadata = {
+  title: `Refund Policy | ${BRAND_NAME}`,
+  description:
+    "Read the HackathonWallah refund timelines, eligibility, and escalation process for paid hackathon registrations.",
+  alternates: {
+    canonical: "/refund-policy"
+  },
+  openGraph: {
+    title: `Refund Policy | ${BRAND_NAME}`,
+    description:
+      "Refund windows and dispute resolution guidelines for HackathonWallah events."
+  },
+  twitter: {
+    title: `Refund Policy | ${BRAND_NAME}`,
+    description:
+      "Refund windows and dispute resolution guidelines for HackathonWallah events."
+  }
+};
 
 const sections = [
   {

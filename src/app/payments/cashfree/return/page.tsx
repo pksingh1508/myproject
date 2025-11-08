@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
 
 import { CashfreeReturnHandler } from "@/components/payments/cashfree-return-handler";
+import { BRAND_NAME } from "@/constants/site";
 
 type CashfreeReturnPageProps = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
 export const metadata: Metadata = {
-  title: "Payment Verification | Hackathon Hub"
+  title: `Payment Verification | ${BRAND_NAME}`,
+  robots: {
+    index: false,
+    follow: false
+  }
 };
 
 export default async function CashfreeReturnPage({

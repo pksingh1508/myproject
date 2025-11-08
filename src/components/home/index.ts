@@ -8,3 +8,4 @@ export { WhyChooseUs } from "./why-choose-us";
 export { FAQ } from "./faq";
 export { Testimonials } from "./testimonials";
 export { Footer } from "./footer";
+export { SeoContent } from "./seo-content";

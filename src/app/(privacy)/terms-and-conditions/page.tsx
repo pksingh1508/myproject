@@ -1,4 +1,25 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { BRAND_NAME } from "@/constants/site";
+
+export const metadata: Metadata = {
+  title: `Terms & Conditions | ${BRAND_NAME}`,
+  description:
+    "Understand the participation rules, eligibility guidelines, and code of conduct for every HackathonWallah event.",
+  alternates: {
+    canonical: "/terms-and-conditions"
+  },
+  openGraph: {
+    title: `Terms & Conditions | ${BRAND_NAME}`,
+    description:
+      "Review HackathonWallah’s legal terms covering registrations, submissions, intellectual property, and rewards."
+  },
+  twitter: {
+    title: `Terms & Conditions | ${BRAND_NAME}`,
+    description:
+      "Review HackathonWallah’s legal terms covering registrations, submissions, intellectual property, and rewards."
+  }
+};
 
 const sections = [
   {

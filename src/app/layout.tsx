@@ -7,6 +7,12 @@ import { SiteNavigation } from "@/components/navigation/site-navigation";
 import { Toaster } from "sonner";
 import ReactLenis from "lenis/react";
 import { fontVariables } from "./fonts";
+import {
+  BRAND_DESCRIPTION,
+  BRAND_NAME,
+  BRAND_TAGLINE,
+  SITE_URL
+} from "@/constants/site";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,15 +25,67 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
-  ),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Hackathon Wallah",
-    template: "%s | Hackathon Hub"
+    default: `${BRAND_NAME} | India's home for student-led hackathons`,
+    template: `%s | ${BRAND_NAME}`
   },
-  description:
-    "Discover, join, and manage hackathons seamlessly with secure authentication and streamlined participant flows."
+  description: BRAND_DESCRIPTION,
+  keywords: [
+    "student hackathons India",
+    "hackathon platform",
+    "hackathonwallah",
+    "college innovation challenges",
+    "buildshipwin",
+    "submit something celebrate everything"
+  ],
+  applicationName: BRAND_NAME,
+  creator: BRAND_NAME,
+  publisher: BRAND_NAME,
+  authors: [{ name: `${BRAND_NAME} Team`, url: `${SITE_URL}/about` }],
+  category: "technology",
+  alternates: {
+    languages: {
+      "en-IN": SITE_URL,
+      "en-US": SITE_URL
+    }
+  },
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    title: `${BRAND_NAME} | India's home for student-led hackathons`,
+    description: BRAND_DESCRIPTION,
+    siteName: BRAND_NAME,
+    locale: "en_IN",
+    images: [
+      {
+        url: `${SITE_URL}/brand.png`,
+        width: 1200,
+        height: 630,
+        alt: `${BRAND_NAME} community of student builders`
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${BRAND_NAME} | India's home for student-led hackathons`,
+    description: BRAND_DESCRIPTION,
+    images: [`${SITE_URL}/brand.png`]
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large"
+    }
+  },
+  other: {
+    tagline: BRAND_TAGLINE
+  }
 };
 
 export default function RootLayout({

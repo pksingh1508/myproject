@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { listHackathons } from "@/lib/repos/hackathons";
@@ -5,6 +6,26 @@ import { HackathonGrid } from "@/components/hackathons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { HackathonFilterInput } from "@/lib/validation/hackathons";
+import { BRAND_NAME } from "@/constants/site";
+
+export const metadata: Metadata = {
+  title: `Upcoming hackathons | ${BRAND_NAME}`,
+  description:
+    "Find upcoming, ongoing, and completed HackathonWallah events across India. Filter by status or theme and register with one click.",
+  alternates: {
+    canonical: "/hackathons"
+  },
+  openGraph: {
+    title: `Upcoming hackathons | ${BRAND_NAME}`,
+    description:
+      "Browse HackathonWallah events curated for Indian campuses, builders, and early-stage founders."
+  },
+  twitter: {
+    title: `Upcoming hackathons | ${BRAND_NAME}`,
+    description:
+      "Browse HackathonWallah events curated for Indian campuses, builders, and early-stage founders."
+  }
+};
 
 export const revalidate = 120;
 

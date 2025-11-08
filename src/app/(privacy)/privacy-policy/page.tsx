@@ -1,4 +1,25 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { BRAND_NAME } from "@/constants/site";
+
+export const metadata: Metadata = {
+  title: `Privacy Policy | ${BRAND_NAME}`,
+  description:
+    "Learn how HackathonWallah collects, stores, and protects participant data across hackathons, payments, and communications.",
+  alternates: {
+    canonical: "/privacy-policy"
+  },
+  openGraph: {
+    title: `Privacy Policy | ${BRAND_NAME}`,
+    description:
+      "Transparent privacy practices for the HackathonWallah platform, events, and partner initiatives."
+  },
+  twitter: {
+    title: `Privacy Policy | ${BRAND_NAME}`,
+    description:
+      "Transparent privacy practices for the HackathonWallah platform, events, and partner initiatives."
+  }
+};
 
 const sections = [
   {
