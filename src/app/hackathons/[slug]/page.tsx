@@ -36,13 +36,11 @@ export async function generateMetadata({
   return {
     title: `${hackathon.title} | Hackathon Hub`,
     description:
-      hackathon.short_description ??
-      hackathon.description.slice(0, 160),
+      hackathon.short_description ?? hackathon.description.slice(0, 160),
     openGraph: {
       title: hackathon.title,
       description:
-        hackathon.short_description ??
-        hackathon.description.slice(0, 160),
+        hackathon.short_description ?? hackathon.description.slice(0, 160),
       images: hackathon.banner_url ? [hackathon.banner_url] : undefined
     }
   };
@@ -85,9 +83,6 @@ export default async function HackathonPage({ params }: HackathonPageProps) {
                 hackathon={hackathon}
                 buttonSize="lg"
               />
-              <Button asChild variant="outline" size="lg">
-                <Link href="/#cta">Talk to the team</Link>
-              </Button>
             </div>
           </div>
         </div>
@@ -152,9 +147,7 @@ export default async function HackathonPage({ params }: HackathonPageProps) {
           <Card>
             <CardContent className="space-y-4 py-6">
               <div>
-                <h3 className="text-lg font-semibold">
-                  Get ready to compete
-                </h3>
+                <h3 className="text-lg font-semibold">Get ready to compete</h3>
                 <p className="text-sm text-muted-foreground">
                   Assemble your team, review the rules, and register early to
                   secure your slot. Payment details will be shared during

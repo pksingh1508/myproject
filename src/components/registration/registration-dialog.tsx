@@ -13,7 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProfileForm } from "@/components/registration/profile-form";
 import { TeamForm, type TeamFormOutput } from "@/components/registration/team-form";
-import { CashfreeDropCheckout } from "@/components/payments";
+import { loadCashfreeDropSdk } from "@/lib/payments/cashfree-drop";
 import type { UserProfileRecord } from "@/lib/auth/require-user-profile";
 import type { UserProfileUpdateInput } from "@/lib/validation/users";
 
@@ -105,6 +105,7 @@ export function HackathonRegistrationDialog({
   const [teamSubmitting, setTeamSubmitting] = useState(false);
   const [verifyingPayment, setVerifyingPayment] = useState(false);
   const [isCreatingOrder, setIsCreatingOrder] = useState(false);
+  const [launchingCheckout, setLaunchingCheckout] = useState(false);
 
   const needsProfile = profileState ? !profileState.complete : false;
   const alreadyRegistered = status?.registered ?? false;
@@ -135,7 +136,7 @@ export function HackathonRegistrationDialog({
         const result = await response.json();
         setPaymentDetails(result.data);
         setSuccess(
-          "Payment session generated. Launch Cashfree Checkout or Drop JS with the session ID to finish payment."
+          "Payment session generated. Use the checkout button below to open Cashfree and finish payment."
         );
         setStatus({
           registered: true,
@@ -176,6 +177,10 @@ export function HackathonRegistrationDialog({
       setLoading(false);
     }
   }, [hackathon.id]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   useEffect(() => {
     if (open) {
@@ -377,9 +382,43 @@ export function HackathonRegistrationDialog({
 
   const primaryButtonLabel = alreadyRegistered
     ? paymentSettled
-      ? "Registered"
+      ? "Submit code"
       : "Complete payment"
     : buttonLabel;
+
+  const handleCheckoutLaunch = useCallback(async () => {
+    if (!paymentDetails) {
+      setError("Payment details unavailable. Generate a payment session first.");
+      return;
+    }
+
+    setLaunchingCheckout(true);
+    setError(null);
+
+    try {
+      const CashfreeCtor = await loadCashfreeDropSdk();
+
+      if (!CashfreeCtor) {
+        throw new Error("Unable to load Cashfree checkout. Please check your connection.");
+      }
+
+      const cashfree = new CashfreeCtor(paymentDetails.paymentSessionId);
+      cashfree.redirect();
+    } catch (checkoutError) {
+      console.error("Cashfree checkout launch failed:", checkoutError);
+      setError(
+        checkoutError instanceof Error
+          ? checkoutError.message
+          : "Unable to open Cashfree checkout. Please try again."
+      );
+    } finally {
+      setLaunchingCheckout(false);
+    }
+  }, [paymentDetails]);
+
+  const handleCancelPayment = useCallback(() => {
+    setOpen(false);
+  }, []);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -441,41 +480,40 @@ export function HackathonRegistrationDialog({
                 {!paymentSettled ? (
                   <>
                     {paymentDetails ? (
-                      <>
-                        <CashfreeDropCheckout
-                          paymentSessionId={paymentDetails.paymentSessionId}
-                          orderId={paymentDetails.orderId}
-                          amount={paymentDetails.amount}
-                          onSuccess={() => handlePaymentVerification()}
-                          onFailure={(payload) => {
-                            console.error("Cashfree drop failure", payload);
-                            setError("Payment window closed or failed. Please try again.");
-                          }}
-                        />
-                        <div className="flex flex-wrap items-center gap-2">
+                      <div className="space-y-4 rounded-md border bg-muted/30 p-4">
+                        <div className="space-y-1 text-sm text-muted-foreground">
+                          <p>
+                            Complete the INR {paymentDetails.amount.toFixed(0)} payment on the secure
+                            Cashfree page. Use the buttons below to launch checkout, verify status, or cancel.
+                          </p>
+                          <p>
+                            Order reference: <span className="font-medium text-foreground">{paymentDetails.orderId}</span>
+                          </p>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          <Button
+                            type="button"
+                            onClick={handleCheckoutLaunch}
+                            disabled={launchingCheckout}
+                          >
+                            {launchingCheckout ? "Opening checkout..." : "Checkout"}
+                          </Button>
                           <Button
                             type="button"
                             onClick={handlePaymentVerification}
                             disabled={verifyingPayment}
                           >
-                            {verifyingPayment
-                              ? "Verifying..."
-                              : "Verify payment status"}
+                            {verifyingPayment ? "Verifying..." : "Verify payment status"}
                           </Button>
                           <Button
                             type="button"
                             variant="outline"
-                            disabled={isCreatingOrder || !participantId}
-                            onClick={() =>
-                              participantId && initiatePayment(participantId)
-                            }
+                            onClick={handleCancelPayment}
                           >
-                            {isCreatingOrder
-                              ? "Refreshing session..."
-                              : "Refresh session"}
+                            Cancel
                           </Button>
                         </div>
-                      </>
+                      </div>
                     ) : (
                       <Button
                         type="button"
@@ -589,4 +627,3 @@ export function HackathonRegistrationButton({
     </>
   );
 }
-
