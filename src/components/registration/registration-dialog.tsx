@@ -621,7 +621,7 @@ export function HackathonRegistrationDialog({
                 <Button
                   variant="outline"
                   className="w-full"
-                  onClick={() => setOpen(false)}
+                  onClick={() => setRegistrationDialogOpen(false)}
                 >
                   Close
                 </Button>
