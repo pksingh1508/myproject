@@ -133,7 +133,7 @@ export async function updateParticipantSubmission(
   input: ParticipantSubmissionInput,
   client?: SupabaseClient
 ) {
-  const supabase = await resolveClient(client);
+  const supabase = await resolveClient(client, { serviceRole: true });
   const payload = participantSubmissionSchema.parse(input);
 
   const { data, error } = await supabase

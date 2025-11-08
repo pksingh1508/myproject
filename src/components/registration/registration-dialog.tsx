@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProfileForm } from "@/components/registration/profile-form";
 import { TeamForm, type TeamFormOutput } from "@/components/registration/team-form";
+import { SubmissionModal } from "@/components/registration/submission-modal";
 import { loadCashfreeDropSdk } from "@/lib/payments/cashfree-drop";
 import type { UserProfileRecord } from "@/lib/auth/require-user-profile";
 import type { UserProfileUpdateInput } from "@/lib/validation/users";
@@ -33,13 +34,19 @@ type ProfileState =
     }
   | null;
 
+type ParticipantStatus = {
+  id: string;
+  paymentStatus: string;
+  paymentId?: string | null;
+  submissionUrl?: string | null;
+  submissionDescription?: string | null;
+  submittedAt?: string | null;
+};
+
 type RegistrationStatus =
   | {
       registered: boolean;
-      participant?: {
-        id: string;
-        paymentStatus: string;
-      };
+      participant?: ParticipantStatus;
     }
   | null;
 
@@ -93,7 +100,8 @@ export function HackathonRegistrationDialog({
   buttonClassName
 }: RegistrationDialogProps) {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  const [registrationDialogOpen, setRegistrationDialogOpen] = useState(false);
+  const [submissionModalOpen, setSubmissionModalOpen] = useState(false);
   const [profileState, setProfileState] = useState<ProfileState>(null);
   const [status, setStatus] = useState<RegistrationStatus>(null);
   const [currentParticipantId, setCurrentParticipantId] = useState<string | null>(null);
@@ -112,6 +120,7 @@ export function HackathonRegistrationDialog({
   const participantId = currentParticipantId ?? status?.participant?.id ?? null;
   const paymentSettled =
     status?.participant?.paymentStatus?.toLowerCase() === "paid";
+  const hasSubmitted = Boolean(status?.participant?.submissionUrl);
 
   const initiatePayment = useCallback(
     async (targetParticipantId: string) => {
@@ -138,13 +147,18 @@ export function HackathonRegistrationDialog({
         setSuccess(
           "Payment session generated. Use the checkout button below to open Cashfree and finish payment."
         );
-        setStatus({
+        setStatus((previous) => ({
           registered: true,
           participant: {
+            ...(previous?.participant ?? {}),
             id: targetParticipantId,
-            paymentStatus: "pending"
+            paymentStatus: "pending",
+            paymentId: previous?.participant?.paymentId,
+            submissionUrl: previous?.participant?.submissionUrl,
+            submissionDescription: previous?.participant?.submissionDescription,
+            submittedAt: previous?.participant?.submittedAt
           }
-        });
+        }));
         router.refresh();
       } catch (err) {
         console.error(err);
@@ -183,18 +197,18 @@ export function HackathonRegistrationDialog({
   }, [loadData]);
 
   useEffect(() => {
-    if (open) {
+    if (registrationDialogOpen) {
       loadData();
     } else {
       setError(null);
       setSuccess(null);
       setPaymentDetails(null);
     }
-  }, [open, loadData]);
+  }, [registrationDialogOpen, loadData]);
 
   useEffect(() => {
     if (
-      open &&
+      registrationDialogOpen &&
       !loading &&
       alreadyRegistered &&
       !paymentSettled &&
@@ -205,7 +219,7 @@ export function HackathonRegistrationDialog({
       initiatePayment(participantId);
     }
   }, [
-    open,
+    registrationDialogOpen,
     loading,
     alreadyRegistered,
     paymentSettled,
@@ -272,13 +286,18 @@ export function HackathonRegistrationDialog({
         const result = await response.json();
         const newParticipantId: string = result.data.id;
 
-        setStatus({
+        setStatus((previous) => ({
           registered: true,
           participant: {
+            ...(previous?.participant ?? {}),
             id: newParticipantId,
-            paymentStatus: result.data.paymentStatus
+            paymentStatus: result.data.paymentStatus,
+            paymentId: previous?.participant?.paymentId,
+            submissionUrl: previous?.participant?.submissionUrl,
+            submissionDescription: previous?.participant?.submissionDescription,
+            submittedAt: previous?.participant?.submittedAt
           }
-        });
+        }));
 
         setSuccess(
           "Registration successful! Generating a payment session..."
@@ -328,13 +347,18 @@ export function HackathonRegistrationDialog({
         const participantRef = participantId;
 
         if (participantRef) {
-          setStatus({
+          setStatus((previous) => ({
             registered: true,
             participant: {
+              ...(previous?.participant ?? {}),
               id: participantRef,
-              paymentStatus: "paid"
+              paymentStatus: "paid",
+              paymentId: paymentId ?? previous?.participant?.paymentId,
+              submissionUrl: previous?.participant?.submissionUrl,
+              submissionDescription: previous?.participant?.submissionDescription,
+              submittedAt: previous?.participant?.submittedAt
             }
-          });
+          }));
           setCurrentParticipantId(participantRef);
         }
 
@@ -344,13 +368,18 @@ export function HackathonRegistrationDialog({
       } else if (paymentStatus === "failed") {
         setError("Payment failed or was cancelled. Please try again.");
         if (participantId) {
-          setStatus({
+          setStatus((previous) => ({
             registered: true,
             participant: {
+              ...(previous?.participant ?? {}),
               id: participantId,
-              paymentStatus: "failed"
+              paymentStatus: "failed",
+              paymentId: previous?.participant?.paymentId,
+              submissionUrl: previous?.participant?.submissionUrl,
+              submissionDescription: previous?.participant?.submissionDescription,
+              submittedAt: previous?.participant?.submittedAt
             }
-          });
+          }));
         }
       } else {
         setSuccess(
@@ -365,6 +394,41 @@ export function HackathonRegistrationDialog({
       setVerifyingPayment(false);
     }
   }, [paymentDetails, participantId, router]);
+
+  const handleSubmissionSuccess = useCallback(
+    (data: {
+      submissionUrl: string;
+      submissionDescription: string | null;
+      submittedAt: string | null;
+    }) => {
+      setStatus((previous) => {
+        const participantRef = previous?.participant ?? null;
+        const derivedId = participantRef?.id ?? participantId;
+
+        if (!derivedId) {
+          return previous;
+        }
+
+        return {
+          registered: true,
+          participant: {
+            ...(participantRef ?? {}),
+            id: derivedId,
+            paymentStatus: participantRef?.paymentStatus ?? "paid",
+            paymentId: participantRef?.paymentId,
+            submissionUrl: data.submissionUrl,
+            submissionDescription: data.submissionDescription,
+            submittedAt: data.submittedAt
+          }
+        };
+      });
+
+      setSubmissionModalOpen(false);
+      setSuccess("Submission received! We'll review it soon.");
+      router.refresh();
+    },
+    [participantId, router]
+  );
 
   const profileDefaultValues = useMemo(() => {
     if (!profileState?.profile) {
@@ -382,9 +446,25 @@ export function HackathonRegistrationDialog({
 
   const primaryButtonLabel = alreadyRegistered
     ? paymentSettled
-      ? "Submit code"
+      ? hasSubmitted
+        ? "Submitted"
+        : "Submit code"
       : "Complete payment"
     : buttonLabel;
+
+  const isPrimaryButtonDisabled =
+    alreadyRegistered && paymentSettled && hasSubmitted;
+
+  const handlePrimaryButtonClick = useCallback(() => {
+    if (alreadyRegistered && paymentSettled) {
+      if (!hasSubmitted) {
+        setSubmissionModalOpen(true);
+      }
+      return;
+    }
+
+    setRegistrationDialogOpen(true);
+  }, [alreadyRegistered, paymentSettled, hasSubmitted]);
 
   const handleCheckoutLaunch = useCallback(async () => {
     if (!paymentDetails) {
@@ -417,19 +497,25 @@ export function HackathonRegistrationDialog({
   }, [paymentDetails]);
 
   const handleCancelPayment = useCallback(() => {
-    setOpen(false);
+    setRegistrationDialogOpen(false);
   }, []);
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <>
       <Button
         variant={buttonVariant}
         size={buttonSize}
         className={buttonClassName}
-        onClick={() => setOpen(true)}
+        onClick={handlePrimaryButtonClick}
+        disabled={isPrimaryButtonDisabled}
       >
         {primaryButtonLabel}
       </Button>
+
+      <Dialog
+        open={registrationDialogOpen}
+        onOpenChange={setRegistrationDialogOpen}
+      >
 
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
         <DialogHeader>
@@ -592,6 +678,17 @@ export function HackathonRegistrationDialog({
         )}
       </DialogContent>
     </Dialog>
+
+      <SubmissionModal
+        open={submissionModalOpen}
+        onOpenChange={setSubmissionModalOpen}
+        hackathonId={hackathon.id}
+        hackathonTitle={hackathon.title}
+        initialUrl={status?.participant?.submissionUrl}
+        initialDescription={status?.participant?.submissionDescription}
+        onSubmitted={handleSubmissionSuccess}
+      />
+    </>
   );
 }
 

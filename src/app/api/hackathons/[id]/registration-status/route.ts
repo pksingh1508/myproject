@@ -24,7 +24,10 @@ export async function GET(
       participant: {
         id: participant.id,
         paymentStatus: participant.payment_status,
-        paymentId: participant.payment_id
+        paymentId: participant.payment_id,
+        submissionUrl: participant.submission_url,
+        submissionDescription: participant.submission_description,
+        submittedAt: participant.submitted_at
       }
     });
   } catch (error) {
