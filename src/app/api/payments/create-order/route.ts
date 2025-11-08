@@ -90,7 +90,8 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           error: "FORBIDDEN",
-          message: "You are not allowed to initiate payment for this registration."
+          message:
+            "You are not allowed to initiate payment for this registration."
         },
         { status: 403 }
       );
@@ -130,9 +131,9 @@ export async function POST(request: Request) {
       existingPayment.gateway_response &&
       typeof existingPayment.gateway_response === "object"
     ) {
-      const sessionId =
-        (existingPayment.gateway_response as Record<string, unknown>)
-          ?.payment_session_id;
+      const sessionId = (
+        existingPayment.gateway_response as Record<string, unknown>
+      )?.payment_session_id;
       if (sessionId && typeof sessionId === "string") {
         return NextResponse.json({
           data: {
@@ -147,8 +148,12 @@ export async function POST(request: Request) {
     const orderId = `order_${participant.id.slice(0, 8)}_${Date.now()}`;
     const client = getCashfreeClient();
 
-    const defaultReturnUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/payments/cashfree/return?order_id={order_id}`;
-    const defaultNotifyUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/api/webhooks/cashfree`;
+    const defaultReturnUrl = `${
+      process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.hackathonwallah.com"
+    }/payments/cashfree/return?order_id={order_id}`;
+    const defaultNotifyUrl = `${
+      process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.hackathonwallah.com"
+    }/api/webhooks/cashfree`;
 
     const orderRequest = {
       order_id: orderId,
@@ -166,11 +171,15 @@ export async function POST(request: Request) {
       }
     };
 
-    const orderResponse = await client.PGCreateOrder(orderRequest, undefined, orderId);
+    const orderResponse = await client.PGCreateOrder(
+      orderRequest,
+      undefined,
+      orderId
+    );
     const orderData = orderResponse.data ?? {};
 
-    const paymentSessionId =
-      (orderData as Record<string, unknown>).payment_session_id;
+    const paymentSessionId = (orderData as Record<string, unknown>)
+      .payment_session_id;
 
     if (!paymentSessionId || typeof paymentSessionId !== "string") {
       throw new Error("Cashfree response missing payment_session_id.");
