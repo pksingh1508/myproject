@@ -91,18 +91,18 @@ export function Footer() {
                 </p>
               </div>
               <div className="grid gap-1 text-sm text-foreground/80">
-                <p>Workspace 42, Indiranagar</p>
-                <p>Bengaluru, Karnataka 560038</p>
+                <p>Indranagar</p>
+                <p>Gorakhpur, 273001</p>
                 <p>India</p>
               </div>
               <div className="grid gap-1 text-sm text-foreground/80">
                 <p>
                   <span className="font-semibold text-foreground">Phone:</span>{" "}
-                  +91-98765-43210
+                  +91-9865-4310
                 </p>
                 <p>
                   <span className="font-semibold text-foreground">Email:</span>{" "}
-                  hello@hackathonwallah.com
+                  hubhackathon15@gmail.com
                 </p>
               </div>
             </div>

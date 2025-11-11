@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { toast } from "sonner";
+
 import { BrandButton, CustomCard } from "@/components/layout";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,7 +33,36 @@ export default function ContactContent() {
     setSubmitting(true);
 
     try {
-      // TODO: Integrate with backend or API route.
+      const response = await fetch("/api/contacts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formValues)
+      });
+
+      const text = await response.text();
+      const payload = text ? (JSON.parse(text) as Record<string, unknown>) : null;
+
+      if (!response.ok) {
+        const message =
+          typeof payload?.message === "string"
+            ? payload.message
+            : "Unable to send your message. Please try again.";
+        throw new Error(message);
+      }
+
+      setFormValues(initialState);
+      toast.success(
+        (payload?.message as string) ??
+          "Thanks for getting in touch. We’ll reach out soon."
+      );
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again in a moment.";
+      toast.error(message);
     } finally {
       setSubmitting(false);
     }
@@ -65,15 +96,15 @@ export default function ContactContent() {
           <div className="mt-6 space-y-4 text-sm text-muted-foreground">
             <div>
               <p className="font-semibold text-foreground">Email</p>
-              <p>support@hackathonwallah.com</p>
+              <p>hubhackathon15@gmail.com</p>
             </div>
             <div>
               <p className="font-semibold text-foreground">Phone</p>
-              <p>+91-98765-43210</p>
+              <p>+91-9865-4310</p>
             </div>
             <div>
               <p className="font-semibold text-foreground">Office</p>
-              <p>Workspace 42, Indiranagar, Bengaluru, Karnataka 560038, India</p>
+              <p>Indranagar, Gorakhpur, 273001, India</p>
             </div>
           </div>
         </CustomCard>
