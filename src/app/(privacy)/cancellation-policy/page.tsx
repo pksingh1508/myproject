@@ -33,25 +33,39 @@ const sections = [
       <>
         <p>Participants may cancel their registration by emailing</p>
         <p>
-          <a href="mailto:help@hackathonwallah.com" className="text-primary underline-offset-4 hover:underline">
+          <a
+            href="mailto:help@hackathonwallah.com"
+            className="text-primary underline-offset-4 hover:underline"
+          >
             help@hackathonwallah.com
           </a>{" "}
           with the subject line &ldquo;Cancellation Request&rdquo;.
         </p>
         <ul className="ml-5 mt-3 list-disc space-y-2 text-muted-foreground">
-          <li>Include name, registered email, event name, and reason for cancellation.</li>
           <li>
-            Cancellations submitted at least 5 days before the event begin receiving priority review and may be eligible
-            for partial refunds (see{" "}
-            <Link href="/(privacy)/refund-policy" className="text-primary underline-offset-4 hover:underline">
+            Include name, registered email, event name, and reason for
+            cancellation.
+          </li>
+          <li>
+            Cancellations submitted at least 5 days before the event begin
+            receiving priority review and may be eligible for partial refunds
+            (see{" "}
+            <Link
+              href="/(privacy)/refund-policy"
+              className="text-primary underline-offset-4 hover:underline"
+            >
               Refund Policy
             </Link>
             ).
           </li>
-          <li>Cancellations within 5 days of the event generally do not qualify for refunds unless covered by emergencies.</li>
           <li>
-            For team registrations, the team leader must submit the cancellation; partial team cancellations are not
-            permitted unless the event has individual-entry pricing.
+            Cancellations within 5 days of the event generally do not qualify
+            for refunds unless covered by emergencies.
+          </li>
+          <li>
+            For team registrations, the team leader must submit the
+            cancellation; partial team cancellations are not permitted unless
+            the event has individual-entry pricing.
           </li>
         </ul>
       </>
@@ -71,15 +85,22 @@ const sections = [
     title: "5. HackathonWallah Cancellations",
     content: (
       <>
-        <p>HackathonWallah reserves the right to cancel or reschedule events due to:</p>
+        <p>
+          HackathonWallah reserves the right to cancel or reschedule events due
+          to:
+        </p>
         <ul className="ml-5 mt-3 list-disc space-y-2 text-muted-foreground">
           <li>Low registrations or logistical constraints.</li>
-          <li>Unforeseen emergencies (venue issues, platform outages, health advisories).</li>
+          <li>
+            Unforeseen emergencies (venue issues, platform outages, health
+            advisories).
+          </li>
           <li>Compliance with legal or regulatory requirements.</li>
         </ul>
         <p className="mt-3">
-          If an event is cancelled or rescheduled by HackathonWallah, registered participants will be notified via email
-          and offered either a full refund or complimentary transfer to another hackathon of equal value.
+          If an event is cancelled or rescheduled by HackathonWallah, registered
+          participants will be notified via email and offered either a full
+          refund or complimentary transfer to another hackathon of equal value.
         </p>
       </>
     )
@@ -101,14 +122,16 @@ const sections = [
         <p>For cancellation-related support, reach us at:</p>
         <div className="mt-3 text-sm text-muted-foreground">
           <p>HackathonWallah Support</p>
-          <p>Workspace 42, Indiranagar, Bengaluru, Karnataka 560038, India</p>
+          <p>Indranagar, Gorakhpur, 273001, India</p>
           <p>
             Email:{" "}
-            <a href="mailto:help@hackathonwallah.com" className="text-primary underline-offset-4 hover:underline">
+            <a
+              href="mailto:help@hackathonwallah.com"
+              className="text-primary underline-offset-4 hover:underline"
+            >
               help@hackathonwallah.com
             </a>
           </p>
-          <p>Phone: +91-98765-43210</p>
         </div>
       </>
     )
@@ -123,11 +146,18 @@ export default function CancellationPolicyPage() {
           <span className="inline-flex w-fit items-center rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.32em] text-primary">
             Policy
           </span>
-          <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Cancellation Policy</h1>
+          <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+            Cancellation Policy
+          </h1>
           <p className="max-w-3xl text-sm text-muted-foreground">
-            Last updated: {new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}.
-            This policy explains how to cancel hackathon registrations and how HackathonWallah handles cancellations of
-            its events.
+            Last updated:{" "}
+            {new Date().toLocaleDateString("en-IN", {
+              day: "numeric",
+              month: "long",
+              year: "numeric"
+            })}
+            . This policy explains how to cancel hackathon registrations and how
+            HackathonWallah handles cancellations of its events.
           </p>
         </div>
       </section>
@@ -139,8 +169,12 @@ export default function CancellationPolicyPage() {
               key={section.title}
               className="space-y-4 rounded-2xl border border-border/60 bg-muted/20 p-6 shadow-sm"
             >
-              <h2 className="text-xl font-semibold text-foreground">{section.title}</h2>
-              <div className="space-y-3 text-sm leading-relaxed text-muted-foreground">{section.content}</div>
+              <h2 className="text-xl font-semibold text-foreground">
+                {section.title}
+              </h2>
+              <div className="space-y-3 text-sm leading-relaxed text-muted-foreground">
+                {section.content}
+              </div>
             </article>
           ))}
         </div>
@@ -148,11 +182,17 @@ export default function CancellationPolicyPage() {
         <div className="mt-12 text-sm text-muted-foreground">
           <p>
             Please review this policy along with our{" "}
-            <Link href="/(privacy)/refund-policy" className="text-primary underline-offset-4 hover:underline">
+            <Link
+              href="/(privacy)/refund-policy"
+              className="text-primary underline-offset-4 hover:underline"
+            >
               Refund Policy
             </Link>{" "}
             and{" "}
-            <Link href="/(privacy)/terms-and-conditions" className="text-primary underline-offset-4 hover:underline">
+            <Link
+              href="/(privacy)/terms-and-conditions"
+              className="text-primary underline-offset-4 hover:underline"
+            >
               Terms &amp; Conditions
             </Link>{" "}
             to understand the complete set of event guidelines.

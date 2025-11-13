@@ -20,7 +20,9 @@ export default function ContactContent() {
   const [formValues, setFormValues] = useState(initialState);
   const [submitting, setSubmitting] = useState(false);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = event.target;
     setFormValues((previous) => ({
       ...previous,
@@ -42,7 +44,9 @@ export default function ContactContent() {
       });
 
       const text = await response.text();
-      const payload = text ? (JSON.parse(text) as Record<string, unknown>) : null;
+      const payload = text
+        ? (JSON.parse(text) as Record<string, unknown>)
+        : null;
 
       if (!response.ok) {
         const message =
@@ -80,27 +84,27 @@ export default function ContactContent() {
             Talk to the HackathonWallah team
           </h1>
           <p className="max-w-2xl text-lg text-muted-foreground">
-            Whether you&rsquo;re a student, mentor, or partner brand, we&rsquo;re here to help you ship your next idea.
-            Reach out and we&rsquo;ll respond within 2-3 business days.
+            Whether you&rsquo;re a student, mentor, or partner brand,
+            we&rsquo;re here to help you ship your next idea. Reach out and
+            we&rsquo;ll respond within 2-3 business days.
           </p>
         </div>
       </section>
 
       <section className="mx-auto grid w-full max-w-5xl gap-8 px-4 py-16 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] sm:px-6 lg:px-8">
         <CustomCard className="border border-border/60 bg-muted/30">
-          <h2 className="text-xl font-semibold text-foreground">How can we help?</h2>
+          <h2 className="text-xl font-semibold text-foreground">
+            How can we help?
+          </h2>
           <p className="mt-3 text-sm text-muted-foreground">
-            Tell us about your question, collaboration idea, or support request. Provide as much detail as possible so we
-            can connect you to the right organisers or mentors.
+            Tell us about your question, collaboration idea, or support request.
+            Provide as much detail as possible so we can connect you to the
+            right organisers or mentors.
           </p>
           <div className="mt-6 space-y-4 text-sm text-muted-foreground">
             <div>
               <p className="font-semibold text-foreground">Email</p>
               <p>hubhackathon15@gmail.com</p>
-            </div>
-            <div>
-              <p className="font-semibold text-foreground">Phone</p>
-              <p>+91-9865-4310</p>
             </div>
             <div>
               <p className="font-semibold text-foreground">Office</p>
@@ -113,7 +117,10 @@ export default function ContactContent() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <label htmlFor="name" className="text-sm font-medium text-foreground">
+                <label
+                  htmlFor="name"
+                  className="text-sm font-medium text-foreground"
+                >
                   Name
                 </label>
                 <Input
@@ -126,7 +133,10 @@ export default function ContactContent() {
                 />
               </div>
               <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-medium text-foreground">
+                <label
+                  htmlFor="email"
+                  className="text-sm font-medium text-foreground"
+                >
                   Email
                 </label>
                 <Input
@@ -143,7 +153,10 @@ export default function ContactContent() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <label htmlFor="phone" className="text-sm font-medium text-foreground">
+                <label
+                  htmlFor="phone"
+                  className="text-sm font-medium text-foreground"
+                >
                   Phone
                 </label>
                 <Input
@@ -155,7 +168,10 @@ export default function ContactContent() {
                 />
               </div>
               <div className="space-y-2">
-                <label htmlFor="subject" className="text-sm font-medium text-foreground">
+                <label
+                  htmlFor="subject"
+                  className="text-sm font-medium text-foreground"
+                >
                   Subject
                 </label>
                 <Input
@@ -170,7 +186,10 @@ export default function ContactContent() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="message" className="text-sm font-medium text-foreground">
+              <label
+                htmlFor="message"
+                className="text-sm font-medium text-foreground"
+              >
                 Message
               </label>
               <Textarea
@@ -184,7 +203,12 @@ export default function ContactContent() {
               />
             </div>
 
-            <BrandButton type="submit" loading={submitting} loadingText="Sending..." className="px-8 py-3 text-xs">
+            <BrandButton
+              type="submit"
+              loading={submitting}
+              loadingText="Sending..."
+              className="px-8 py-3 text-xs"
+            >
               Submit message
             </BrandButton>
           </form>

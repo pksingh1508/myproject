@@ -212,17 +212,16 @@ const sections = [
         <div className="mt-3 text-sm text-muted-foreground">
           <p>HackathonWallah</p>
           <p>Workspace 42, Indiranagar</p>
-          <p>Bengaluru, Karnataka 560038, India</p>
+          <p>Indranagar, Gorakhpur, 273001, India</p>
           <p className="mt-2">
             Email:{" "}
             <a
-              href="mailto:legal@hackathonwallah.com"
+              href="mailto:hubhackathon15@gmail.com"
               className="text-primary underline-offset-4 hover:underline"
             >
-              legal@hackathonwallah.com
+              hubhackathon15@gmail.com
             </a>
           </p>
-          <p>Phone: +91-98765-43210</p>
         </div>
       </>
     )

@@ -97,10 +97,6 @@ export function Footer() {
               </div>
               <div className="grid gap-1 text-sm text-foreground/80">
                 <p>
-                  <span className="font-semibold text-foreground">Phone:</span>{" "}
-                  +91-9865-4310
-                </p>
-                <p>
                   <span className="font-semibold text-foreground">Email:</span>{" "}
                   hubhackathon15@gmail.com
                 </p>
