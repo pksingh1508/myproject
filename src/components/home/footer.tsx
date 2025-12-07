@@ -14,10 +14,7 @@ const quickLinks = [
 ];
 
 const socialLinks = [
-  { label: "Instagram", href: "https://instagram.com" },
-  { label: "Twitter", href: "https://twitter.com" },
-  { label: "LinkedIn", href: "https://linkedin.com" },
-  { label: "YouTube", href: "https://youtube.com" }
+  { label: "Instagram", href: "https://instagram.com/hackathon_wallah" }
 ];
 
 const legalLinks = [
