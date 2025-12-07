@@ -34,10 +34,10 @@ const sections = [
         <p>Participants may cancel their registration by emailing</p>
         <p>
           <a
-            href="mailto:help@hackathonwallah.com"
+            href="mailto:hubhackathon15@gmail.com"
             className="text-primary underline-offset-4 hover:underline"
           >
-            help@hackathonwallah.com
+            hubhackathon15@gmail.com
           </a>{" "}
           with the subject line &ldquo;Cancellation Request&rdquo;.
         </p>
@@ -51,7 +51,7 @@ const sections = [
             receiving priority review and may be eligible for partial refunds
             (see{" "}
             <Link
-              href="/(privacy)/refund-policy"
+              href="/refund-policy"
               className="text-primary underline-offset-4 hover:underline"
             >
               Refund Policy
@@ -126,10 +126,10 @@ const sections = [
           <p>
             Email:{" "}
             <a
-              href="mailto:help@hackathonwallah.com"
+              href="mailto:hubhackathon15@gmail.com"
               className="text-primary underline-offset-4 hover:underline"
             >
-              help@hackathonwallah.com
+              hubhackathon15@gmail.com
             </a>
           </p>
         </div>
@@ -183,14 +183,14 @@ export default function CancellationPolicyPage() {
           <p>
             Please review this policy along with our{" "}
             <Link
-              href="/(privacy)/refund-policy"
+              href="/refund-policy"
               className="text-primary underline-offset-4 hover:underline"
             >
               Refund Policy
             </Link>{" "}
             and{" "}
             <Link
-              href="/(privacy)/terms-and-conditions"
+              href="/terms-and-conditions"
               className="text-primary underline-offset-4 hover:underline"
             >
               Terms &amp; Conditions
