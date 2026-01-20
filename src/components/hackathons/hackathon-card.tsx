@@ -89,7 +89,7 @@ export function HackathonCard({ hackathon }: HackathonCardProps) {
         <span className="text-sm text-muted-foreground">
           Prize pool: INR {hackathon.prize_pool.toLocaleString("en-IN")}
         </span>
-        <Button asChild>
+        <Button asChild className={`${hackathon.status === "completed" ? "hidden" : ""}`}>
           <Link href={`/hackathons/${hackathon.slug}`}>View details</Link>
         </Button>
       </CardFooter>

@@ -407,7 +407,7 @@ export default function AboutContent() {
       </section>
 
       <section className="mx-auto w-full max-w-5xl px-4 pb-24 sm:px-6 lg:px-8">
-        <div className="items-center gap-5 border border-primary/30 bg-primary/10 text-center shadow-lg sm:p-14 rounded-lg flex flex-col">
+        <div className="items-center gap-5 border border-primary/30 bg-primary/10 text-center shadow-lg sm:p-14 rounded-lg flex flex-col p-5">
           <h2
             className="text-3xl font-semibold tracking-tight text-primary sm:text-4xl"
             style={brandDisplayStyle}

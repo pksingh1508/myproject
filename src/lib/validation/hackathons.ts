@@ -79,10 +79,7 @@ const baseHackathonSchema = z
     status: statusSchema.default("draft"),
     themes: z
       .array(
-        z
-          .string()
-          .trim()
-          .min(1, { message: "Theme names must not be empty." })
+        z.string().trim().min(1, { message: "Theme names must not be empty." })
       )
       .max(10, { message: "A maximum of 10 themes can be provided." })
       .optional(),
@@ -97,17 +94,21 @@ const baseHackathonSchema = z
       message: "Registration end must be after registration start."
     }
   )
-  .refine((data) => new Date(data.start_date) >= new Date(data.registration_end), {
-    path: ["start_date"],
-    message: "Hackathon cannot start before registration is complete."
-  })
+  .refine(
+    (data) => new Date(data.start_date) >= new Date(data.registration_end),
+    {
+      path: ["start_date"],
+      message: "Hackathon cannot start before registration is complete."
+    }
+  )
   .refine((data) => new Date(data.end_date) >= new Date(data.start_date), {
     path: ["end_date"],
     message: "Hackathon end date must be after the start date."
   })
   .refine((data) => data.max_team_size >= data.min_team_size, {
     path: ["max_team_size"],
-    message: "Maximum team size must be greater than or equal to minimum team size."
+    message:
+      "Maximum team size must be greater than or equal to minimum team size."
   })
   .refine(
     (data) => {
@@ -140,9 +141,7 @@ export const updateHackathonSchema = baseHackathonSchema
     id: uuidSchema
   })
   .refine(
-    (data) =>
-      !data.slug ||
-      /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(data.slug ?? ""),
+    (data) => !data.slug || /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(data.slug ?? ""),
     {
       path: ["slug"],
       message:
@@ -154,7 +153,7 @@ export const hackathonFilterSchema = z.object({
   status: z
     .array(statusSchema)
     .optional()
-    .default(["published", "ongoing"]),
+    .default(["published", "ongoing", "completed"]),
   themes: z.array(z.string().trim().min(1)).optional(),
   search: z.string().trim().optional()
 });

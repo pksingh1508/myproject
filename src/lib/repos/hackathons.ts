@@ -124,8 +124,23 @@ export async function listHackathons(
   filters: Partial<HackathonFilterInput> = {},
   client?: SupabaseClient
 ) {
-  const supabase = await resolveUserClient(client);
   const parsedFilters = hackathonFilterSchema.parse(filters);
+
+  // Check if we are requesting only public data (no drafts).
+  // If so, we use the service role client to ensure visibility regardless of RLS,
+  // fixing the issue where "completed" hackathons were hidden for anonymous users.
+  const isPublicRequest = parsedFilters.status.every((s) =>
+    ["published", "ongoing", "completed"].includes(s)
+  );
+
+  let supabase: SupabaseClient;
+  if (client) {
+    supabase = client;
+  } else if (isPublicRequest) {
+    supabase = createServiceRoleClient() as SupabaseClient;
+  } else {
+    supabase = await resolveUserClient();
+  }
 
   let query = supabase
     .from("hackathons")

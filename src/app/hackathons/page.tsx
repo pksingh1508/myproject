@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   }
 };
 
-export const revalidate = 120;
+export const dynamic = "force-dynamic";
 
 interface HackathonsPageProps {
   searchParams?: Promise<{
@@ -39,12 +39,12 @@ interface HackathonsPageProps {
 
 const STATUS_PRESETS = [
   {
-    label: "Upcoming",
-    value: "published,ongoing"
+    label: "Ongoing",
+    value: "ongoing"
   },
   {
-    label: "Drafts",
-    value: "draft"
+    label: "Upcoming",
+    value: "upcoming"
   },
   {
     label: "Completed",
