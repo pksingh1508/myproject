@@ -43,10 +43,6 @@ const STATUS_PRESETS = [
     value: "ongoing"
   },
   {
-    label: "Upcoming",
-    value: "upcoming"
-  },
-  {
     label: "Completed",
     value: "completed"
   }

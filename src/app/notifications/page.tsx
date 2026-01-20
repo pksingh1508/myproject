@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 import { requireUserProfile } from "@/lib/auth/require-user-profile";
 import { listNotificationsForUser } from "@/lib/repos/notifications";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
