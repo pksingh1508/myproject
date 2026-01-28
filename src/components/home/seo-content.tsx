@@ -10,6 +10,8 @@ import {
 } from "@/constants/site";
 import { FAQ as FAQ_ENTRIES } from "@/constants/data";
 
+const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
+
 const structuredDataGeneratedAt = new Date().toISOString();
 
 const talkingPoints = [
@@ -147,6 +149,7 @@ export function SeoContent() {
     <section
       className="w-full bg-background py-16 sm:py-20"
       aria-labelledby="seo-content-heading"
+      style={brandDisplayStyle}
     >
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-10 px-4 sm:px-6 lg:px-8">
         <div className="space-y-4 text-center sm:text-left">

@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 
 import { getHackathonBySlug } from "@/lib/repos/hackathons";
 import { HackathonOverview, HackathonPrizes } from "@/components/hackathons";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -14,6 +12,9 @@ import {
   AccordionTrigger
 } from "@/components/ui/accordion";
 import { HackathonRegistrationButton } from "@/components/registration";
+
+const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
+const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
 
 export const revalidate = 120;
 
@@ -56,7 +57,7 @@ export default async function HackathonPage({ params }: HackathonPageProps) {
 
   return (
     <div className="bg-background">
-      <section className="relative">
+      <section className="relative" style={brandDisplayStyle}>
         {hackathon.banner_url ? (
           <div className="absolute inset-0">
             <div
@@ -90,12 +91,12 @@ export default async function HackathonPage({ params }: HackathonPageProps) {
 
       <Separator />
 
-      <section className="mx-auto grid max-w-5xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[2fr,1fr] lg:px-8">
+      <section className="mx-auto grid max-w-5xl gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[2fr,1fr] lg:px-8" style={brandSansStyle}>
         <div className="space-y-10">
           <HackathonOverview hackathon={hackathon} />
 
           <Card>
-            <CardContent className="space-y-4 py-6">
+            <CardContent className="space-y-4 py-6" style={brandDisplayStyle}>
               <div>
                 <h2 className="text-2xl font-semibold">FAQs</h2>
                 <p className="text-sm text-muted-foreground">

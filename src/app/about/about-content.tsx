@@ -17,21 +17,21 @@ type StatDescriptor = {
 };
 
 const stats: StatDescriptor[] = [
-  { label: "Hackathons launched", target: 120, suffix: "+", format: "integer" },
+  { label: "Hackathons launched", target: 50, suffix: "+", format: "integer" },
   {
     label: "Projects submitted",
-    target: 18_000,
+    target: 1_000,
     suffix: "+",
     format: "compact"
   },
   {
     label: "Prizes awarded",
-    target: 3.2,
+    target: 20,
     prefix: "₹",
-    suffix: " Cr",
-    format: "decimal"
+    suffix: " Lakhs+",
+    format: "integer"
   },
-  { label: "Campuses represented", target: 640, suffix: "+", format: "integer" }
+  { label: "Campuses represented", target: 40, suffix: "+", format: "integer" }
 ];
 
 const pillars = [

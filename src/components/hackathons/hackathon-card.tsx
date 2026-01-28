@@ -17,6 +17,8 @@ interface HackathonCardProps {
   hackathon: Hackathon;
 }
 
+const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
+
 function formatDateRange(start: string, end: string) {
   try {
     const startDate = format(new Date(start), "MMM d, yyyy");
@@ -34,7 +36,7 @@ function formatDateRange(start: string, end: string) {
 
 export function HackathonCard({ hackathon }: HackathonCardProps) {
   return (
-    <Card className="flex h-full flex-col justify-between">
+    <Card className="flex h-full flex-col justify-between" style={brandSansStyle}>
       <div>
         <CardHeader className="space-y-3">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">

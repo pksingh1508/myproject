@@ -10,6 +10,8 @@ interface HackathonOverviewProps {
   hackathon: Hackathon;
 }
 
+const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
+
 function formatDateTime(value: string) {
   try {
     return format(new Date(value), "PPP p");
@@ -91,14 +93,14 @@ export function HackathonOverview({ hackathon }: HackathonOverviewProps) {
                 ? `INR ${hackathon.participation_fee.toFixed(0)}`
                 : "Free"}
             </div>
-            {typeof hackathon.max_participants === "number" ? (
+            {/* {typeof hackathon.max_participants === "number" ? (
               <div>
                 <span className="font-medium text-foreground">
                   Participant slots:
                 </span>{" "}
                 {hackathon.current_participants} / {hackathon.max_participants}
               </div>
-            ) : null}
+            ) : null} */}
             {hackathon.location_details ? (
               <div>
                 <span className="font-medium text-foreground">Details:</span>{" "}
@@ -116,7 +118,7 @@ export function HackathonOverview({ hackathon }: HackathonOverviewProps) {
       </div>
 
       <Tabs defaultValue="details" className="w-full">
-        <TabsList>
+        <TabsList style={brandDisplayStyle}>
           <TabsTrigger value="details">Details</TabsTrigger>
           <TabsTrigger value="requirements">Requirements</TabsTrigger>
           <TabsTrigger value="rules">Rules</TabsTrigger>

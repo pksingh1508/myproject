@@ -27,6 +27,9 @@ export const metadata: Metadata = {
   }
 };
 
+const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
+const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
+
 export const dynamic = "force-dynamic";
 
 interface HackathonsPageProps {
@@ -40,7 +43,7 @@ interface HackathonsPageProps {
 const STATUS_PRESETS = [
   {
     label: "Ongoing",
-    value: "ongoing"
+    value: "published,ongoing"
   },
   {
     label: "Completed",
@@ -67,7 +70,9 @@ export default async function HackathonsPage({
   });
 
   return (
-    <div className="mx-auto max-w-6xl space-y-10 px-4 py-12 sm:px-6 lg:px-0">
+    <div className="mx-auto max-w-6xl space-y-10 px-4 py-12 sm:px-6 lg:px-0"
+      style={brandDisplayStyle}
+    >
       <section className="space-y-4">
         <Badge variant="secondary" className="uppercase">
           Discover Hackathons
@@ -107,7 +112,7 @@ export default async function HackathonsPage({
       <HackathonGrid
         hackathons={hackathons}
         emptyState={
-          <div>
+          <div className="text-center" style={brandSansStyle}>
             <h3 className="text-lg font-semibold">
               No hackathons match filters
             </h3>
