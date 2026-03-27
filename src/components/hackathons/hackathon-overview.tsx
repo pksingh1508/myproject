@@ -69,9 +69,7 @@ export function HackathonOverview({ hackathon }: HackathonOverviewProps) {
             </div>
             <Separator className="my-2" />
             <div>
-              <span className="font-medium text-foreground">
-                Registration:
-              </span>{" "}
+              <span className="font-medium text-foreground">Registration:</span>{" "}
               {formatDate(hackathon.registration_start)} -{" "}
               {formatDate(hackathon.registration_end)}
             </div>
@@ -136,9 +134,9 @@ export function HackathonOverview({ hackathon }: HackathonOverviewProps) {
           <Card>
             <CardContent className="prose max-w-none py-6 dark:prose-invert">
               {hackathon.requirements ? (
-                hackathon.requirements.split("\n").map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
-                ))
+                hackathon.requirements
+                  .split("\n")
+                  .map((paragraph, index) => <p key={index}>{paragraph}</p>)
               ) : (
                 <p>No specific requirements for this hackathon.</p>
               )}
@@ -149,9 +147,25 @@ export function HackathonOverview({ hackathon }: HackathonOverviewProps) {
           <Card>
             <CardContent className="prose max-w-none py-6 dark:prose-invert">
               {hackathon.rules ? (
-                hackathon.rules.split("\n").map((paragraph, index) => (
-                  <p key={index}>{paragraph}</p>
-                ))
+                <div className="space-y-4 not-prose">
+                  {hackathon.rules
+                    .split("\n")
+                    .map((paragraph) => paragraph.trim())
+                    .filter(Boolean)
+                    .map((paragraph, index) => (
+                      <div key={index} className="flex items-start">
+                        <span
+                          className="min-w-8 text-base leading-7 text-muted-foreground"
+                          style={brandDisplayStyle}
+                        >
+                          {index + 1}.
+                        </span>
+                        <p className="m-0 text-base leading-7 text-muted-foreground">
+                          {paragraph}
+                        </p>
+                      </div>
+                    ))}
+                </div>
               ) : (
                 <p>Rules will be shared with registered participants.</p>
               )}

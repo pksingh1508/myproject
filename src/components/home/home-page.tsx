@@ -4,7 +4,6 @@ import { HowItWork } from "./how-it-work";
 import { WhyChooseUs } from "./why-choose-us";
 import { FAQ } from "./faq";
 import { Testimonials } from "./testimonials";
-import { Footer } from "./footer";
 import { SeoContent } from "./seo-content";
 
 export async function HomePage() {
@@ -17,7 +16,6 @@ export async function HomePage() {
       <FAQ />
       <Testimonials />
       <SeoContent />
-      <Footer />
     </main>
   );
 }

@@ -11,24 +11,25 @@ import {
   BRAND_DESCRIPTION,
   BRAND_NAME,
   BRAND_TAGLINE,
-  SITE_URL
+  SITE_URL,
 } from "@/constants/site";
+import { Footer } from "@/components/home";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"]
+  subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
-  subsets: ["latin"]
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default: `${BRAND_NAME} | India's home for student-led hackathons`,
-    template: `%s | ${BRAND_NAME}`
+    template: `%s | ${BRAND_NAME}`,
   },
   description: BRAND_DESCRIPTION,
   keywords: [
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
     "hackathonwallah",
     "college innovation challenges",
     "buildshipwin",
-    "submit something celebrate everything"
+    "submit something celebrate everything",
   ],
   applicationName: BRAND_NAME,
   creator: BRAND_NAME,
@@ -47,8 +48,8 @@ export const metadata: Metadata = {
   alternates: {
     languages: {
       "en-IN": SITE_URL,
-      "en-US": SITE_URL
-    }
+      "en-US": SITE_URL,
+    },
   },
   openGraph: {
     type: "website",
@@ -62,15 +63,15 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/brand.png`,
         width: 1200,
         height: 630,
-        alt: `${BRAND_NAME} community of student builders`
-      }
-    ]
+        alt: `${BRAND_NAME} community of student builders`,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${BRAND_NAME} | India's home for student-led hackathons`,
     description: BRAND_DESCRIPTION,
-    images: [`${SITE_URL}/brand.png`]
+    images: [`${SITE_URL}/brand.png`],
   },
   robots: {
     index: true,
@@ -80,16 +81,16 @@ export const metadata: Metadata = {
       follow: true,
       "max-snippet": -1,
       "max-video-preview": -1,
-      "max-image-preview": "large"
-    }
+      "max-image-preview": "large",
+    },
   },
   other: {
-    tagline: BRAND_TAGLINE
-  }
+    tagline: BRAND_TAGLINE,
+  },
 };
 
 export default function RootLayout({
-  children
+  children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
@@ -107,6 +108,7 @@ export default function RootLayout({
                   {children}
                   <Toaster richColors position="top-right" />
                 </main>
+                <Footer />
               </div>
             </PostHogProvider>
           </body>
