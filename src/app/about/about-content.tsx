@@ -3,435 +3,604 @@
 import { useEffect, useMemo, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import {
+  ArrowRight,
+  MapPinned,
+  Rocket,
+  ShieldCheck,
+  Sparkles,
+  Target,
+  Trophy,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import { BrandButton, CustomCard } from "@/components/layout";
+import { cn } from "@/lib/utils";
 
 type StatDescriptor = {
   label: string;
   target: number;
+  icon: LucideIcon;
   prefix?: string;
   suffix?: string;
   format: "integer" | "compact" | "decimal";
 };
 
+type FeatureDescriptor = {
+  title: string;
+  description: string;
+  icon: LucideIcon;
+};
+
+type MilestoneDescriptor = {
+  year: string;
+  title: string;
+  description: string;
+};
+
 const stats: StatDescriptor[] = [
-  { label: "Hackathons launched", target: 50, suffix: "+", format: "integer" },
+  {
+    label: "Hackathons hosted",
+    target: 50,
+    icon: Trophy,
+    suffix: "+",
+    format: "integer",
+  },
   {
     label: "Projects submitted",
     target: 1_000,
+    icon: Rocket,
     suffix: "+",
-    format: "compact"
+    format: "compact",
   },
   {
-    label: "Prizes awarded",
+    label: "Prize money won",
     target: 20,
+    icon: Sparkles,
     prefix: "₹",
     suffix: " Lakhs+",
-    format: "integer"
+    format: "integer",
   },
-  { label: "Campuses represented", target: 40, suffix: "+", format: "integer" }
+  {
+    label: "Campuses joined",
+    target: 40,
+    icon: MapPinned,
+    suffix: "+",
+    format: "integer",
+  },
 ];
 
-const pillars = [
+const focusAreas: FeatureDescriptor[] = [
   {
-    title: "Curated challenges",
+    title: "Clear opportunities",
     description:
-      "Every problem statement is built with mentors and partners so students solve real problems while learning industry best practices."
+      "Students should know what to build, how to join, and what comes next without digging through ten different links.",
+    icon: Target,
   },
   {
-    title: "Frictionless experience",
+    title: "Real support",
     description:
-      "We handle the logistics, mentoring, judging, and communications so participants can code, iterate, and demo without distractions."
+      "A good hackathon feels less scary when you can find teammates, ask questions, and get unstuck quickly.",
+    icon: Users,
   },
   {
-    title: "Guaranteed recognition",
+    title: "Fair recognition",
     description:
-      "If you ship, you shine. Every submitted solution earns a reward because we believe progress deserves the prize."
-  }
+      "Winning matters, but so does showing up and shipping something real. We want effort to count too.",
+    icon: ShieldCheck,
+  },
 ];
 
-const values = [
+const studentPromises: FeatureDescriptor[] = [
   {
-    title: "Build together",
+    title: "Less confusion",
     description:
-      "HackathonWallah brings together developers, designers, makers, and dreamers from hundreds of campuses to collaborate in public."
+      "Simple steps, clear timelines, and fewer last-minute surprises.",
+    icon: Sparkles,
   },
   {
-    title: "Learn out loud",
+    title: "More confidence",
     description:
-      "Workshops, AMAs, retros, and mentor office hours help teams pick up new stacks and ship production-ready ideas."
+      "Helpful nudges before submission day so first-time teams feel ready.",
+    icon: Rocket,
   },
   {
-    title: "Celebrate courage",
+    title: "Momentum after the event",
     description:
-      "We reward the courage to finish projects, not just to win. Shipping early and often is the mindset that powers careers."
-  }
+      "The next teammate, project, or hackathon should be easier to find.",
+    icon: ArrowRight,
+  },
 ];
 
-const milestones = [
+const milestones: MilestoneDescriptor[] = [
   {
     year: "2019",
-    title: "Born in campus corridors",
+    title: "Started by students",
     description:
-      "HackathonWallah began as a basement experiment by a group of students who wanted an inclusive space to prototype and learn."
+      "HackathonWallah began with one simple goal: make hackathons feel open and doable for more students.",
   },
   {
     year: "2021",
-    title: "India-wide adoption",
+    title: "More campuses came in",
     description:
-      "Universities from Delhi to Bengaluru signed on, partners joined the movement, and every submission started receiving rewards."
+      "Students from different cities and colleges joined, and the community started growing beyond one circle.",
   },
   {
     year: "2024",
-    title: "Beyond the weekend",
+    title: "Built for the long run",
     description:
-      "We now power year-long innovation programs, job pipelines, and founder cohorts while keeping hackathon energy at the center."
-  }
+      "It became more than a weekend event. Students stayed for the next build, the next team, and the next chance.",
+  },
 ];
 
 const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
 const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
 
+const hoverCardClassName =
+  "border border-border/60 bg-background/80 backdrop-blur-sm transition-colors duration-300 hover:border-sky-300/80";
+
+gsap.registerPlugin(ScrollTrigger);
+
+function MotionIcon({
+  icon: Icon,
+  className,
+}: {
+  icon: LucideIcon;
+  className?: string;
+}) {
+  return (
+    <motion.div
+      variants={{
+        rest: { y: 0, rotate: 0, scale: 1 },
+        hover: {
+          y: -4,
+          rotate: [0, -5, 4, 0],
+          scale: 1.05,
+          transition: { duration: 0.45, ease: "easeOut" },
+        },
+      }}
+      className={cn(
+        "flex size-12 items-center justify-center rounded-2xl border border-sky-200/80 bg-sky-100 text-sky-700 shadow-sm",
+        className,
+      )}
+    >
+      <Icon className="size-5" strokeWidth={2.1} />
+    </motion.div>
+  );
+}
+
 export default function AboutContent() {
   const router = useRouter();
-  const heroRef = useRef<HTMLDivElement | null>(null);
+  const mainRef = useRef<HTMLElement | null>(null);
   const statsRefs = useRef<Array<HTMLParagraphElement | null>>([]);
   const compactFormatter = useMemo(
     () =>
       Intl.NumberFormat("en-IN", {
         notation: "compact",
-        maximumFractionDigits: 1
+        maximumFractionDigits: 1,
       }),
-    []
+    [],
   );
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    gsap.registerPlugin(ScrollTrigger);
 
-    const hero = heroRef.current;
-    if (hero) {
-      const ctx = gsap.context(() => {
-        gsap.fromTo(
-          hero.querySelectorAll("[data-animate=hero]"),
-          { y: 32, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.12,
-            ease: "power3.out"
-          }
-        );
-      }, hero);
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        "[data-animate=hero]",
+        { y: 28, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: "power3.out",
+        },
+      );
 
-      return () => ctx.revert();
-    }
+      gsap.utils
+        .toArray<HTMLElement>("[data-animate=section]")
+        .forEach((element) => {
+          gsap.fromTo(
+            element,
+            { y: 24, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.7,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: element,
+                start: "top 86%",
+                once: true,
+              },
+            },
+          );
+        });
+    }, mainRef);
+
+    return () => ctx.revert();
   }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    gsap.registerPlugin(ScrollTrigger);
 
-    statsRefs.current.forEach((ref, index) => {
-      if (!ref) return;
-      const descriptor = stats[index];
-      const tracker = { value: 0 };
+    const ctx = gsap.context(() => {
+      statsRefs.current.forEach((ref, index) => {
+        if (!ref) return;
 
-      const formatValue = (value: number) => {
-        switch (descriptor.format) {
-          case "compact":
-            return `${compactFormatter.format(Math.round(value))}${
-              descriptor.suffix ?? ""
-            }`;
-          case "decimal":
-            return `${descriptor.prefix ?? ""}${value.toFixed(1)}${
-              descriptor.suffix ?? ""
-            }`;
-          default:
-            return `${descriptor.prefix ?? ""}${Math.round(value)}${
-              descriptor.suffix ?? ""
-            }`;
-        }
-      };
+        const descriptor = stats[index];
+        const tracker = { value: 0 };
 
-      ref.textContent = formatValue(0);
+        const formatValue = (value: number) => {
+          switch (descriptor.format) {
+            case "compact":
+              return `${compactFormatter.format(Math.round(value))}${
+                descriptor.suffix ?? ""
+              }`;
+            case "decimal":
+              return `${descriptor.prefix ?? ""}${value.toFixed(1)}${
+                descriptor.suffix ?? ""
+              }`;
+            default:
+              return `${descriptor.prefix ?? ""}${Math.round(value)}${
+                descriptor.suffix ?? ""
+              }`;
+          }
+        };
 
-      gsap.to(tracker, {
-        value: descriptor.target,
-        duration: 1.6,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: ref,
-          start: "top 85%",
-          once: true
-        },
-        onUpdate: () => {
-          ref.textContent = formatValue(tracker.value);
-        }
+        ref.textContent = formatValue(0);
+
+        gsap.to(tracker, {
+          value: descriptor.target,
+          duration: 1.5,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: ref,
+            start: "top 88%",
+            once: true,
+          },
+          onUpdate: () => {
+            ref.textContent = formatValue(tracker.value);
+          },
+        });
       });
-    });
+    }, mainRef);
+
+    return () => ctx.revert();
   }, [compactFormatter]);
 
   return (
-    <main className="bg-background text-foreground" style={brandSansStyle}>
+    <main
+      ref={mainRef}
+      className="bg-background text-foreground"
+      style={brandSansStyle}
+    >
       <section className="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background">
-        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),transparent_40%)]" />
-        <div
-          ref={heroRef}
-          className="relative mx-auto flex min-h-[60vh] w-full max-w-5xl flex-col justify-center gap-6 px-4 py-20 sm:px-6 lg:px-8"
-        >
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),transparent_42%)]" />
+        <div className="relative mx-auto flex min-h-[58vh] w-full max-w-6xl flex-col justify-center gap-6 px-4 pt-20 sm:px-6 lg:px-8 lg:pt-24">
           <span
             data-animate="hero"
             className="inline-flex w-fit items-center rounded-full border border-primary/40 bg-primary/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.32em] text-primary/80"
           >
             About HackathonWallah
           </span>
+
           <h1
             data-animate="hero"
-            className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl"
+            className="max-w-4xl text-balance text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl"
             style={brandDisplayStyle}
           >
-            Where students build fearlessly, submit boldly, and win together.
+            We built this for students who want a fair chance to try, build, and
+            ship.
           </h1>
+
           <p
             data-animate="hero"
-            className="max-w-3xl text-lg text-muted-foreground"
+            className="max-w-3xl text-base leading-7 text-muted-foreground sm:text-lg"
           >
-            HackathonWallah is India&apos;s home for student-led innovation. We
-            host high-energy hackathons that reward every submission, champion
-            real-world learning, and connect budding builders with mentors,
-            investors, and lifelong collaborators.
+            HackathonWallah started with a simple thought: good students get
+            missed all the time just because they are not from the right
+            college, city, or circle. We wanted one place where they could find
+            real hackathons, build with others, and feel good enough to submit
+            their work.
           </p>
+
           <p
             data-animate="hero"
-            className="text-base font-semibold text-primary"
+            className="max-w-2xl rounded-2xl border border-sky-200/80 bg-sky-100/80 px-4 py-3 text-sm leading-6 text-sky-900"
           >
-            Our mantra: &ldquo;Submit something. Celebrate everything.&rdquo;
-            Because every shipped idea deserves the spotlight.
+            We are not here to make things look bigger than they are. We are
+            here to make the path clearer for students who are willing to put in
+            the work.
           </p>
+
           <div
             data-animate="hero"
-            className="flex flex-col gap-3 sm:flex-row sm:items-center"
+            className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center"
           >
             <BrandButton
               className="px-8 py-3 text-xs"
               onClick={() => router.push("/hackathons")}
             >
-              Browse live hackathons
+              Explore hackathons
             </BrandButton>
             <BrandButton
-              className="px-8 py-3 text-xs border border-primary/40 bg-primary/10"
+              className="border border-primary/40 bg-primary/10 px-8 py-3 text-xs"
               onClick={() => router.push("/notifications")}
             >
-              Stay in the loop
+              Stay updated
             </BrandButton>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto grid w-full max-w-5xl gap-6 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4 sm:px-6 lg:px-8">
-        {stats.map((stat, index) => (
-          <CustomCard key={stat.label} className="h-full">
-            <p
-              ref={(el) => {
-                statsRefs.current[index] = el;
-              }}
-              className="text-3xl font-semibold text-primary"
-            />
-            <p className="mt-2 text-sm uppercase tracking-[0.25em] text-muted-foreground">
-              {stat.label}
-            </p>
+      <section
+        data-animate="section"
+        className="mx-auto grid w-full max-w-6xl gap-6 px-4 py-14 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8"
+      >
+        {stats.map((stat, index) => {
+          const Icon = stat.icon;
+
+          return (
+            <CustomCard
+              key={stat.label}
+              className={cn(hoverCardClassName, "h-full bg-muted/20")}
+            >
+              <motion.div
+                initial="rest"
+                whileHover="hover"
+                className="flex h-full flex-col gap-5"
+              >
+                <MotionIcon icon={Icon} />
+                <div className="space-y-2">
+                  <p
+                    ref={(el) => {
+                      statsRefs.current[index] = el;
+                    }}
+                    className="text-3xl font-semibold text-foreground sm:text-4xl"
+                    style={brandDisplayStyle}
+                  />
+                  <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+                    {stat.label}
+                  </p>
+                </div>
+              </motion.div>
+            </CustomCard>
+          );
+        })}
+      </section>
+
+      <section
+        data-animate="section"
+        className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14"
+      >
+        <div className="max-w-3xl space-y-4">
+          <h2
+            className="text-3xl font-semibold tracking-tight sm:text-4xl"
+            style={brandDisplayStyle}
+          >
+            What we are trying to fix
+          </h2>
+          <p className="text-base leading-7 text-muted-foreground">
+            A lot of good students never get started because hackathons can feel
+            noisy, confusing, or made for people who already know the system. We
+            want the whole experience to feel simpler from day one.
+          </p>
+        </div>
+
+        <div className="mt-8 grid gap-6 lg:grid-cols-3">
+          {focusAreas.map((item) => (
+            <CustomCard
+              key={item.title}
+              className={cn(hoverCardClassName, "h-full bg-muted/20")}
+            >
+              <motion.div
+                initial="rest"
+                whileHover="hover"
+                className="flex h-full flex-col gap-5"
+              >
+                <MotionIcon icon={item.icon} />
+                <div className="space-y-2">
+                  <h3
+                    className="text-xl font-semibold text-foreground"
+                    style={brandDisplayStyle}
+                  >
+                    {item.title}
+                  </h3>
+                  <p className="text-sm leading-6 text-muted-foreground">
+                    {item.description}
+                  </p>
+                </div>
+              </motion.div>
+            </CustomCard>
+          ))}
+        </div>
+      </section>
+
+      <section
+        data-animate="section"
+        className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14"
+      >
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+          <CustomCard className={cn(hoverCardClassName, "h-full bg-muted/30")}>
+            <motion.div
+              initial="rest"
+              whileHover="hover"
+              className="flex h-full flex-col gap-6"
+            >
+              <MotionIcon icon={Users} className="size-14 rounded-3xl" />
+              <div className="space-y-4">
+                <h2
+                  className="text-3xl font-semibold tracking-tight sm:text-4xl"
+                  style={brandDisplayStyle}
+                >
+                  Why we started this
+                </h2>
+                <p className="text-base leading-7 text-muted-foreground">
+                  We kept seeing smart students hold back because they felt
+                  late, underprepared, or not connected enough. That feeling is
+                  real, especially in tier-2 and tier-3 colleges. So we built a
+                  space that feels more welcoming and less intimidating.
+                </p>
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-3">
+                <div className="rounded-2xl border border-sky-200/70 bg-sky-100/70 p-4">
+                  <p className="text-sm font-semibold text-sky-950">
+                    Find events fast
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-sky-900/80">
+                    No need to hunt through scattered groups and random posts.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-sky-200/70 bg-sky-100/70 p-4">
+                  <p className="text-sm font-semibold text-sky-950">
+                    Build with people
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-sky-900/80">
+                    Meet teammates who want to learn and finish something real.
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-sky-200/70 bg-sky-100/70 p-4">
+                  <p className="text-sm font-semibold text-sky-950">
+                    Get a fair shot
+                  </p>
+                  <p className="mt-2 text-sm leading-6 text-sky-900/80">
+                    First-time builders should feel welcome, not out of place.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
           </CustomCard>
-        ))}
-      </section>
 
-      <section className="mx-auto grid w-full max-w-5xl gap-10 px-4 py-16 sm:px-6 lg:px-8">
-        <div className="space-y-4">
-          <h2
-            className="text-3xl font-semibold tracking-tight sm:text-4xl"
-            style={brandDisplayStyle}
-          >
-            Why HackathonWallah exists
-          </h2>
-          <p className="text-muted-foreground">
-            We wanted a space where students could iterate fast, learn from
-            peers, and gain recognition no matter their starting point. So we
-            built a platform that makes the hackathon journey inclusive,
-            transparent, and genuinely rewarding.
-          </p>
-        </div>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {pillars.map((pillar) => (
-            <CustomCard key={pillar.title} className="h-full bg-muted/40">
-              <h3
-                className="text-lg font-semibold text-foreground"
-                style={brandDisplayStyle}
+          <div className="grid gap-6">
+            {studentPromises.map((item) => (
+              <CustomCard
+                key={item.title}
+                className={cn(hoverCardClassName, "h-full bg-background")}
               >
-                {pillar.title}
-              </h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                {pillar.description}
-              </p>
-            </CustomCard>
-          ))}
+                <motion.div
+                  initial="rest"
+                  whileHover="hover"
+                  className="flex h-full items-start gap-4"
+                >
+                  <MotionIcon
+                    icon={item.icon}
+                    className="size-11 rounded-[1.15rem]"
+                  />
+                  <div className="space-y-2">
+                    <h3
+                      className="text-lg font-semibold text-foreground"
+                      style={brandDisplayStyle}
+                    >
+                      {item.title}
+                    </h3>
+                    <p className="text-sm leading-6 text-muted-foreground">
+                      {item.description}
+                    </p>
+                  </div>
+                </motion.div>
+              </CustomCard>
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="space-y-4">
+      <section
+        data-animate="section"
+        className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14"
+      >
+        <div className="max-w-3xl space-y-4 text-center mx-auto">
           <h2
             className="text-3xl font-semibold tracking-tight sm:text-4xl"
             style={brandDisplayStyle}
           >
-            The HackathonWallah promise
+            How we got here
           </h2>
-          <p className="max-w-3xl text-muted-foreground">
-            When students sign up for a HackathonWallah event, they enter a
-            playground where effort is celebrated and momentum is guaranteed.
-            Here&rsquo;s what we believe in:
+          <p className="text-base leading-7 text-muted-foreground">
+            The story has grown over time, but the goal has stayed the same:
+            make it easier for students to build and actually put their work out
+            there.
           </p>
         </div>
-        <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {values.map((value) => (
-            <CustomCard key={value.title} className="h-full bg-muted/20">
-              <h3
-                className="text-lg font-semibold text-foreground"
-                style={brandDisplayStyle}
-              >
-                {value.title}
-              </h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                {value.description}
-              </p>
-            </CustomCard>
-          ))}
-        </div>
-      </section>
 
-      <section className="mx-auto w-full max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="space-y-4 text-center">
-          <h2
-            className="text-3xl font-semibold tracking-tight sm:text-4xl"
-            style={brandDisplayStyle}
-          >
-            Our journey so far
-          </h2>
-          <p className="text-muted-foreground">
-            From a scrappy student collective to India&rsquo;s most loved
-            hackathon network, here&rsquo;s a glance at the milestones that
-            shaped us.
-          </p>
-        </div>
-        <div className="mt-10 space-y-6 w-full max-w-3xl mx-auto">
+        <div className="mt-8 grid gap-6 lg:grid-cols-3">
           {milestones.map((milestone) => (
             <CustomCard
               key={milestone.year}
-              className="border border-border/60 bg-muted/30"
+              className={cn(hoverCardClassName, "h-full bg-muted/20")}
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-primary/70">
-                {milestone.year}
-              </p>
-              <h3
-                className="mt-1 text-lg font-semibold text-foreground"
-                style={brandDisplayStyle}
+              <motion.div
+                initial="rest"
+                whileHover="hover"
+                className="flex h-full flex-col gap-5"
               >
-                {milestone.title}
-              </h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                {milestone.description}
-              </p>
+                <MotionIcon icon={Sparkles} className="size-11 rounded-2xl" />
+                <div className="space-y-3">
+                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-primary/75">
+                    {milestone.year}
+                  </p>
+                  <h3
+                    className="text-xl font-semibold text-foreground"
+                    style={brandDisplayStyle}
+                  >
+                    {milestone.title}
+                  </h3>
+                  <p className="text-sm leading-6 text-muted-foreground">
+                    {milestone.description}
+                  </p>
+                </div>
+              </motion.div>
             </CustomCard>
           ))}
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-5xl px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-          <CustomCard className="space-y-4 border border-border/60 bg-muted/20">
-            <h2
-              className="text-3xl font-semibold tracking-tight sm:text-4xl"
-              style={brandDisplayStyle}
-            >
-              Built for every kind of student innovator
-            </h2>
-            <p className="text-muted-foreground">
-              Whether you&rsquo;re writing your first lines of code or chasing
-              your third startup idea, HackathonWallah is where curiosity meets
-              momentum.
-            </p>
-            <ul className="space-y-3 text-sm text-muted-foreground">
-              <li className="flex items-start gap-2">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-primary" />
-                <span>
-                  New builders get guided starter kits, matching teammates, and
-                  mentors ready to teach.
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-primary" />
-                <span>
-                  Seasoned hackers tap into investors, designers, and hiring
-                  partners at every showcase.
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-primary" />
-                <span>
-                  Alumni stay active through build sprints, job boards, and
-                  launchpad programs all year long.
-                </span>
-              </li>
-            </ul>
-          </CustomCard>
+      <section
+        data-animate="section"
+        className="mx-auto w-full max-w-6xl px-4 pb-24 pt-10 sm:px-6 lg:px-8"
+      >
+        <div className="rounded-[2rem] border border-primary/30 bg-primary/3 p-6 shadow-lg sm:p-10">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-3xl space-y-4">
+              <h2
+                className="text-3xl font-semibold tracking-tight text-primary sm:text-4xl"
+                style={brandDisplayStyle}
+              >
+                Ready to build your next project?
+              </h2>
+              <p className="text-sm leading-6 text-primary/80 sm:text-base">
+                Join students who are learning in public, building with real
+                intent, and getting better one submission at a time.
+              </p>
+            </div>
 
-          <CustomCard className="border border-primary/40 bg-primary/10">
-            <h3
-              className="text-lg font-semibold text-primary"
-              style={brandDisplayStyle}
-            >
-              “Submit something. Celebrate everything.”
-            </h3>
-            <p className="mt-3 text-sm text-primary/80">
-              Our commitment to fairness, effort, and the courage to learn in
-              public. Every submission earns rewards because finishing a project
-              is the real victory.
-            </p>
-            <p className="mt-6 text-sm font-semibold text-primary">
-              Prizes aren’t just trophies—they’re momentum for your next launch.
-            </p>
-          </CustomCard>
-        </div>
-      </section>
-
-      <section className="mx-auto w-full max-w-5xl px-4 pb-24 sm:px-6 lg:px-8">
-        <div className="items-center gap-5 border border-primary/30 bg-primary/10 text-center shadow-lg sm:p-14 rounded-lg flex flex-col p-5">
-          <h2
-            className="text-3xl font-semibold tracking-tight text-primary sm:text-4xl"
-            style={brandDisplayStyle}
-          >
-            Ready to ship your next big idea?
-          </h2>
-          <p className="max-w-2xl text-sm text-primary/80 mx-auto text-center">
-            Join thousands of students who are already building, submitting, and
-            celebrating with HackathonWallah.
-          </p>
-          <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <BrandButton
-              className="px-8 py-3 text-xs"
-              onClick={() => router.push("/hackathons")}
-            >
-              Explore live hackathons
-            </BrandButton>
-            <Link
-              href="/contact"
-              className="inline-flex items-center justify-center rounded-full border border-primary px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-primary transition-colors hover:bg-primary/10"
-              style={brandSansStyle}
-            >
-              Partner with us
-            </Link>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <BrandButton
+                className="px-8 py-3 text-xs"
+                onClick={() => router.push("/hackathons")}
+              >
+                Explore live hackathons
+              </BrandButton>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-primary px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-primary transition-colors hover:bg-primary/10"
+                style={brandSansStyle}
+              >
+                Partner with us
+                <motion.span
+                  whileHover={{ x: 3 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                >
+                  <ArrowRight className="size-4" />
+                </motion.span>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

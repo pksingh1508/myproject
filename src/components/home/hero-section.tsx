@@ -14,17 +14,22 @@ export function HeroSection() {
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),transparent_40%)]" />
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-10 px-4 pt-24 pb-20 text-center sm:px-6">
         <div className="space-y-6">
-          <span className="inline-flex items-center rounded-full border border-border/80 bg-muted/60 px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-            Compete. Create. Celebrate.
+          <span className="inline-flex items-center rounded-full border border-border/80 bg-muted/60 px-3 py-1 text-sm font-medium uppercase tracking-[0.18em] text-muted-foreground">
+            Build. Submit. Win.
           </span>
+          <div className="pt-0 lg:pt-5" />
           <h1
             className="text-balance text-5xl font-semibold tracking-tight text-foreground sm:text-6xl lg:text-7xl"
             style={brandDisplayStyle}
           >
-            Built for TIER-2 & TIER-3 College Students in India
+            Built for{" "}
+            <span className="inline-block rounded-[0.45em] bg-sky-100 px-[0.24em] py-[0.08em] text-sky-950 ring-1 ring-sky-200/80">
+              TIER-2 &amp; TIER-3
+            </span>{" "}
+            College Students in India
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            Not from a famous college? Doesn’t matter. HackathonWallah helps
+            Not from a famous college? Does not matter. HackathonWallah helps
             students from tier-2 and tier-3 colleges discover real hackathons,
             build strong projects, find teammates, and compete with confidence.
           </p>
