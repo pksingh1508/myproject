@@ -21,12 +21,12 @@ export function HeroSection() {
             className="text-balance text-5xl font-semibold tracking-tight text-foreground sm:text-6xl lg:text-7xl"
             style={brandDisplayStyle}
           >
-            Join India&apos;s most exciting hackathons and win big
+            Built for TIER-2 & TIER-3 College Students in India
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-            Discover curated challenges, register instantly, and ship
-            production-ready projects. Submit your build, impress the judges,
-            and take home the prizes.
+            Not from a famous college? Doesn’t matter. HackathonWallah helps
+            students from tier-2 and tier-3 colleges discover real hackathons,
+            build strong projects, find teammates, and compete with confidence.
           </p>
         </div>
 
@@ -48,11 +48,12 @@ export function HeroSection() {
         <div className="grid gap-6 text-left sm:grid-cols-3 mt-0 md:mt-3">
           <CustomCard className="h-full bg-muted/40">
             <p className="text-base font-semibold text-foreground">
-              Build with confidence
+              Build without fear
             </p>
             <p className="mt-2 text-sm text-muted-foreground">
-              Access detailed problem statements, starter kits, and mentor
-              support so you can focus on shipping a standout solution.
+              From idea to demo, get the clarity and support you need to
+              participate with confidence — even if you’re joining your first
+              hackathon.
             </p>
           </CustomCard>
           <CustomCard className="h-full bg-muted/40">
