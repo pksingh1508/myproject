@@ -3,7 +3,10 @@ import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
-import { requireUserProfile } from "@/lib/auth/require-user-profile";
+import {
+  AuthenticationRequiredError,
+  requireUserProfile
+} from "@/lib/auth/require-user-profile";
 import { listNotificationsForUser } from "@/lib/repos/notifications";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -71,6 +74,10 @@ export default async function NotificationsPage() {
     );
   } catch (error) {
     console.error("Unable to load notifications:", error);
-    redirect("/sign-in");
+    if (error instanceof AuthenticationRequiredError) {
+      redirect("/sign-in");
+    }
+
+    throw error;
   }
 }

@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 
-import { requireUserProfile } from "@/lib/auth/require-user-profile";
+import {
+  AuthenticationRequiredError,
+  requireUserProfile
+} from "@/lib/auth/require-user-profile";
 import {
   listNotificationsForUser,
   markNotificationRead
@@ -13,6 +16,13 @@ const markSchema = z.object({
 });
 
 function handleError(error: unknown) {
+  if (error instanceof AuthenticationRequiredError) {
+    return NextResponse.json(
+      { error: "UNAUTHORIZED", message: error.message },
+      { status: 401 }
+    );
+  }
+
   if (error instanceof AppError) {
     return NextResponse.json(
       { error: error.code, message: error.message, details: error.details },

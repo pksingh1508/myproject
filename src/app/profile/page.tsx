@@ -3,7 +3,10 @@ import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
 
-import { requireUserProfile } from "@/lib/auth/require-user-profile";
+import {
+  AuthenticationRequiredError,
+  requireUserProfile
+} from "@/lib/auth/require-user-profile";
 
 import { ProfilePageClient } from "./profile-page-client";
 import { BRAND_NAME } from "@/constants/site";
@@ -34,6 +37,10 @@ export default async function ProfilePage() {
     );
   } catch (error) {
     console.error("Unable to load profile page:", error);
-    redirect("/sign-in");
+    if (error instanceof AuthenticationRequiredError) {
+      redirect("/sign-in");
+    }
+
+    throw error;
   }
 }
