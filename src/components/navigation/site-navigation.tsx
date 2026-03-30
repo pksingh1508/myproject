@@ -26,8 +26,10 @@ const navigationLinks = [
 export function SiteNavigation() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     const handleScroll = () => setIsScrolled(window.scrollY > 12);
     handleScroll();
     window.addEventListener("scroll", handleScroll);
@@ -79,59 +81,70 @@ export function SiteNavigation() {
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
-          <SignedOut>
-            <div className="flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-3 py-1.5">
-              <SignInButton mode="modal">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="hover:bg-gray-600 hover:text-gray-50 rounded-full transition-all duration-300"
-                >
-                  Log in
-                </Button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <Button size="sm" className="bg-gray-700 rounded-full">
-                  Sign up
-                </Button>
-              </SignUpButton>
-            </div>
-          </SignedOut>
-          <SignedIn>
-            <div className="flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-3 py-1.5">
-              <Button asChild variant="ghost" size="sm">
-                <Link href="/profile">Profile</Link>
-              </Button>
-              <UserButton
-                appearance={{
-                  elements: {
-                    userButtonAvatarBox: "size-9",
-                    userButtonOuterIdentifier: "text-sm"
-                  }
-                }}
-                afterSignOutUrl="/"
-              />
-            </div>
-          </SignedIn>
+          {isMounted ? (
+            <>
+              <SignedOut>
+                <div className="flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-3 py-1.5">
+                  <SignInButton mode="modal">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="hover:bg-gray-600 hover:text-gray-50 rounded-full transition-all duration-300"
+                    >
+                      Log in
+                    </Button>
+                  </SignInButton>
+                  <SignUpButton mode="modal">
+                    <Button size="sm" className="bg-gray-700 rounded-full">
+                      Sign up
+                    </Button>
+                  </SignUpButton>
+                </div>
+              </SignedOut>
+              <SignedIn>
+                <div className="flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-3 py-1.5">
+                  <Button asChild variant="ghost" size="sm">
+                    <Link href="/profile">Profile</Link>
+                  </Button>
+                  <UserButton
+                    appearance={{
+                      elements: {
+                        userButtonAvatarBox: "size-9",
+                        userButtonOuterIdentifier: "text-sm"
+                      }
+                    }}
+                    afterSignOutUrl="/"
+                  />
+                </div>
+              </SignedIn>
+            </>
+          ) : (
+            <div
+              aria-hidden="true"
+              className="h-11 w-[188px] rounded-full border border-border/60 bg-muted/30"
+            />
+          )}
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
-          <SignedIn>
-            <div className="flex items-center gap-2">
-              <Button asChild variant="ghost" size="sm">
-                <Link href="/profile">Profile</Link>
-              </Button>
-              <UserButton
-                appearance={{
-                  elements: {
-                    userButtonAvatarBox: "size-8",
-                    userButtonOuterIdentifier: "text-sm"
-                  }
-                }}
-                afterSignOutUrl="/"
-              />
-            </div>
-          </SignedIn>
+          {isMounted ? (
+            <SignedIn>
+              <div className="flex items-center gap-2">
+                <Button asChild variant="ghost" size="sm">
+                  <Link href="/profile">Profile</Link>
+                </Button>
+                <UserButton
+                  appearance={{
+                    elements: {
+                      userButtonAvatarBox: "size-8",
+                      userButtonOuterIdentifier: "text-sm"
+                    }
+                  }}
+                  afterSignOutUrl="/"
+                />
+              </div>
+            </SignedIn>
+          ) : null}
           <Sheet>
             <SheetTrigger asChild>
               <Button
@@ -171,21 +184,30 @@ export function SiteNavigation() {
                   })}
                 </nav>
                 <div className="flex flex-col gap-3">
-                  <SignedOut>
-                    <SignInButton mode="modal">
-                      <Button variant="outline" className="w-full">
-                        Log in
-                      </Button>
-                    </SignInButton>
-                    <SignUpButton mode="modal">
-                      <Button className="w-full">Sign up</Button>
-                    </SignUpButton>
-                  </SignedOut>
-                  <SignedIn>
-                    <p className="text-sm text-muted-foreground">
-                      Use the avatar above to view your account or sign out.
-                    </p>
-                  </SignedIn>
+                  {isMounted ? (
+                    <>
+                      <SignedOut>
+                        <SignInButton mode="modal">
+                          <Button variant="outline" className="w-full">
+                            Log in
+                          </Button>
+                        </SignInButton>
+                        <SignUpButton mode="modal">
+                          <Button className="w-full">Sign up</Button>
+                        </SignUpButton>
+                      </SignedOut>
+                      <SignedIn>
+                        <p className="text-sm text-muted-foreground">
+                          Use the avatar above to view your account or sign out.
+                        </p>
+                      </SignedIn>
+                    </>
+                  ) : (
+                    <div
+                      aria-hidden="true"
+                      className="h-20 rounded-xl border border-border/50 bg-muted/20"
+                    />
+                  )}
                 </div>
               </div>
             </SheetContent>

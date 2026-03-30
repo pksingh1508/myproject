@@ -108,7 +108,6 @@ export default function RootLayout({
                   {children}
                   <Toaster richColors position="top-right" />
                 </main>
-                <Footer />
               </div>
             </PostHogProvider>
           </body>
