@@ -56,20 +56,20 @@ export const BrandButton = forwardRef<HTMLButtonElement, BrandButtonProps>(
 
       hoverTimeline.current = gsap
         .timeline({ paused: true })
-        .to(fill, { scaleY: 1, duration: 0.4, ease: "power2.out" }, 0)
+        .to(fill, { scaleY: 1, duration: 0.12, ease: "power3.out" }, 0)
         .to(
           btn,
-          { x: -6, y: -6, duration: 0.35, ease: "power2.out" },
+          { x: -6, y: -6, duration: 0.12, ease: "power3.out" },
           0
         )
         .to(
           shadow,
-          { opacity: 1, duration: 0.35, ease: "power2.out" },
+          { opacity: 1, duration: 0.12, ease: "power3.out" },
           0
         )
         .to(
           textRef.current,
-          { color: "#ffffff", duration: 0.35, ease: "power2.out" },
+          { color: "#ffffff", duration: 0.06, ease: "none" },
           0
         );
 
@@ -131,24 +131,24 @@ export const BrandButton = forwardRef<HTMLButtonElement, BrandButtonProps>(
           x: 0,
           y: 0,
           scale: 1,
-          duration: 0.2,
-          ease: "power2.out"
+          duration: 0.08,
+          ease: "power3.out"
         });
         gsap.to(fillRef.current, {
           scaleY: 0,
-          duration: 0.2,
-          ease: "power2.out"
+          duration: 0.08,
+          ease: "power3.out"
         });
         gsap.to(shadowRef.current, {
           opacity: 0,
-          duration: 0.2,
-          ease: "power2.out"
+          duration: 0.08,
+          ease: "power3.out"
         });
         if (textEl) {
           gsap.to(textEl, {
             color: initialTextColor.current || "",
-            duration: 0.2,
-            ease: "power2.out"
+            duration: 0.05,
+            ease: "none"
           });
         }
       }
@@ -159,12 +159,12 @@ export const BrandButton = forwardRef<HTMLButtonElement, BrandButtonProps>(
         <span
           ref={shadowRef}
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-xl bg-foreground/15 opacity-0 transition-opacity duration-200"
+          className="pointer-events-none absolute inset-0 rounded-xl bg-foreground/15 opacity-0"
         />
         <button
           ref={buttonRef}
           className={cn(
-            "relative inline-flex items-center justify-center overflow-hidden rounded-xl border border-primary/40 bg-background px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-foreground shadow-md transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70",
+            "relative inline-flex items-center justify-center overflow-hidden rounded-xl border border-primary/40 bg-background px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-foreground shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70",
             className
           )}
           disabled={disabled || loading}
@@ -177,7 +177,7 @@ export const BrandButton = forwardRef<HTMLButtonElement, BrandButtonProps>(
           />
           <span
             ref={textRef}
-            className="relative flex items-center justify-center gap-2 text-foreground transition-colors duration-200"
+            className="relative flex items-center justify-center gap-2 text-foreground"
           >
             {loading ? (
               <>
