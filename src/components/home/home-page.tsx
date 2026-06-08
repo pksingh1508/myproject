@@ -11,12 +11,12 @@ export async function HomePage() {
   return (
     <main className="bg-background">
       <HeroSection />
-      <WhatYouGet />
       <HowItWork />
+      <WhatYouGet />
       <WhyChooseUs />
-      <FAQ />
+      {/* <FAQ /> */}
       <Testimonials />
-      <SeoContent />
+      {/* <SeoContent /> */}
       <Footer />
     </main>
   );

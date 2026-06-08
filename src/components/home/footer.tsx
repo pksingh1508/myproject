@@ -10,18 +10,18 @@ const quickLinks = [
   { label: "Hackathons", href: "/hackathons" },
   { label: "About", href: "/about" },
   { label: "Notifications", href: "/notifications" },
-  { label: "Contact", href: "/contact" }
+  { label: "Contact", href: "/contact" },
 ];
 
 const socialLinks = [
-  { label: "Instagram", href: "https://instagram.com/hackathon_wallah" }
+  { label: "Instagram", href: "https://instagram.com/hackathon_wallah" },
 ];
 
 const legalLinks = [
   { label: "Terms & Conditions", href: "/terms-and-conditions" },
   { label: "Privacy policy", href: "/privacy-policy" },
   { label: "Refund Policy", href: "/refund-policy" },
-  { label: "Cancellation Policy", href: "/cancellation-policy" }
+  { label: "Cancellation Policy", href: "/cancellation-policy" },
 ];
 
 const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
@@ -49,9 +49,9 @@ export function Footer() {
           ease: "power3.out",
           scrollTrigger: {
             trigger: el,
-            start: "top 85%"
-          }
-        }
+            start: "top 85%",
+          },
+        },
       );
     }, el);
 
@@ -88,8 +88,8 @@ export function Footer() {
                 </p>
               </div>
               <div className="grid gap-1 text-sm text-foreground/80">
-                <p>Indranagar</p>
-                <p>Gorakhpur, 273001</p>
+                <p>Noida</p>
+                <p>Sector 62</p>
                 <p>India</p>
               </div>
               <div className="grid gap-1 text-sm text-foreground/80">
