@@ -5,7 +5,6 @@ import {
   useMemo,
   useRef,
   useState,
-  type ButtonHTMLAttributes,
   type ReactNode,
 } from "react";
 import Link from "next/link";
@@ -28,6 +27,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+import { BrandButton } from "@/components/layout";
 import { cn } from "@/lib/utils";
 
 type StatDescriptor = {
@@ -247,24 +247,6 @@ function AboutCard({
   return <div className={cn(cardClassName, className)}>{children}</div>;
 }
 
-function AboutButton({
-  className,
-  children,
-  ...props
-}: ButtonHTMLAttributes<HTMLButtonElement>) {
-  return (
-    <button
-      className={cn(
-        "inline-flex items-center justify-center rounded-xl border border-primary/40 bg-background px-8 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-foreground shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
-        className,
-      )}
-      {...props}
-    >
-      {children}
-    </button>
-  );
-}
-
 export default function AboutContent() {
   const router = useRouter();
 
@@ -299,15 +281,18 @@ export default function AboutContent() {
           </p>
 
           <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center">
-            <AboutButton onClick={() => router.push("/hackathons")}>
+            <BrandButton
+              className="px-8 py-3 text-xs"
+              onClick={() => router.push("/hackathons")}
+            >
               Explore hackathons
-            </AboutButton>
-            <AboutButton
-              className="border-border/60 bg-muted/40"
+            </BrandButton>
+            <BrandButton
+              className="border border-border/60 bg-muted/40 px-8 py-3 text-xs"
               onClick={() => router.push("/notifications")}
             >
               Stay updated
-            </AboutButton>
+            </BrandButton>
           </div>
         </div>
       </section>
@@ -502,9 +487,12 @@ export default function AboutContent() {
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <AboutButton onClick={() => router.push("/hackathons")}>
+              <BrandButton
+                className="px-8 py-3 text-xs"
+                onClick={() => router.push("/hackathons")}
+              >
                 Explore live hackathons
-              </AboutButton>
+              </BrandButton>
               <Link
                 href="/contact"
                 className="inline-flex items-center justify-center gap-2 rounded-xl border border-primary/40 bg-background px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-foreground shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
