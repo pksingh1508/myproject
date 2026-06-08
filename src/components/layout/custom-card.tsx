@@ -43,14 +43,14 @@ export const CustomCard = forwardRef<HTMLDivElement, CustomCardProps>(
         hoverTimeline.current = gsap.to(card, {
           x: 10,
           y: -10,
-          duration: 0.3,
-          ease: "power2.out"
+          duration: 0.12,
+          ease: "power3.out"
         });
         gsap.to(shadow, {
           opacity: 1,
           scale: 1,
-          duration: 0.35,
-          ease: "power2.out"
+          duration: 0.12,
+          ease: "power3.out"
         });
       };
 
@@ -59,14 +59,14 @@ export const CustomCard = forwardRef<HTMLDivElement, CustomCardProps>(
         hoverTimeline.current = gsap.to(card, {
           x: 0,
           y: 0,
-          duration: 0.3,
-          ease: "power2.out"
+          duration: 0.1,
+          ease: "power3.out"
         });
         gsap.to(shadow, {
           opacity: 0,
           scale: 0.95,
-          duration: 0.35,
-          ease: "power2.out"
+          duration: 0.1,
+          ease: "power3.out"
         });
       };
 
@@ -115,12 +115,12 @@ export const CustomCard = forwardRef<HTMLDivElement, CustomCardProps>(
         <span
           ref={shadowRef}
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 rounded-2xl bg-foreground/10 opacity-0 transition-opacity duration-300"
+          className="pointer-events-none absolute inset-0 rounded-2xl bg-foreground/10 opacity-0"
         />
         <div
           ref={cardRef}
           className={cn(
-            "relative flex h-full flex-col rounded-2xl border border-border/60 bg-background p-6 shadow-lg transition-shadow duration-200",
+            "relative flex h-full flex-col rounded-2xl border border-border/60 bg-background p-6 shadow-lg",
             className
           )}
           {...props}
