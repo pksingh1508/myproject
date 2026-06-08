@@ -20,7 +20,8 @@ const navigationLinks = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Hackathons", href: "/hackathons" },
-  { label: "Notification", href: "/notifications" }
+  { label: "Notification", href: "/notifications" },
+  { label: "Career", href: "/career" }
 ];
 
 export function SiteNavigation() {

@@ -6,11 +6,12 @@ const isPublicRoute = createRouteMatcher([
   "/sign-up(.*)",
   "/hackathons(.*)",
   "/about(.*)",
+  "/career(.*)",
   "/api/webhooks/(.*)",
   "/privacy-policy(.*)",
   "/terms-and-conditions(.*)",
   "/refund-policy(.*)",
-  "/cancellation-policy(.*)"
+  "/cancellation-policy(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
@@ -29,6 +30,6 @@ export const config = {
   matcher: [
     // Skip Next.js internals and all static files.
     "/((?!_next|.*\\..*).*)",
-    "/"
-  ]
+    "/",
+  ],
 };
