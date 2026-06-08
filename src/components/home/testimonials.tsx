@@ -5,14 +5,14 @@ import Image from "next/image";
 import {
   Carousel,
   CarouselContent,
-  CarouselItem
+  CarouselItem,
 } from "@/components/ui/carousel";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from "@/components/ui/card";
 import { TESTIMONIALS } from "@/constants/data";
 const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
@@ -28,10 +28,7 @@ function truncateWords(text: string, maxWords = 200) {
 
 export function Testimonials() {
   return (
-    <section
-      className="w-full bg-background py-10 sm:py-10"
-      style={brandSansStyle}
-    >
+    <section className="w-full bg-background pt-10" style={brandSansStyle}>
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 sm:px-6 lg:px-8">
         <div className="space-y-3 text-center sm:text-left">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
@@ -41,7 +38,7 @@ export function Testimonials() {
             className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
             style={brandDisplayStyle}
           >
-            Builders love shipping with Hackathon Wallah
+            Builders loves Hackathon Wallah
           </h2>
           <p className="mx-auto max-w-2xl text-sm text-muted-foreground sm:mx-0">
             Hear from hackers who turned weekend projects into standout

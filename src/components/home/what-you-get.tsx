@@ -11,42 +11,37 @@ const prizes = [
     title: "Win a high-performance laptop",
     description:
       "Take home a cutting-edge laptop to power your next big build.",
-    image:
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=720&q=80",
-    alt: "Laptop on a desk"
+    image: "https://ik.imagekit.io/eucareerserwis/Hackathonwallah/laptop.png",
+    alt: "Laptop on a desk",
   },
   {
     title: "Bag the latest smartphone",
     description:
       "Upgrade your hustle with a flagship mobile ready for prototyping on the go.",
-    image:
-      "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=720&q=80",
-    alt: "Modern smartphone close-up"
+    image: "https://ik.imagekit.io/eucareerserwis/Hackathonwallah/phone.png",
+    alt: "Modern smartphone close-up",
   },
   {
     title: "Swag that turns heads",
     description:
       "Limited-edition tees and bottles for every teammate who makes the shortlist.",
-    image:
-      "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=720&q=80",
-    alt: "T-shirt and bottle merchandise"
+    image: "https://ik.imagekit.io/eucareerserwis/Hackathonwallah/tshirt.png",
+    alt: "T-shirt and bottle merchandise",
   },
   {
     title: "Cash prizes that go the distance",
     description:
       "Win generous cash rewards to reinvest in your product roadmap or celebrate with your crew.",
-    image:
-      "https://images.unsplash.com/photo-1565514158740-064f34bd6cfd?auto=format&fit=crop&w=720&q=80",
-    alt: "Stacks of money"
+    image: "https://ik.imagekit.io/eucareerserwis/Hackathonwallah/cash.png",
+    alt: "Stacks of money",
   },
   {
     title: "Pitch to real investors",
     description:
       "Selected winners unlock direct intros to investors scouting their next portfolio company.",
-    image:
-      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=720&q=80",
-    alt: "Business investor meeting"
-  }
+    image: "https://ik.imagekit.io/eucareerserwis/Hackathonwallah/investor.png",
+    alt: "Business investor meeting",
+  },
 ] as const;
 
 export function WhatYouGet() {

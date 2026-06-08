@@ -5,19 +5,23 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "images.unsplash.com"
+        hostname: "images.unsplash.com",
       },
       {
         protocol: "https",
-        hostname: "images.pexels.com"
+        hostname: "images.pexels.com",
+      },
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
       },
       {
         protocol: "https",
         hostname: "api.dicebear.com",
-        pathname: "/**"
-      }
-    ]
-  }
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
