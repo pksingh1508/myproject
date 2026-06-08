@@ -9,7 +9,7 @@ export type JobRole = {
 export const jobData: JobRole[] = [
   {
     title: "Frontend Developer",
-    salaryRange: "10 - 20 LPA",
+    salaryRange: "10 - 12 LPA",
     description:
       "We are looking for a Frontend Developer to build modern, responsive, and user-friendly web applications. You will work closely with designers and backend developers to create seamless digital experiences.",
     responsibilities: [
@@ -30,7 +30,7 @@ export const jobData: JobRole[] = [
   },
   {
     title: "Backend Developer",
-    salaryRange: "10 - 20 LPA",
+    salaryRange: "14 - 16 LPA",
     description:
       "We are seeking a Backend Developer to design, develop, and maintain scalable server-side applications and APIs that power our products and services.",
     responsibilities: [
@@ -51,7 +51,7 @@ export const jobData: JobRole[] = [
   },
   {
     title: "Full Stack Developer",
-    salaryRange: "10 - 20 LPA",
+    salaryRange: "14 - 20 LPA",
     description:
       "We are looking for a Full Stack Developer who can work across both frontend and backend technologies to build complete web applications from concept to deployment.",
     responsibilities: [
@@ -72,7 +72,7 @@ export const jobData: JobRole[] = [
   },
   {
     title: "Mobile App Developer",
-    salaryRange: "10 - 20 LPA",
+    salaryRange: "17 - 20 LPA",
     description:
       "We are hiring a Mobile App Developer to create high-quality Android and iOS applications with a strong focus on performance, usability, and user experience.",
     responsibilities: [
@@ -93,7 +93,7 @@ export const jobData: JobRole[] = [
   },
   {
     title: "React Developer",
-    salaryRange: "10 - 20 LPA",
+    salaryRange: "10 - 12 LPA",
     description:
       "We are looking for a React Developer to build modern, scalable, and high-performance web applications using React and related technologies.",
     responsibilities: [
@@ -114,7 +114,7 @@ export const jobData: JobRole[] = [
   },
   {
     title: "React Native Developer",
-    salaryRange: "10 - 20 LPA",
+    salaryRange: "15 - 17 LPA",
     description:
       "We are seeking a React Native Developer to build and maintain cross-platform mobile applications for Android and iOS.",
     responsibilities: [
@@ -135,7 +135,7 @@ export const jobData: JobRole[] = [
   },
   {
     title: "Node.js Developer",
-    salaryRange: "10 - 20 LPA",
+    salaryRange: "10 - 12 LPA",
     description:
       "We are looking for a Node.js Developer to build scalable backend services and APIs that support modern web and mobile applications.",
     responsibilities: [
@@ -156,7 +156,7 @@ export const jobData: JobRole[] = [
   },
   {
     title: "Laravel Developer",
-    salaryRange: "10 - 20 LPA",
+    salaryRange: "12 - 15 LPA",
     description:
       "We are seeking a Laravel Developer to build robust web applications, admin panels, APIs, and business management systems.",
     responsibilities: [
