@@ -13,7 +13,7 @@ const initialState = {
   email: "",
   phone: "",
   subject: "",
-  message: ""
+  message: "",
 };
 
 export default function ContactContent() {
@@ -21,12 +21,12 @@ export default function ContactContent() {
   const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = event.target;
     setFormValues((previous) => ({
       ...previous,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -38,9 +38,9 @@ export default function ContactContent() {
       const response = await fetch("/api/contacts", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formValues)
+        body: JSON.stringify(formValues),
       });
 
       const text = await response.text();
@@ -59,7 +59,7 @@ export default function ContactContent() {
       setFormValues(initialState);
       toast.success(
         (payload?.message as string) ??
-          "Thanks for getting in touch. We’ll reach out soon."
+          "Thanks for getting in touch. We’ll reach out soon.",
       );
     } catch (error) {
       const message =
@@ -108,7 +108,7 @@ export default function ContactContent() {
             </div>
             <div>
               <p className="font-semibold text-foreground">Office</p>
-              <p>Indranagar, Gorakhpur, 273001, India</p>
+              <p>Noida, Sector 62, India</p>
             </div>
           </div>
         </CustomCard>
