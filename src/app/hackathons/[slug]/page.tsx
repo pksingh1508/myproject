@@ -18,6 +18,16 @@ const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
 
 export const revalidate = 120;
 
+function isRegistrationOpen(registrationEnd: string) {
+  const registrationEndDate = new Date(registrationEnd);
+
+  if (Number.isNaN(registrationEndDate.getTime())) {
+    return false;
+  }
+
+  return new Date() <= registrationEndDate;
+}
+
 interface HackathonPageProps {
   params: Promise<{ slug: string }>;
 }
@@ -55,6 +65,8 @@ export default async function HackathonPage({ params }: HackathonPageProps) {
     notFound();
   }
 
+  const registrationOpen = isRegistrationOpen(hackathon.registration_end);
+
   return (
     <div className="bg-background">
       <section className="relative" style={brandDisplayStyle}>
@@ -82,7 +94,9 @@ export default async function HackathonPage({ params }: HackathonPageProps) {
             <div className="flex gap-3">
               <HackathonRegistrationButton
                 hackathon={hackathon}
+                buttonLabel="Register"
                 buttonSize="lg"
+                registrationOpen={registrationOpen}
               />
             </div>
           </div>
@@ -157,9 +171,11 @@ export default async function HackathonPage({ params }: HackathonPageProps) {
               </div>
               <HackathonRegistrationButton
                 hackathon={hackathon}
+                buttonLabel="Register"
                 buttonVariant="default"
                 buttonSize="lg"
                 buttonClassName="w-full"
+                registrationOpen={registrationOpen}
               />
             </CardContent>
           </Card>

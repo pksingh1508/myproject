@@ -24,6 +24,7 @@ interface RegistrationDialogProps {
   buttonVariant?: VariantProps<typeof buttonVariants>["variant"];
   buttonSize?: VariantProps<typeof buttonVariants>["size"];
   buttonClassName?: string;
+  registrationOpen?: boolean;
 }
 
 type ProfileState =
@@ -94,10 +95,11 @@ async function fetchRegistrationStatus(
 
 export function HackathonRegistrationDialog({
   hackathon,
-  buttonLabel = "Register now",
+  buttonLabel = "Register",
   buttonVariant = "default",
   buttonSize = "lg",
-  buttonClassName
+  buttonClassName,
+  registrationOpen = true,
 }: RegistrationDialogProps) {
   const router = useRouter();
   const [registrationDialogOpen, setRegistrationDialogOpen] = useState(false);
@@ -106,7 +108,7 @@ export function HackathonRegistrationDialog({
   const [status, setStatus] = useState<RegistrationStatus>(null);
   const [currentParticipantId, setCurrentParticipantId] = useState<string | null>(null);
   const [paymentDetails, setPaymentDetails] = useState<PaymentDetails | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [profileSubmitting, setProfileSubmitting] = useState(false);
@@ -117,6 +119,7 @@ export function HackathonRegistrationDialog({
 
   const needsProfile = profileState ? !profileState.complete : false;
   const alreadyRegistered = status?.registered ?? false;
+  const registrationStatusLoading = loading && status === null;
   const participantId = currentParticipantId ?? status?.participant?.id ?? null;
   const paymentSettled =
     status?.participant?.paymentStatus?.toLowerCase() === "paid";
@@ -444,18 +447,28 @@ export function HackathonRegistrationDialog({
     };
   }, [profileState]);
 
-  const primaryButtonLabel = alreadyRegistered
-    ? paymentSettled
-      ? hasSubmitted
-        ? "Submitted"
-        : "Submit code"
-      : "Complete payment"
-    : buttonLabel;
+  const primaryButtonLabel = registrationStatusLoading
+    ? "Loading..."
+    : alreadyRegistered
+      ? paymentSettled
+        ? hasSubmitted
+          ? "Submitted"
+          : "Submit code"
+        : "Complete payment"
+      : registrationOpen
+        ? buttonLabel
+        : "Registration End";
 
   const isPrimaryButtonDisabled =
-    alreadyRegistered && paymentSettled && hasSubmitted;
+    registrationStatusLoading ||
+    (alreadyRegistered && paymentSettled && hasSubmitted) ||
+    (!alreadyRegistered && !registrationOpen);
 
   const handlePrimaryButtonClick = useCallback(() => {
+    if (!alreadyRegistered && !registrationOpen) {
+      return;
+    }
+
     if (alreadyRegistered && paymentSettled) {
       if (!hasSubmitted) {
         setSubmissionModalOpen(true);
@@ -464,7 +477,7 @@ export function HackathonRegistrationDialog({
     }
 
     setRegistrationDialogOpen(true);
-  }, [alreadyRegistered, paymentSettled, hasSubmitted]);
+  }, [alreadyRegistered, paymentSettled, hasSubmitted, registrationOpen]);
 
   const handleCheckoutLaunch = useCallback(async () => {
     if (!paymentDetails) {
@@ -697,7 +710,8 @@ export function HackathonRegistrationButton({
   buttonLabel,
   buttonVariant,
   buttonSize,
-  buttonClassName
+  buttonClassName,
+  registrationOpen,
 }: RegistrationDialogProps) {
   return (
     <>
@@ -719,6 +733,7 @@ export function HackathonRegistrationButton({
           buttonVariant={buttonVariant}
           buttonSize={buttonSize}
           buttonClassName={buttonClassName}
+          registrationOpen={registrationOpen}
         />
       </SignedIn>
     </>
