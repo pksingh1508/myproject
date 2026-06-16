@@ -24,6 +24,34 @@ const featureCards = [
   },
 ] as const;
 
+function CornerHighlight({ children }: { children: React.ReactNode }) {
+  const dotClassName =
+    "absolute size-2.5 animate-pulse rounded-full bg-sky-500 shadow-[0_0_10px_rgba(56,189,248,0.6)] duration-1000";
+
+  return (
+    <span className="relative inline-block px-[0.32em] py-[0.08em] text-sky-950">
+      <span
+        className="absolute rounded-md inset-0 bg-sky-100/80"
+        aria-hidden="true"
+      />
+      <span className={`${dotClassName} left-0 top-0`} aria-hidden="true" />
+      <span
+        className={`${dotClassName} right-0 top-0 [animation-delay:300ms]`}
+        aria-hidden="true"
+      />
+      <span
+        className={`${dotClassName} bottom-0 left-0 [animation-delay:600ms]`}
+        aria-hidden="true"
+      />
+      <span
+        className={`${dotClassName} bottom-0 right-0 [animation-delay:900ms]`}
+        aria-hidden="true"
+      />
+      <span className="relative z-10">{children}</span>
+    </span>
+  );
+}
+
 export function HeroSection() {
   const router = useRouter();
 
@@ -39,10 +67,7 @@ export function HeroSection() {
             className="text-balance text-slate-700 text-5xl font-semibold tracking-tight sm:text-6xl lg:text-7xl"
             style={brandDisplayStyle}
           >
-            Built for{" "}
-            <span className="inline-block rounded-lg bg-sky-200/80 px-[0.24em] py-[0.08em] text-sky-950 ring-1 ring-sky-300/80">
-              TIER-2 &amp; TIER-3
-            </span>{" "}
+            Built for <CornerHighlight>TIER-2 &amp; TIER-3</CornerHighlight>{" "}
             College Students in India
           </h1>
           <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
