@@ -10,7 +10,7 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from "@/components/ui/card";
 
 interface HackathonCardProps {
@@ -34,11 +34,81 @@ function formatDateRange(start: string, end: string) {
   }
 }
 
+function formatDate(date: Date, fallback: string) {
+  try {
+    return format(date, "MMM d, yyyy");
+  } catch {
+    return fallback;
+  }
+}
+
+function getHackathonStatusMessage(hackathon: Hackathon) {
+  if (hackathon.status === "completed") {
+    return {
+      text: "Hackathon completed",
+      className: "text-emerald-600 dark:text-emerald-400",
+    };
+  }
+
+  const now = new Date();
+  const registrationStart = new Date(hackathon.registration_start);
+  const registrationEnd = new Date(hackathon.registration_end);
+
+  if (
+    Number.isNaN(registrationStart.getTime()) ||
+    Number.isNaN(registrationEnd.getTime())
+  ) {
+    return null;
+  }
+
+  if (now > registrationEnd) {
+    return {
+      text: `Registration ended on ${formatDate(
+        registrationEnd,
+        hackathon.registration_end,
+      )}`,
+      className: "text-red-500/80 dark:text-red-300/80",
+    };
+  }
+
+  if (now < registrationStart) {
+    return null;
+  }
+
+  const millisecondsPerDay = 1000 * 60 * 60 * 24;
+  const remainingDays = Math.ceil(
+    (registrationEnd.getTime() - now.getTime()) / millisecondsPerDay,
+  );
+
+  if (remainingDays <= 5) {
+    return {
+      text:
+        remainingDays <= 1
+          ? "Registration ends today"
+          : `Registration ends in ${remainingDays} days`,
+      className: "text-red-500/80 dark:text-red-300/80",
+    };
+  }
+
+  return null;
+}
+
 export function HackathonCard({ hackathon }: HackathonCardProps) {
+  const statusMessage = getHackathonStatusMessage(hackathon);
+
   return (
-    <Card className="flex h-full flex-col justify-between" style={brandSansStyle}>
+    <Card
+      className="flex h-full flex-col justify-between"
+      style={brandSansStyle}
+    >
       <div>
         <CardHeader className="space-y-3">
+          {statusMessage ? (
+            <p className={`text-sm font-medium ${statusMessage.className}`}>
+              {statusMessage.text}
+            </p>
+          ) : null}
+
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Badge variant="outline" className="capitalize">
               {hackathon.status}
@@ -76,8 +146,8 @@ export function HackathonCard({ hackathon }: HackathonCardProps) {
 
           {hackathon.participation_fee ? (
             <div>
-              <span className="font-medium text-foreground">Fee:</span>{" "}
-              INR {hackathon.participation_fee.toFixed(0)}
+              <span className="font-medium text-foreground">Fee:</span> INR{" "}
+              {hackathon.participation_fee.toFixed(0)}
             </div>
           ) : (
             <div className="text-emerald-600 dark:text-emerald-400">
@@ -91,7 +161,10 @@ export function HackathonCard({ hackathon }: HackathonCardProps) {
         <span className="text-sm text-muted-foreground">
           Prize pool: INR {hackathon.prize_pool.toLocaleString("en-IN")}
         </span>
-        <Button asChild className={`${hackathon.status === "completed" ? "hidden" : ""}`}>
+        <Button
+          asChild
+          className={`${hackathon.status === "completed" ? "hidden" : ""}`}
+        >
           <Link href={`/hackathons/${hackathon.slug}`}>View details</Link>
         </Button>
       </CardFooter>
