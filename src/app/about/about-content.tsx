@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 
 import { BrandButton } from "@/components/layout";
+import { Footer } from "@/components/home/footer";
 import { cn } from "@/lib/utils";
 
 type StatDescriptor = {
@@ -470,10 +471,10 @@ export default function AboutContent() {
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-6xl px-4 pb-24 pt-10 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-6xl px-4 pb-16 pt-10 sm:px-6 lg:px-8">
         <div className="rounded-2xl border border-border/60 bg-muted/40 p-6 shadow-sm sm:p-10">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-3xl space-y-4">
+          <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
+            <div className="space-y-4">
               <h2
                 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
                 style={brandDisplayStyle}
@@ -486,7 +487,7 @@ export default function AboutContent() {
               </p>
             </div>
 
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
               <BrandButton
                 className="px-8 py-3 text-xs"
                 onClick={() => router.push("/hackathons")}
@@ -505,6 +506,8 @@ export default function AboutContent() {
           </div>
         </div>
       </section>
+
+      <Footer />
     </main>
   );
 }
