@@ -4,11 +4,13 @@ import { HackathonCard } from "./hackathon-card";
 interface HackathonGridProps {
   hackathons: Hackathon[];
   emptyState?: React.ReactNode;
+  sortByCreatedAt?: boolean;
 }
 
 export function HackathonGrid({
   hackathons,
-  emptyState
+  emptyState,
+  sortByCreatedAt = false
 }: HackathonGridProps) {
   if (hackathons.length === 0) {
     return (
@@ -26,9 +28,17 @@ export function HackathonGrid({
     );
   }
 
+  const displayedHackathons = sortByCreatedAt
+    ? [...hackathons].sort(
+        (current, next) =>
+          new Date(next.created_at).getTime() -
+          new Date(current.created_at).getTime()
+      )
+    : hackathons;
+
   return (
     <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-      {hackathons.map((hackathon) => (
+      {displayedHackathons.map((hackathon) => (
         <HackathonCard key={hackathon.id} hackathon={hackathon} />
       ))}
     </div>

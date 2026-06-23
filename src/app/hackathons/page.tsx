@@ -111,6 +111,7 @@ export default async function HackathonsPage({
 
       <HackathonGrid
         hackathons={hackathons}
+        sortByCreatedAt
         emptyState={
           <div className="text-center" style={brandSansStyle}>
             <h3 className="text-lg font-semibold">

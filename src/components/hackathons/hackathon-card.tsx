@@ -75,22 +75,10 @@ function getHackathonStatusMessage(hackathon: Hackathon) {
     return null;
   }
 
-  const millisecondsPerDay = 1000 * 60 * 60 * 24;
-  const remainingDays = Math.ceil(
-    (registrationEnd.getTime() - now.getTime()) / millisecondsPerDay,
-  );
-
-  if (remainingDays <= 5) {
-    return {
-      text:
-        remainingDays <= 1
-          ? "Registration ends today"
-          : `Registration ends in ${remainingDays} days`,
-      className: "text-red-500/80 dark:text-red-300/80",
-    };
-  }
-
-  return null;
+  return {
+    text: "Registration Open",
+    className: "text-emerald-600 dark:text-emerald-400",
+  };
 }
 
 export function HackathonCard({ hackathon }: HackathonCardProps) {
