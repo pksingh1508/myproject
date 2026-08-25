@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Suspense } from "react";
 
-import { listHackathons } from "@/lib/repos/hackathons";
-import { HackathonGrid } from "@/components/hackathons";
+import {
+  HackathonCatalog,
+  HackathonGridLoader,
+} from "@/components/hackathons";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/motion/reveal";
-import type { HackathonFilterInput } from "@/lib/validation/hackathons";
 import { BRAND_NAME } from "@/constants/site";
 
 export const metadata: Metadata = {
@@ -28,48 +28,9 @@ export const metadata: Metadata = {
   }
 };
 
-const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
 const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
 
-export const dynamic = "force-dynamic";
-
-interface HackathonsPageProps {
-  searchParams?: Promise<{
-    status?: string;
-    themes?: string;
-    search?: string;
-  }>;
-}
-
-const STATUS_PRESETS = [
-  {
-    label: "Ongoing",
-    value: "published,ongoing"
-  },
-  {
-    label: "Completed",
-    value: "completed"
-  }
-];
-
-export default async function HackathonsPage({
-  searchParams
-}: HackathonsPageProps) {
-  const resolvedParams = searchParams ? await searchParams : undefined;
-  const activeStatus = resolvedParams?.status ?? "published,ongoing";
-  const themesValue = resolvedParams?.themes;
-  const searchValue = resolvedParams?.search;
-
-  const statusFilter = activeStatus.split(
-    ","
-  ) as HackathonFilterInput["status"];
-
-  const hackathons = await listHackathons({
-    status: statusFilter,
-    themes: themesValue ? themesValue.split(",") : undefined,
-    search: searchValue
-  });
-
+export default function HackathonsPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-10 px-4 py-12 sm:px-6 lg:px-0"
       style={brandDisplayStyle}
@@ -89,42 +50,11 @@ export default async function HackathonsPage({
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          {STATUS_PRESETS.map((preset) => {
-            const isActive = preset.value === activeStatus;
-            const href = new URLSearchParams(resolvedParams ?? {});
-            href.set("status", preset.value);
-            return (
-              <Button
-                key={preset.value}
-                asChild
-                variant={isActive ? "default" : "outline"}
-                size="sm"
-              >
-                <Link href={`/hackathons?${href.toString()}`}>
-                  {preset.label}
-                </Link>
-              </Button>
-            );
-          })}
-        </div>
       </Reveal>
 
-      <HackathonGrid
-        hackathons={hackathons}
-        sortByCreatedAt
-        emptyState={
-          <div className="text-center" style={brandSansStyle}>
-            <h3 className="text-lg font-semibold">
-              No hackathons match filters
-            </h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Try adjusting the filters or check back soon for newly published
-              events.
-            </p>
-          </div>
-        }
-      />
+      <Suspense fallback={<HackathonGridLoader />}>
+        <HackathonCatalog />
+      </Suspense>
     </div>
   );
 }

@@ -15,7 +15,10 @@ const isPublicRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (isPublicRoute(req)) {
+  const isPublicHackathonListRequest =
+    req.method === "GET" && req.nextUrl.pathname === "/api/hackathons";
+
+  if (isPublicRoute(req) || isPublicHackathonListRequest) {
     return;
   }
 
