@@ -96,7 +96,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      appearance={{
+        variables: {
+          colorBackground: "var(--card)",
+          colorForeground: "var(--card-foreground)",
+          colorMuted: "var(--muted)",
+          colorMutedForeground: "var(--muted-foreground)",
+          colorNeutral: "var(--foreground)",
+          colorInput: "var(--background)",
+          colorInputForeground: "var(--foreground)",
+          colorPrimary: "var(--primary)",
+          colorPrimaryForeground: "var(--primary-foreground)",
+          colorBorder: "var(--border)",
+          colorRing: "var(--ring)",
+        },
+      }}
+    >
       <html lang="en" suppressHydrationWarning>
         <ReactLenis root>
           <body
