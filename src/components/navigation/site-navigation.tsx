@@ -20,7 +20,13 @@ import {
 import { Menu } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
 const navigationLinks = [
@@ -183,6 +189,10 @@ export function SiteNavigation() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-full max-w-xs px-0">
+              <SheetTitle className="sr-only">Site navigation</SheetTitle>
+              <SheetDescription className="sr-only">
+                Navigate HackathonWallah or access your account.
+              </SheetDescription>
               <div className="flex flex-col gap-6 p-6">
                 <Link href="/" className="text-lg font-semibold">
                   Hackathonwallah

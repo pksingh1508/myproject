@@ -13,7 +13,6 @@ import {
   BRAND_TAGLINE,
   SITE_URL,
 } from "@/constants/site";
-import { Footer } from "@/components/home";
 import { MotionProvider } from "@/components/motion/motion-provider";
 
 const geistSans = Geist({

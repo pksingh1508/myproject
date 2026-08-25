@@ -24,7 +24,13 @@ export const BrandButton = forwardRef<HTMLButtonElement, BrandButtonProps>(
     forwardedRef
   ) {
     return (
-      <span className="relative inline-block">
+      <m.span
+        className="relative inline-block"
+        initial="rest"
+        animate="rest"
+        whileHover={disabled || loading ? undefined : "hover"}
+        whileTap={disabled || loading ? undefined : "tap"}
+      >
         <m.span
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 rounded-xl bg-foreground/15 opacity-0"
@@ -40,13 +46,10 @@ export const BrandButton = forwardRef<HTMLButtonElement, BrandButtonProps>(
             className
           )}
           disabled={disabled || loading}
-          initial="rest"
-          animate="rest"
-          whileHover={disabled || loading ? undefined : "hover"}
-          whileTap={disabled || loading ? undefined : { scale: 0.98 }}
           variants={{
-            rest: { x: 0, y: 0 },
+            rest: { x: 0, y: 0, scale: 1 },
             hover: { x: -3, y: -3 },
+            tap: { x: -1, y: -1, scale: 0.98 },
           }}
           transition={{ type: "spring", stiffness: 420, damping: 30 }}
           {...props}
@@ -78,7 +81,7 @@ export const BrandButton = forwardRef<HTMLButtonElement, BrandButtonProps>(
             )}
           </m.span>
         </m.button>
-      </span>
+      </m.span>
     );
   }
 );

@@ -3,6 +3,7 @@
 import Image from "next/image";
 
 import { CustomCard } from "@/components/layout";
+import { Reveal } from "@/components/motion/reveal";
 const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
 const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
 
@@ -51,7 +52,7 @@ export function WhatYouGet() {
       style={brandSansStyle}
     >
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 sm:px-6">
-        <div className="space-y-3 text-center sm:text-left">
+        <Reveal className="space-y-3 text-center sm:text-left">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
             Prizes
           </p>
@@ -65,22 +66,22 @@ export function WhatYouGet() {
             From gear and cash to investor access, every hackathon on Hackathon
             Hub is stacked with outcomes that accelerate your next move.
           </p>
-        </div>
+        </Reveal>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {prizes.map((prize) => (
+          {prizes.map((prize, index) => (
             <CustomCard
               key={prize.title}
               className="group border-border/50 bg-muted/30 backdrop-blur-sm"
+              revealDelay={(index % 3) * 0.06}
             >
               <div className="relative mb-4 h-40 overflow-hidden rounded-2xl">
                 <Image
                   src={prize.image}
                   alt={prize.alt}
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.035]"
                   sizes="(min-width: 1024px) 360px, (min-width: 640px) 45vw, 90vw"
-                  priority={prize.title === "Win a high-performance laptop"}
                 />
               </div>
               <h3 className="text-lg font-semibold text-foreground">

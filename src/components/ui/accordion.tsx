@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { animate as animateValue, motion, useReducedMotion } from "motion/react";
+import { animate as animateValue, m, useReducedMotion } from "motion/react";
 import { ChevronDownIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -82,7 +82,7 @@ function AccordionTrigger({
         {...props}
       >
         {children}
-        <motion.span
+        <m.span
           aria-hidden="true"
           className="pointer-events-none flex size-9 shrink-0 items-center justify-center rounded-full border border-border/70 bg-background/80 text-muted-foreground shadow-sm"
           animate={
@@ -100,7 +100,7 @@ function AccordionTrigger({
           }}
         >
           <ChevronDownIcon className="size-4" />
-        </motion.span>
+        </m.span>
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   );

@@ -1,11 +1,11 @@
 "use client";
 
 import { forwardRef } from "react";
-import { m } from "motion/react";
+import { m, type HTMLMotionProps } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
-type CustomCardProps = React.HTMLAttributes<HTMLDivElement> & {
+type CustomCardProps = Omit<HTMLMotionProps<"div">, "ref"> & {
   revealDelay?: number;
 };
 
@@ -22,14 +22,20 @@ export const CustomCard = forwardRef<HTMLDivElement, CustomCardProps>(
           className,
         )}
         initial={{ opacity: 0, y: 18 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        whileHover={{ y: -4 }}
-        viewport={{ once: true, amount: 0.2, margin: "0px 0px -6% 0px" }}
-        transition={{
-          duration: 0.5,
-          delay: revealDelay,
-          ease: [0.22, 1, 0.36, 1],
+        whileInView={{
+          opacity: 1,
+          y: 0,
+          transition: {
+            duration: 0.5,
+            delay: revealDelay,
+            ease: [0.22, 1, 0.36, 1],
+          },
         }}
+        whileHover={{
+          y: -4,
+          transition: { type: "spring", stiffness: 420, damping: 30, delay: 0 },
+        }}
+        viewport={{ once: true, amount: 0.2, margin: "0px 0px -6% 0px" }}
         {...props}
       >
         {children}

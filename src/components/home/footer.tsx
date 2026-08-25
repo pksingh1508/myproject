@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { m } from "motion/react";
 
 const quickLinks = [
   { label: "Hackathons", href: "/hackathons" },
@@ -30,45 +28,18 @@ const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
 
 export function Footer() {
   const router = useRouter();
-  const footerRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      gsap.registerPlugin(ScrollTrigger);
-    }
-    const el = footerRef.current;
-    if (!el) return;
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        el,
-        { y: 48, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.9,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 85%",
-          },
-        },
-      );
-    }, el);
-
-    return () => {
-      ctx.revert();
-    };
-  }, []);
 
   return (
     <footer
       className="relative w-full bg-background text-muted-foreground"
       style={brandSansStyle}
     >
-      <div
-        ref={footerRef}
+      <m.div
         className="relative mx-auto w-full max-w-6xl px-4 py-16 sm:px-6 lg:px-8"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.15 }}
+        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="relative overflow-hidden rounded-3xl border-5 border-border/80 bg-gray-50 px-8 py-12 shadow-[0_10px_40px_rgba(15,23,42,0.08)] backdrop-blur-lg sm:px-12">
           {/* <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent" /> */}
@@ -117,7 +88,7 @@ export function Footer() {
             </p>
           </div>
         </div>
-      </div>
+      </m.div>
     </footer>
   );
 }

@@ -3,6 +3,7 @@
 import { ShieldCheckIcon, SparklesIcon, UsersIcon } from "lucide-react";
 
 import { CustomCard } from "@/components/layout";
+import { Reveal } from "@/components/motion/reveal";
 const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
 const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
 
@@ -34,7 +35,7 @@ export function WhyChooseUs() {
       style={brandSansStyle}
     >
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 sm:px-6">
-        <div className="space-y-3 text-center sm:text-left">
+        <Reveal className="space-y-3 text-center sm:text-left">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
             Why choose us
           </p>
@@ -48,18 +49,19 @@ export function WhyChooseUs() {
             Hackathon Wallah blends pro-grade tooling with a community that
             genuinely wants to see you ship. Here’s what sets us apart.
           </p>
-        </div>
+        </Reveal>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {reasons.map((reason) => {
+          {reasons.map((reason, index) => {
             const Icon = reason.icon;
             return (
               <CustomCard
                 key={reason.title}
                 className="group h-full border-border/60 bg-muted/30 backdrop-blur-sm"
+                revealDelay={index * 0.07}
               >
                 <span className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
-                  <Icon className="size-6 transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-3 group-hover:scale-110" />
+                  <Icon className="size-6 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:rotate-3 group-hover:scale-105" />
                 </span>
                 <div className="mt-4 space-y-2 text-left">
                   <h3 className="text-lg font-semibold text-foreground">

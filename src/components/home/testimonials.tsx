@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { m } from "motion/react";
 
 import {
   Carousel,
@@ -17,6 +18,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { TESTIMONIALS } from "@/constants/data";
+import { Reveal } from "@/components/motion/reveal";
 const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
 const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
 const testimonialCount: number = TESTIMONIALS.length;
@@ -83,7 +85,7 @@ export function Testimonials() {
   return (
     <section className="w-full bg-background pt-10" style={brandSansStyle}>
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 sm:px-6 lg:px-8">
-        <div className="space-y-3 text-center sm:text-left">
+        <Reveal className="space-y-3 text-center sm:text-left">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
             Voices from the community
           </p>
@@ -97,7 +99,7 @@ export function Testimonials() {
             Hear from hackers who turned weekend projects into standout
             portfolio pieces, job offers, and investor-ready products.
           </p>
-        </div>
+        </Reveal>
 
         <div className="relative">
           <Carousel
@@ -111,34 +113,58 @@ export function Testimonials() {
                   key={`${testimonial.id}-${index}`}
                   className="basis-full sm:basis-1/2 lg:basis-1/3"
                 >
-                  <Card className="h-full border-border/60 bg-muted/20 backdrop-blur-sm">
-                    <CardHeader className="flex flex-row items-center gap-4 @container">
-                      <div className="relative h-12 w-12 overflow-hidden rounded-full bg-muted">
-                        <Image
-                          src={testimonial.avatar}
-                          alt={testimonial.name}
-                          unoptimized
-                          width={48}
-                          height={48}
-                          className="object-cover"
-                          sizes="48px"
-                        />
-                      </div>
-                      <div className="flex flex-col">
-                        <CardTitle className="text-base font-semibold text-foreground">
-                          {testimonial.name}
-                        </CardTitle>
-                        <CardDescription className="text-xs uppercase tracking-wide">
-                          {testimonial.role}
-                        </CardDescription>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-4 pt-0">
-                      <blockquote className="text-sm leading-relaxed text-muted-foreground">
-                        “{truncateWords(testimonial.quote)}”
-                      </blockquote>
-                    </CardContent>
-                  </Card>
+                  <m.div
+                    className="h-full will-change-transform"
+                    initial={{ opacity: 0, y: 14 }}
+                    whileInView={{
+                      opacity: 1,
+                      y: 0,
+                      transition: {
+                        duration: 0.5,
+                        delay: (index % visibleTestimonials) * 0.06,
+                        ease: [0.22, 1, 0.36, 1],
+                      },
+                    }}
+                    whileHover={{
+                      y: -3,
+                      transition: {
+                        type: "spring",
+                        stiffness: 420,
+                        damping: 30,
+                        delay: 0,
+                      },
+                    }}
+                    viewport={{ once: true, amount: 0.25 }}
+                  >
+                    <Card className="h-full border-border/60 bg-muted/20 shadow-[0_12px_35px_-26px_rgba(15,23,42,0.45)] backdrop-blur-sm">
+                      <CardHeader className="flex flex-row items-center gap-4 @container">
+                        <div className="relative h-12 w-12 overflow-hidden rounded-full bg-muted">
+                          <Image
+                            src={testimonial.avatar}
+                            alt={testimonial.name}
+                            unoptimized
+                            width={48}
+                            height={48}
+                            className="object-cover"
+                            sizes="48px"
+                          />
+                        </div>
+                        <div className="flex flex-col">
+                          <CardTitle className="text-base font-semibold text-foreground">
+                            {testimonial.name}
+                          </CardTitle>
+                          <CardDescription className="text-xs uppercase tracking-wide">
+                            {testimonial.role}
+                          </CardDescription>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-4 pt-0">
+                        <blockquote className="text-sm leading-relaxed text-muted-foreground">
+                          “{truncateWords(testimonial.quote)}”
+                        </blockquote>
+                      </CardContent>
+                    </Card>
+                  </m.div>
                 </CarouselItem>
               ))}
             </CarouselContent>
