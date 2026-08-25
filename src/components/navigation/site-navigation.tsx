@@ -28,6 +28,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 const navigationLinks = [
   { label: "Home", href: "/" },
@@ -113,6 +114,7 @@ export function SiteNavigation() {
         </LayoutGroup>
 
         <div className="hidden items-center gap-2 md:flex">
+          <ThemeToggle />
           {isMounted ? (
             <>
               <SignedOut>
@@ -121,13 +123,13 @@ export function SiteNavigation() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="hover:bg-gray-600 hover:text-gray-50 rounded-full transition-all duration-300"
+                      className="rounded-full transition-all duration-300 hover:bg-foreground hover:text-background"
                     >
                       Log in
                     </Button>
                   </SignInButton>
                   <SignUpButton mode="modal">
-                    <Button size="sm" className="bg-gray-700 rounded-full">
+                    <Button size="sm" className="rounded-full">
                       Sign up
                     </Button>
                   </SignUpButton>
@@ -159,6 +161,7 @@ export function SiteNavigation() {
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
           {isMounted ? (
             <SignedIn>
               <div className="flex items-center gap-2">

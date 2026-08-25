@@ -148,7 +148,7 @@ export function HeroSection() {
           <div className="pt-0 lg:pt-5" />
           <m.h1
             variants={heroItem}
-            className="text-balance text-4xl font-semibold leading-[1.08] tracking-tight text-slate-700 sm:text-6xl sm:leading-[1.05] lg:text-7xl"
+            className="text-balance text-4xl font-semibold leading-[1.08] tracking-tight text-foreground sm:text-6xl sm:leading-[1.05] lg:text-7xl"
             style={brandDisplayStyle}
           >
             Built for <CornerHighlight>TIER-2 &amp; TIER-3</CornerHighlight>{" "}

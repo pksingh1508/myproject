@@ -41,7 +41,7 @@ export function Footer() {
         viewport={{ once: true, amount: 0.15 }}
         transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className="relative overflow-hidden rounded-3xl border-5 border-border/80 bg-gray-50 px-8 py-12 shadow-[0_10px_40px_rgba(15,23,42,0.08)] backdrop-blur-lg sm:px-12">
+        <div className="relative overflow-hidden rounded-3xl border-5 border-border/80 bg-card px-8 py-12 text-card-foreground shadow-[0_10px_40px_rgba(15,23,42,0.08)] backdrop-blur-lg sm:px-12">
           {/* <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent" /> */}
 
           <div className="relative grid gap-10 text-sm text-muted-foreground sm:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
