@@ -32,7 +32,8 @@ const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
 
 export default function HackathonsPage() {
   return (
-    <div className="mx-auto max-w-6xl space-y-10 px-4 py-12 sm:px-6 lg:px-0"
+    <div
+      className="mx-auto max-w-6xl space-y-10 px-4 py-12 sm:px-6 lg:px-0"
       style={brandDisplayStyle}
     >
       <Reveal className="space-y-4">
@@ -49,7 +50,6 @@ export default function HackathonsPage() {
             your team prepare.
           </p>
         </div>
-
       </Reveal>
 
       <Suspense fallback={<HackathonGridLoader />}>
