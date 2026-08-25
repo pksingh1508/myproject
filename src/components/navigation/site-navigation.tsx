@@ -4,6 +4,13 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  LayoutGroup,
+  m,
+  useMotionValueEvent,
+  useScroll,
+  useSpring,
+} from "motion/react";
+import {
   SignedIn,
   SignedOut,
   SignInButton,
@@ -28,14 +35,21 @@ export function SiteNavigation() {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const { scrollY, scrollYProgress } = useScroll();
+  const smoothScrollProgress = useSpring(scrollYProgress, {
+    stiffness: 160,
+    damping: 30,
+    mass: 0.25,
+  });
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setIsScrolled(latest > 12);
+  });
 
   useEffect(() => {
     setIsMounted(true);
-    const handleScroll = () => setIsScrolled(window.scrollY > 12);
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    setIsScrolled(scrollY.get() > 12);
+  }, [scrollY]);
 
   return (
     <header
@@ -46,40 +60,51 @@ export function SiteNavigation() {
           : "bg-background/95"
       )}
     >
+      <m.div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-px origin-left bg-primary/70"
+        style={{ scaleX: smoothScrollProgress }}
+      />
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link
-          href="/"
-          className="group flex items-center gap-2 text-lg font-semibold tracking-tight text-foreground transition-transform duration-300 ease-out hover:scale-[1.02] rounded-full border border-border/60 bg-muted/40 px-3 py-1.5"
-        >
-          <span>Hackathonwallah</span>
-        </Link>
+        <m.div whileHover={{ y: -1 }} whileTap={{ scale: 0.98 }}>
+          <Link
+            href="/"
+            className="group flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-3 py-1.5 text-lg font-semibold tracking-tight text-foreground"
+          >
+            <span>Hackathonwallah</span>
+          </Link>
+        </m.div>
 
-        <nav className="hidden gap-1 rounded-full border border-border/60 bg-muted/40 px-3 py-1.5 text-sm font-medium md:flex">
-          {navigationLinks.map((link) => {
-            const isActive =
-              pathname === link.href ||
-              (link.href !== "/" && pathname?.startsWith(link.href));
+        <LayoutGroup id="site-navigation">
+          <nav className="hidden gap-1 rounded-full border border-border/60 bg-muted/40 px-3 py-1.5 text-sm font-medium md:flex">
+            {navigationLinks.map((link) => {
+              const isActive =
+                pathname === link.href ||
+                (link.href !== "/" && pathname?.startsWith(link.href));
 
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "relative rounded-full px-4 py-2 transition-all duration-300 ease-out hover:text-foreground",
-                  isActive ? "text-foreground" : "text-muted-foreground"
-                )}
-              >
-                {link.label}
-                <span
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
                   className={cn(
-                    "absolute inset-x-3 bottom-1 h-0.5 scale-x-0 rounded-full bg-primary/80 transition-transform duration-300 ease-out",
-                    isActive && "scale-x-100"
+                    "relative rounded-full px-4 py-2 transition-colors duration-200 hover:text-foreground",
+                    isActive ? "text-foreground" : "text-muted-foreground",
                   )}
-                />
-              </Link>
-            );
-          })}
-        </nav>
+                >
+                  <span className="relative z-10">{link.label}</span>
+                  {isActive ? (
+                    <m.span
+                      layoutId="active-navigation-pill"
+                      aria-hidden="true"
+                      className="absolute inset-0 rounded-full border border-border/70 bg-background shadow-sm"
+                      transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                    />
+                  ) : null}
+                </Link>
+              );
+            })}
+          </nav>
+        </LayoutGroup>
 
         <div className="hidden items-center gap-2 md:flex">
           {isMounted ? (

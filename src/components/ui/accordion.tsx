@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { animate as animateValue, motion, useReducedMotion } from "framer-motion";
+import { animate as animateValue, motion, useReducedMotion } from "motion/react";
 import { ChevronDownIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";

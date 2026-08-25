@@ -14,6 +14,7 @@ import {
   SITE_URL,
 } from "@/constants/site";
 import { Footer } from "@/components/home";
+import { MotionProvider } from "@/components/motion/motion-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -101,15 +102,17 @@ export default function RootLayout({
           <body
             className={`${geistSans.variable} ${geistMono.variable} ${fontVariables} antialiased`}
           >
-            <PostHogProvider>
-              <div className="flex min-h-screen flex-col bg-background">
-                <SiteNavigation />
-                <main className="flex-1">
-                  {children}
-                  <Toaster richColors position="top-right" />
-                </main>
-              </div>
-            </PostHogProvider>
+            <MotionProvider>
+              <PostHogProvider>
+                <div className="flex min-h-screen flex-col bg-background">
+                  <SiteNavigation />
+                  <main className="flex-1">
+                    {children}
+                    <Toaster richColors position="top-right" />
+                  </main>
+                </div>
+              </PostHogProvider>
+            </MotionProvider>
           </body>
         </ReactLenis>
       </html>
