@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { m } from "motion/react";
 import {
   Dialog,
   DialogContent,
@@ -10,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { BrandButton } from "@/components/layout";
+import { Reveal } from "@/components/motion/reveal";
 import { jobData } from "@/constants/jobData";
 
 const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
@@ -29,7 +31,7 @@ export default function CareerContent() {
 
   return (
     <main className="bg-background text-foreground" style={brandSansStyle}>
-      <section className="mx-auto flex w-full max-w-6xl flex-col justify-center gap-6 px-4 pb-12 pt-20 sm:px-6 lg:px-8">
+      <Reveal className="mx-auto flex w-full max-w-6xl flex-col justify-center gap-6 px-4 pb-12 pt-20 sm:px-6 lg:px-8">
         <span className="inline-flex w-fit items-center rounded-full border border-border/80 bg-muted/60 px-4 py-1 text-xs font-semibold uppercase tracking-[0.32em] text-muted-foreground">
           Career
         </span>
@@ -42,13 +44,22 @@ export default function CareerContent() {
         <p className="max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
           Explore open roles and apply for the team that matches your skills.
         </p>
-      </section>
+      </Reveal>
 
       <section className="mx-auto grid w-full max-w-6xl gap-6 px-4 pb-24 sm:px-6 lg:px-8">
-        {jobData.map((job) => (
-          <article
+        {jobData.map((job, index) => (
+          <m.article
             key={job.title}
-            className="rounded-2xl border border-border/60 bg-muted/40 p-6 shadow-sm"
+            className="rounded-2xl border border-border/60 bg-muted/40 p-6 shadow-sm will-change-transform"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            whileHover={{ y: -3 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{
+              duration: 0.5,
+              delay: (index % 3) * 0.05,
+              ease: [0.22, 1, 0.36, 1],
+            }}
           >
             <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
               <div className="space-y-3">
@@ -110,7 +121,7 @@ export default function CareerContent() {
                 </ul>
               </div>
             </div>
-          </article>
+          </m.article>
         ))}
       </section>
 

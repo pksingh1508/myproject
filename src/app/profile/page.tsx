@@ -10,6 +10,7 @@ import {
 
 import { ProfilePageClient } from "./profile-page-client";
 import { BRAND_NAME } from "@/constants/site";
+import { Reveal } from "@/components/motion/reveal";
 
 export const metadata: Metadata = {
   title: `Profile | ${BRAND_NAME}`,
@@ -25,14 +26,16 @@ export default async function ProfilePage() {
 
     return (
       <div className="mx-auto max-w-3xl space-y-8 px-4 py-10">
-        <div className="space-y-2">
+        <Reveal className="space-y-2">
           <h1 className="text-3xl font-semibold tracking-tight">Profile</h1>
           <p className="text-sm text-muted-foreground">
             Keep your personal information up to date so organisers can reach you
             quickly.
           </p>
-        </div>
-        <ProfilePageClient profile={profile} />
+        </Reveal>
+        <Reveal delay={0.06}>
+          <ProfilePageClient profile={profile} />
+        </Reveal>
       </div>
     );
   } catch (error) {

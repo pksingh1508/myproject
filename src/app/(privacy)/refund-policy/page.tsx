@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BRAND_NAME } from "@/constants/site";
+import { Reveal } from "@/components/motion/reveal";
 
 export const metadata: Metadata = {
   title: `Refund Policy | ${BRAND_NAME}`,
@@ -186,7 +187,7 @@ export default function RefundPolicyPage() {
   return (
     <main className="bg-background text-foreground">
       <section className="border-b border-border/60 bg-muted/10">
-        <div className="mx-auto flex max-w-4xl flex-col gap-4 px-4 py-16 sm:px-6 lg:px-8">
+        <Reveal className="mx-auto flex max-w-4xl flex-col gap-4 px-4 py-16 sm:px-6 lg:px-8">
           <span className="inline-flex w-fit items-center rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.32em] text-primary">
             Policy
           </span>
@@ -203,23 +204,22 @@ export default function RefundPolicyPage() {
             . This policy explains when you can expect refunds for hackathon
             registration fees on HackathonWallah.
           </p>
-        </div>
+        </Reveal>
       </section>
 
       <section className="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="space-y-10">
-          {sections.map((section) => (
-            <article
-              key={section.title}
-              className="space-y-4 rounded-2xl border border-border/60 bg-muted/20 p-6 shadow-sm"
-            >
-              <h2 className="text-xl font-semibold text-foreground">
-                {section.title}
-              </h2>
-              <div className="space-y-3 text-sm leading-relaxed text-muted-foreground">
-                {section.content}
-              </div>
-            </article>
+          {sections.map((section, index) => (
+            <Reveal key={section.title} delay={(index % 4) * 0.03} y={14}>
+              <article className="space-y-4 rounded-2xl border border-border/60 bg-muted/20 p-6 shadow-sm">
+                <h2 className="text-xl font-semibold text-foreground">
+                  {section.title}
+                </h2>
+                <div className="space-y-3 text-sm leading-relaxed text-muted-foreground">
+                  {section.content}
+                </div>
+              </article>
+            </Reveal>
           ))}
         </div>
 

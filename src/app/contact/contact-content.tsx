@@ -5,6 +5,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { BrandButton, CustomCard } from "@/components/layout";
+import { Reveal } from "@/components/motion/reveal";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -76,7 +77,7 @@ export default function ContactContent() {
     <main className="bg-background text-foreground">
       <section className="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background">
         <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),transparent_60%)]" />
-        <div className="relative mx-auto flex min-h-[50vh] w-full max-w-4xl flex-col justify-center gap-6 px-4 py-20 sm:px-6 lg:px-8">
+        <Reveal className="relative mx-auto flex min-h-[50vh] w-full max-w-4xl flex-col justify-center gap-6 px-4 py-20 sm:px-6 lg:px-8">
           <span className="inline-flex w-fit items-center rounded-full border border-primary/40 bg-primary/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.32em] text-primary/80">
             Contact
           </span>
@@ -88,7 +89,7 @@ export default function ContactContent() {
             we&rsquo;re here to help you ship your next idea. Reach out and
             we&rsquo;ll respond within 2-3 business days.
           </p>
-        </div>
+        </Reveal>
       </section>
 
       <section className="mx-auto grid w-full max-w-5xl gap-8 px-4 py-16 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] sm:px-6 lg:px-8">

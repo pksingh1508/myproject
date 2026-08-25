@@ -56,7 +56,7 @@ export const BrandButton = forwardRef<HTMLButtonElement, BrandButtonProps>(
         >
           <m.span
             aria-hidden="true"
-            className="absolute inset-0 scale-y-0 transform bg-primary"
+            className="absolute inset-0 bg-black"
             style={{ transformOrigin: "50% 100%" }}
             variants={{
               rest: { scaleY: 0 },
@@ -66,7 +66,11 @@ export const BrandButton = forwardRef<HTMLButtonElement, BrandButtonProps>(
           />
           <m.span
             className="relative flex items-center justify-center gap-2 text-foreground"
-            variants={{ rest: { color: "var(--foreground)" }, hover: { color: "#ffffff" } }}
+            variants={{
+              rest: { color: "var(--foreground)" },
+              hover: { color: "#ffffff" },
+              tap: { color: "#ffffff" },
+            }}
             transition={{ duration: 0.16 }}
           >
             {loading ? (

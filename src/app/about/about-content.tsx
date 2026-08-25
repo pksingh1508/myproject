@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   animate,
+  m,
   useInView,
   useMotionValue,
   useMotionValueEvent,
@@ -29,6 +30,7 @@ import {
 
 import { BrandButton } from "@/components/layout";
 import { Footer } from "@/components/home/footer";
+import { Reveal } from "@/components/motion/reveal";
 import { cn } from "@/lib/utils";
 
 type StatDescriptor = {
@@ -245,7 +247,18 @@ function AboutCard({
   className?: string;
   children: ReactNode;
 }) {
-  return <div className={cn(cardClassName, className)}>{children}</div>;
+  return (
+    <m.div
+      className={cn(cardClassName, "will-change-transform", className)}
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -3 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </m.div>
+  );
 }
 
 export default function AboutContent() {
@@ -254,7 +267,7 @@ export default function AboutContent() {
   return (
     <main className="bg-background text-foreground" style={brandSansStyle}>
       <section className="bg-background">
-        <div className="mx-auto flex min-h-[58vh] w-full max-w-6xl flex-col justify-center gap-6 px-4 pt-20 sm:px-6 lg:px-8 lg:pt-24">
+        <Reveal className="mx-auto flex min-h-[58vh] w-full max-w-6xl flex-col justify-center gap-6 px-4 pt-20 sm:px-6 lg:px-8 lg:pt-24">
           <span className="inline-flex w-fit items-center rounded-full border border-border/80 bg-muted/60 px-4 py-1 text-xs font-semibold uppercase tracking-[0.32em] text-muted-foreground">
             About HackathonWallah
           </span>
@@ -295,7 +308,7 @@ export default function AboutContent() {
               Stay updated
             </BrandButton>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       <section className="mx-auto grid w-full max-w-6xl gap-6 px-4 py-14 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
@@ -320,7 +333,7 @@ export default function AboutContent() {
       </section>
 
       <section className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-        <div className="max-w-3xl space-y-4">
+        <Reveal className="max-w-3xl space-y-4">
           <h2
             className="text-3xl font-semibold tracking-tight sm:text-4xl"
             style={brandDisplayStyle}
@@ -332,7 +345,7 @@ export default function AboutContent() {
             noisy, confusing, or made for people who already know the system. We
             want the whole experience to feel simpler from day one.
           </p>
-        </div>
+        </Reveal>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-3">
           {focusAreas.map((item) => (
@@ -432,7 +445,7 @@ export default function AboutContent() {
       </section>
 
       <section className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-        <div className="mx-auto max-w-3xl space-y-4 text-center">
+        <Reveal className="mx-auto max-w-3xl space-y-4 text-center">
           <h2
             className="text-3xl font-semibold tracking-tight sm:text-4xl"
             style={brandDisplayStyle}
@@ -444,7 +457,7 @@ export default function AboutContent() {
             make it easier for students to build and actually put their work out
             there.
           </p>
-        </div>
+        </Reveal>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-3">
           {milestones.map((milestone) => (
@@ -472,7 +485,7 @@ export default function AboutContent() {
       </section>
 
       <section className="mx-auto w-full max-w-6xl px-4 pb-16 pt-10 sm:px-6 lg:px-8">
-        <div className="rounded-2xl border border-border/60 bg-muted/40 p-6 shadow-sm sm:p-10">
+        <Reveal className="rounded-2xl border border-border/60 bg-muted/40 p-6 shadow-sm sm:p-10">
           <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
             <div className="space-y-4">
               <h2
@@ -504,7 +517,7 @@ export default function AboutContent() {
               </Link>
             </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       <Footer />

@@ -1,5 +1,6 @@
 import type { Hackathon } from "@/types/database";
 import { HackathonCard } from "./hackathon-card";
+import { Reveal } from "@/components/motion/reveal";
 
 interface HackathonGridProps {
   hackathons: Hackathon[];
@@ -38,8 +39,15 @@ export function HackathonGrid({
 
   return (
     <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-      {displayedHackathons.map((hackathon) => (
-        <HackathonCard key={hackathon.id} hackathon={hackathon} />
+      {displayedHackathons.map((hackathon, index) => (
+        <Reveal
+          key={hackathon.id}
+          className="h-full"
+          delay={(index % 3) * 0.06}
+          y={14}
+        >
+          <HackathonCard hackathon={hackathon} />
+        </Reveal>
       ))}
     </div>
   );

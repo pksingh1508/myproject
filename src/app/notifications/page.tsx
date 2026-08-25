@@ -11,6 +11,7 @@ import { listNotificationsForUser } from "@/lib/repos/notifications";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { BRAND_NAME } from "@/constants/site";
+import { Reveal } from "@/components/motion/reveal";
 
 export const metadata: Metadata = {
   title: `Notifications | ${BRAND_NAME}`,
@@ -30,12 +31,12 @@ export default async function NotificationsPage() {
 
     return (
       <div className="mx-auto max-w-4xl space-y-6 px-4 py-10">
-        <div className="space-y-2">
+        <Reveal className="space-y-2">
           <h1 className="text-3xl font-semibold tracking-tight">Notifications</h1>
           <p className="text-sm text-muted-foreground">
             Stay informed about registration updates, payment status changes, and important event announcements.
           </p>
-        </div>
+        </Reveal>
         <Separator />
         <div className="space-y-4">
           {notifications.length === 0 ? (
@@ -45,28 +46,34 @@ export default async function NotificationsPage() {
               </CardContent>
             </Card>
           ) : (
-            notifications.map((notification) => (
-              <Card key={notification.id} className="border-muted">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0">
-                  <CardTitle className="text-base">
-                    {notification.title}
-                  </CardTitle>
-                  <span className="text-xs text-muted-foreground">
-                    {new Date(notification.created_at).toLocaleString()}
-                  </span>
-                </CardHeader>
-                <CardContent className="space-y-2 text-sm text-muted-foreground">
-                  <p>{notification.message}</p>
-                  {notification.action_url ? (
-                    <a
-                      href={notification.action_url}
-                      className="text-primary underline-offset-4 hover:underline"
-                    >
-                      Take action
-                    </a>
-                  ) : null}
-                </CardContent>
-              </Card>
+            notifications.map((notification, index) => (
+              <Reveal
+                key={notification.id}
+                delay={(index % 4) * 0.04}
+                y={12}
+              >
+                <Card className="border-muted">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0">
+                    <CardTitle className="text-base">
+                      {notification.title}
+                    </CardTitle>
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(notification.created_at).toLocaleString()}
+                    </span>
+                  </CardHeader>
+                  <CardContent className="space-y-2 text-sm text-muted-foreground">
+                    <p>{notification.message}</p>
+                    {notification.action_url ? (
+                      <a
+                        href={notification.action_url}
+                        className="text-primary underline-offset-4 hover:underline"
+                      >
+                        Take action
+                      </a>
+                    ) : null}
+                  </CardContent>
+                </Card>
+              </Reveal>
             ))
           )}
         </div>

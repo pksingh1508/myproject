@@ -5,6 +5,7 @@ import { listHackathons } from "@/lib/repos/hackathons";
 import { HackathonGrid } from "@/components/hackathons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Reveal } from "@/components/motion/reveal";
 import type { HackathonFilterInput } from "@/lib/validation/hackathons";
 import { BRAND_NAME } from "@/constants/site";
 
@@ -73,7 +74,7 @@ export default async function HackathonsPage({
     <div className="mx-auto max-w-6xl space-y-10 px-4 py-12 sm:px-6 lg:px-0"
       style={brandDisplayStyle}
     >
-      <section className="space-y-4">
+      <Reveal className="space-y-4">
         <Badge variant="secondary" className="uppercase">
           Discover Hackathons
         </Badge>
@@ -107,7 +108,7 @@ export default async function HackathonsPage({
             );
           })}
         </div>
-      </section>
+      </Reveal>
 
       <HackathonGrid
         hackathons={hackathons}
