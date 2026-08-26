@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Analytics } from "@vercel/analytics/next";
 import { PostHogProvider } from "./provider";
 import "./globals.css";
 import { SiteNavigation } from "@/components/navigation/site-navigation";
@@ -131,6 +132,7 @@ export default function RootLayout({
                 </PostHogProvider>
               </MotionProvider>
             </ThemeProvider>
+            <Analytics />
           </body>
         </ReactLenis>
       </html>
