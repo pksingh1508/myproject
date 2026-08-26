@@ -118,7 +118,10 @@ export function HowItWork() {
                       : "sm:justify-end sm:pr-16",
                   )}
                 >
-                  <CustomCard className="group relative z-10 h-full w-full max-w-sm border-border/60 bg-muted/30 backdrop-blur-sm">
+                  <CustomCard
+                    movingBorderVisibility="hover"
+                    className="group relative z-10 h-full w-full max-w-sm border-border/60 bg-muted/30 backdrop-blur-sm"
+                  >
                     <div className="absolute right-6 top-6 text-sm font-semibold text-muted-foreground">
                       Step {index + 1}
                     </div>
