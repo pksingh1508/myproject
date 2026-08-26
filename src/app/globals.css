@@ -142,6 +142,11 @@
   isolation: isolate;
 }
 
+[data-moving-border-scope="off"] [data-moving-border]::before,
+[data-moving-border-scope="off"][data-moving-border]::before {
+  display: none;
+}
+
 [data-moving-border]::before {
   position: absolute;
   z-index: 5;

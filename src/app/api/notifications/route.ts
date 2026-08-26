@@ -42,10 +42,13 @@ export async function GET() {
     const { profile } = await requireUserProfile();
     const notifications = await listNotificationsForUser({
       userId: profile.id,
-      limit: 25
+      limit: 50
     });
 
-    return NextResponse.json({ data: notifications });
+    return NextResponse.json(
+      { data: notifications },
+      { headers: { "Cache-Control": "private, no-store" } }
+    );
   } catch (error) {
     return handleError(error);
   }
