@@ -141,6 +141,7 @@ export function HeroSection() {
         <div className="space-y-6">
           <m.span
             variants={heroItem}
+            data-moving-border
             className="inline-flex items-center rounded-full border border-border/80 bg-background/70 px-3 py-1 text-sm font-medium uppercase tracking-[0.18em] text-muted-foreground shadow-sm backdrop-blur"
           >
             Build. Submit. Win.
