@@ -17,6 +17,7 @@ export const CustomCard = forwardRef<HTMLDivElement, CustomCardProps>(
     return (
       <m.div
         ref={forwardedRef}
+        data-moving-border
         className={cn(
           "relative flex h-full flex-col rounded-2xl border border-border/60 bg-background p-6 shadow-[0_12px_35px_-24px_rgba(15,23,42,0.42)] will-change-transform",
           className,

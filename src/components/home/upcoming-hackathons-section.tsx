@@ -31,7 +31,10 @@ export function UpcomingHackathonsSection({
       {hackathons.length > 0 ? (
         <HackathonGrid hackathons={hackathons} />
       ) : (
-        <div className="rounded-2xl border border-dashed border-border/80 bg-muted/20 p-12 text-center">
+        <div
+          data-moving-border
+          className="rounded-2xl border border-dashed border-border/80 bg-muted/20 p-12 text-center"
+        >
           <h3 className="text-lg font-medium text-foreground">
             No live hackathons right now
           </h3>

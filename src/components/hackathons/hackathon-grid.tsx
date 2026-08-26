@@ -15,7 +15,10 @@ export function HackathonGrid({
 }: HackathonGridProps) {
   if (hackathons.length === 0) {
     return (
-      <div className="flex min-h-[200px] flex-col items-center justify-center rounded-lg border border-dashed p-10 text-center">
+      <div
+        data-moving-border
+        className="flex min-h-[200px] flex-col items-center justify-center rounded-lg border border-dashed p-10 text-center"
+      >
         {emptyState ?? (
           <>
             <h3 className="text-lg font-semibold">No hackathons yet</h3>

@@ -26,6 +26,7 @@ function Alert({
 }: React.ComponentProps<"div"> & VariantProps<typeof alertVariants>) {
   return (
     <div
+      data-moving-border
       data-slot="alert"
       role="alert"
       className={cn(alertVariants({ variant }), className)}

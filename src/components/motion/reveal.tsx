@@ -1,12 +1,12 @@
 "use client";
 
-import { m } from "motion/react";
+import { m, type HTMLMotionProps } from "motion/react";
 
 import { cn } from "@/lib/utils";
 
 const premiumEase = [0.22, 1, 0.36, 1] as const;
 
-type RevealProps = {
+type RevealProps = Omit<HTMLMotionProps<"div">, "children"> & {
   children: React.ReactNode;
   className?: string;
   delay?: number;
@@ -18,9 +18,11 @@ export function Reveal({
   className,
   delay = 0,
   y = 18,
+  ...props
 }: RevealProps) {
   return (
     <m.div
+      {...props}
       className={cn(className)}
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}

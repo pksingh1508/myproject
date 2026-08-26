@@ -45,6 +45,9 @@
 
 :root {
   --radius: 0.625rem;
+  --moving-border-blue: oklch(0.43 0.13 251);
+  --moving-border-cyan: oklch(0.7 0.14 221);
+  --moving-border-green: oklch(0.74 0.19 137);
   --background: oklch(1 0 0);
   --foreground: oklch(0.147 0.004 49.25);
   --card: oklch(1 0 0);
@@ -79,6 +82,9 @@
 }
 
 .dark {
+  --moving-border-blue: oklch(0.67 0.16 248);
+  --moving-border-cyan: oklch(0.78 0.14 215);
+  --moving-border-green: oklch(0.8 0.2 137);
   --background: oklch(0.147 0.004 49.25);
   --foreground: oklch(0.985 0.001 106.423);
   --card: oklch(0.216 0.006 56.043);
@@ -121,6 +127,66 @@
   }
 }
 
+/*
+ * Aceternity-inspired moving border for content containers. The blue-to-green
+ * beam comes from the HackathonWallah mark; controls deliberately opt out.
+ */
+@property --moving-border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+[data-moving-border] {
+  position: relative;
+  isolation: isolate;
+}
+
+[data-moving-border]::before {
+  position: absolute;
+  z-index: 5;
+  inset: -1px;
+  padding: 1.5px;
+  border-radius: inherit;
+  pointer-events: none;
+  content: "";
+  background: conic-gradient(
+    from var(--moving-border-angle),
+    transparent 0deg 292deg,
+    color-mix(in oklch, var(--moving-border-blue) 35%, transparent) 306deg,
+    var(--moving-border-blue) 321deg,
+    var(--moving-border-cyan) 335deg,
+    var(--moving-border-green) 348deg,
+    transparent 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  filter: drop-shadow(
+    0 0 4px color-mix(in oklch, var(--moving-border-cyan) 48%, transparent)
+  );
+  animation: moving-border-orbit 5.5s linear infinite;
+}
+
+[data-moving-border]:nth-child(2n)::before {
+  animation-delay: -1.8s;
+}
+
+[data-moving-border]:nth-child(3n)::before {
+  animation-delay: -3.6s;
+}
+
+@keyframes moving-border-orbit {
+  to {
+    --moving-border-angle: 360deg;
+  }
+}
+
 /* Motion's animateView controls the reveal keyframes. These rules keep the
    incoming theme above the outgoing snapshot without the browser's crossfade. */
 ::view-transition-old(root),
@@ -138,6 +204,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  [data-moving-border]::before {
+    --moving-border-angle: 135deg;
+    animation: none;
+    opacity: 0.65;
+  }
+
   ::view-transition-group(root),
   ::view-transition-old(root),
   ::view-transition-new(root) {

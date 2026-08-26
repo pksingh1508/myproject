@@ -167,7 +167,10 @@ export default function CancellationPolicyPage() {
         <div className="space-y-10">
           {sections.map((section, index) => (
             <Reveal key={section.title} delay={(index % 4) * 0.03} y={14}>
-              <article className="space-y-4 rounded-2xl border border-border/60 bg-muted/20 p-6 shadow-sm">
+              <article
+                data-moving-border
+                className="space-y-4 rounded-2xl border border-border/60 bg-muted/20 p-6 shadow-sm"
+              >
                 <h2 className="text-xl font-semibold text-foreground">
                   {section.title}
                 </h2>

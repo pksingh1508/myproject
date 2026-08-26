@@ -40,12 +40,14 @@ export function FAQ() {
           <Accordion
             type="single"
             collapsible
+            data-moving-border
             className="relative w-full rounded-[2rem] border border-border/60 bg-muted/20 p-3 shadow-[0_22px_60px_-40px_rgba(15,23,42,0.45)] backdrop-blur-sm sm:p-4"
           >
             {FAQ_ENTRIES.map((entry, index) => (
               <AccordionItem
                 key={entry.question}
                 value={`faq-${index}`}
+                data-moving-border
                 className="group relative mb-3 overflow-hidden rounded-[1.5rem] border border-border/70 bg-background/85 px-1 shadow-[0_14px_34px_-28px_rgba(15,23,42,0.45)] transition-colors duration-300 data-[state=open]:border-primary/20 last:mb-0"
               >
                 <span className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-primary/45 to-transparent opacity-0 transition-opacity duration-300 group-data-[state=open]:opacity-100" />

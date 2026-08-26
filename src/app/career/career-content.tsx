@@ -50,6 +50,7 @@ export default function CareerContent() {
         {jobData.map((job, index) => (
           <m.article
             key={job.title}
+            data-moving-border
             className="rounded-2xl border border-border/60 bg-muted/40 p-6 shadow-sm will-change-transform"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -150,6 +151,7 @@ export default function CareerContent() {
             {hiringSteps.map((step, index) => (
               <li
                 key={step}
+                data-moving-border
                 className="flex gap-3 rounded-2xl border border-border/60 bg-muted/40 p-4 text-sm leading-6 text-muted-foreground"
               >
                 <span className="flex size-7 shrink-0 items-center justify-center rounded-full border border-border/70 bg-background text-xs font-semibold text-foreground">

@@ -26,7 +26,7 @@ export function HackathonPrizes({ hackathon }: HackathonPrizesProps) {
         <CardTitle>Prizes & Recognition</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="rounded-lg border px-4 py-3">
+        <div data-moving-border className="rounded-lg border px-4 py-3">
           <div className="text-xs uppercase tracking-wide text-muted-foreground">
             Total Prize Pool
           </div>
@@ -39,6 +39,7 @@ export function HackathonPrizes({ hackathon }: HackathonPrizesProps) {
           {prizeData.map((item) => (
             <div
               key={item.label}
+              data-moving-border
               className="rounded-lg border px-4 py-3 text-center"
             >
               <div className="text-xs uppercase tracking-wide text-muted-foreground">

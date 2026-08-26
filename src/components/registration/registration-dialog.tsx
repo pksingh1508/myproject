@@ -579,7 +579,10 @@ export function HackathonRegistrationDialog({
                 {!paymentSettled ? (
                   <>
                     {paymentDetails ? (
-                      <div className="space-y-4 rounded-md border bg-muted/30 p-4">
+                      <div
+                        data-moving-border
+                        className="space-y-4 rounded-md border bg-muted/30 p-4"
+                      >
                         <div className="space-y-1 text-sm text-muted-foreground">
                           <p>
                             Complete the INR {paymentDetails.amount.toFixed(0)} payment on the secure

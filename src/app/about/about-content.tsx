@@ -249,6 +249,7 @@ function AboutCard({
 }) {
   return (
     <m.div
+      data-moving-border
       className={cn(cardClassName, "will-change-transform", className)}
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -288,7 +289,10 @@ export default function AboutContent() {
             their work.
           </p>
 
-          <p className="max-w-2xl rounded-2xl border border-border/80 bg-muted/40 px-4 py-3 text-sm leading-6 text-muted-foreground">
+          <p
+            data-moving-border
+            className="max-w-2xl rounded-2xl border border-border/80 bg-muted/40 px-4 py-3 text-sm leading-6 text-muted-foreground"
+          >
             We are not here to make things look bigger than they are. We are
             here to make the path clearer for students who are willing to put in
             the work.
@@ -390,7 +394,10 @@ export default function AboutContent() {
               </div>
 
               <div className="grid gap-4 sm:grid-cols-3">
-                <div className="rounded-2xl border border-border/70 bg-background p-4">
+                <div
+                  data-moving-border
+                  className="rounded-2xl border border-border/70 bg-background p-4"
+                >
                   <p className="text-sm font-semibold text-foreground">
                     Find events fast
                   </p>
@@ -398,7 +405,10 @@ export default function AboutContent() {
                     No need to hunt through scattered groups and random posts.
                   </p>
                 </div>
-                <div className="rounded-2xl border border-border/70 bg-background p-4">
+                <div
+                  data-moving-border
+                  className="rounded-2xl border border-border/70 bg-background p-4"
+                >
                   <p className="text-sm font-semibold text-foreground">
                     Build with people
                   </p>
@@ -406,7 +416,10 @@ export default function AboutContent() {
                     Meet teammates who want to learn and finish something real.
                   </p>
                 </div>
-                <div className="rounded-2xl border border-border/70 bg-background p-4">
+                <div
+                  data-moving-border
+                  className="rounded-2xl border border-border/70 bg-background p-4"
+                >
                   <p className="text-sm font-semibold text-foreground">
                     Get a fair shot
                   </p>
@@ -485,7 +498,10 @@ export default function AboutContent() {
       </section>
 
       <section className="mx-auto w-full max-w-6xl px-4 pb-16 pt-10 sm:px-6 lg:px-8">
-        <Reveal className="rounded-2xl border border-border/60 bg-muted/40 p-6 shadow-sm sm:p-10">
+        <Reveal
+          data-moving-border
+          className="rounded-2xl border border-border/60 bg-muted/40 p-6 shadow-sm sm:p-10"
+        >
           <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
             <div className="space-y-4">
               <h2

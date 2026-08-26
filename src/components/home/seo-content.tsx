@@ -175,6 +175,7 @@ export function SeoContent() {
           {talkingPoints.map((point) => (
             <article
               key={point.title}
+              data-moving-border
               className="rounded-3xl border border-border/70 bg-muted/30 p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
             >
               <h3 className="text-lg font-semibold text-foreground">
