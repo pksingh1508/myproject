@@ -244,14 +244,21 @@ function AboutCard({
   className,
   children,
   movingBorder = true,
+  movingBorderVisibility = "always",
 }: {
   className?: string;
   children: ReactNode;
   movingBorder?: boolean;
+  movingBorderVisibility?: "always" | "hover";
 }) {
   return (
     <m.div
       data-moving-border={movingBorder ? "" : undefined}
+      data-moving-border-visibility={
+        movingBorder && movingBorderVisibility === "hover"
+          ? "hover"
+          : undefined
+      }
       className={cn(cardClassName, "will-change-transform", className)}
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -289,15 +296,6 @@ export default function AboutContent() {
             college, city, or circle. We wanted one place where they could find
             real hackathons, build with others, and feel good enough to submit
             their work.
-          </p>
-
-          <p
-            data-moving-border
-            className="max-w-2xl rounded-2xl border border-border/80 bg-muted/40 px-4 py-3 text-sm leading-6 text-muted-foreground"
-          >
-            We are not here to make things look bigger than they are. We are
-            here to make the path clearer for students who are willing to put in
-            the work.
           </p>
 
           <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center">
@@ -355,7 +353,11 @@ export default function AboutContent() {
 
         <div className="mt-8 grid gap-6 lg:grid-cols-3">
           {focusAreas.map((item) => (
-            <AboutCard key={item.title} className="h-full">
+            <AboutCard
+              key={item.title}
+              movingBorderVisibility="hover"
+              className="h-full"
+            >
               <div className="flex h-full flex-col gap-5">
                 <StaticIcon icon={item.icon} />
                 <div className="space-y-2">
@@ -471,7 +473,11 @@ export default function AboutContent() {
 
         <div className="mt-8 grid gap-6 lg:grid-cols-3">
           {milestones.map((milestone) => (
-            <AboutCard key={milestone.year} className="h-full">
+            <AboutCard
+              key={milestone.year}
+              movingBorder={false}
+              className="h-full"
+            >
               <div className="flex h-full flex-col gap-5">
                 <StaticIcon icon={Sparkles} className="size-11 rounded-2xl" />
                 <div className="space-y-3">
