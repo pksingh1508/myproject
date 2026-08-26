@@ -243,13 +243,15 @@ function StaticIcon({
 function AboutCard({
   className,
   children,
+  movingBorder = true,
 }: {
   className?: string;
   children: ReactNode;
+  movingBorder?: boolean;
 }) {
   return (
     <m.div
-      data-moving-border
+      data-moving-border={movingBorder ? "" : undefined}
       className={cn(cardClassName, "will-change-transform", className)}
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -375,7 +377,7 @@ export default function AboutContent() {
 
       <section className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-          <AboutCard className="h-full">
+          <AboutCard movingBorder={false} className="h-full">
             <div className="flex h-full flex-col gap-6">
               <StaticIcon icon={Users} className="size-14 rounded-3xl" />
               <div className="space-y-4">
@@ -394,10 +396,7 @@ export default function AboutContent() {
               </div>
 
               <div className="grid gap-4 sm:grid-cols-3">
-                <div
-                  data-moving-border
-                  className="rounded-2xl border border-border/70 bg-background p-4"
-                >
+                <div className="rounded-2xl border border-border/70 bg-background p-4">
                   <p className="text-sm font-semibold text-foreground">
                     Find events fast
                   </p>
@@ -405,10 +404,7 @@ export default function AboutContent() {
                     No need to hunt through scattered groups and random posts.
                   </p>
                 </div>
-                <div
-                  data-moving-border
-                  className="rounded-2xl border border-border/70 bg-background p-4"
-                >
+                <div className="rounded-2xl border border-border/70 bg-background p-4">
                   <p className="text-sm font-semibold text-foreground">
                     Build with people
                   </p>
@@ -416,10 +412,7 @@ export default function AboutContent() {
                     Meet teammates who want to learn and finish something real.
                   </p>
                 </div>
-                <div
-                  data-moving-border
-                  className="rounded-2xl border border-border/70 bg-background p-4"
-                >
+                <div className="rounded-2xl border border-border/70 bg-background p-4">
                   <p className="text-sm font-semibold text-foreground">
                     Get a fair shot
                   </p>
@@ -433,7 +426,11 @@ export default function AboutContent() {
 
           <div className="grid gap-6">
             {studentPromises.map((item) => (
-              <AboutCard key={item.title} className="h-full bg-background">
+              <AboutCard
+                key={item.title}
+                movingBorder={false}
+                className="h-full bg-background"
+              >
                 <div className="flex h-full items-start gap-4">
                   <StaticIcon
                     icon={item.icon}

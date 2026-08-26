@@ -42,7 +42,6 @@ export function Footer() {
         transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
       >
         <div
-          data-moving-border
           className="relative overflow-hidden rounded-3xl border-5 border-border/80 bg-card px-8 py-12 text-card-foreground shadow-[0_10px_40px_rgba(15,23,42,0.08)] backdrop-blur-lg sm:px-12"
         >
           {/* <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent" /> */}

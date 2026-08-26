@@ -136,7 +136,10 @@ export function Testimonials() {
                     }}
                     viewport={{ once: true, amount: 0.25 }}
                   >
-                    <Card className="h-full border-border/60 bg-muted/20 shadow-[0_12px_35px_-26px_rgba(15,23,42,0.45)] backdrop-blur-sm">
+                    <Card
+                      movingBorder={false}
+                      className="h-full border-border/60 bg-muted/20 shadow-[0_12px_35px_-26px_rgba(15,23,42,0.45)] backdrop-blur-sm"
+                    >
                       <CardHeader className="flex flex-row items-center gap-4 @container">
                         <div className="relative h-12 w-12 overflow-hidden rounded-full bg-muted">
                           <Image
