@@ -54,7 +54,7 @@ export function HackathonOverview({ hackathon }: HackathonOverviewProps) {
       <Separator />
 
       <div className="grid gap-4 md:grid-cols-2">
-        <Card>
+        <Card data-moving-border-override="on">
           <CardHeader>
             <CardTitle>Timeline</CardTitle>
           </CardHeader>
@@ -76,7 +76,7 @@ export function HackathonOverview({ hackathon }: HackathonOverviewProps) {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card data-moving-border-override="on">
           <CardHeader>
             <CardTitle>Participation</CardTitle>
           </CardHeader>

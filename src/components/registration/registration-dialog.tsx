@@ -530,7 +530,10 @@ export function HackathonRegistrationDialog({
         onOpenChange={setRegistrationDialogOpen}
       >
 
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
+      <DialogContent
+        data-moving-border-scope="off"
+        className="max-h-[90vh] overflow-y-auto sm:max-w-2xl"
+      >
         <DialogHeader>
           <DialogTitle>Register for {hackathon.title}</DialogTitle>
         </DialogHeader>

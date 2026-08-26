@@ -69,7 +69,7 @@ export default async function HackathonPage({ params }: HackathonPageProps) {
   const registrationOpen = isRegistrationOpen(hackathon.registration_end);
 
   return (
-    <div className="bg-background">
+    <div data-moving-border-scope="off" className="bg-background">
       <section className="relative" style={brandDisplayStyle}>
         {hackathon.banner_url ? (
           <div className="absolute inset-0">

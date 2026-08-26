@@ -147,6 +147,11 @@
   display: none;
 }
 
+[data-moving-border-scope="off"]
+  [data-moving-border][data-moving-border-override="on"]::before {
+  display: block;
+}
+
 [data-moving-border]::before {
   position: absolute;
   z-index: 5;

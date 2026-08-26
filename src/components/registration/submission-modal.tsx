@@ -95,7 +95,10 @@ export function SubmissionModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent
+        data-moving-border-scope="off"
+        className="sm:max-w-lg"
+      >
         <DialogHeader>
           <DialogTitle>Submit your project for {hackathonTitle}</DialogTitle>
         </DialogHeader>
