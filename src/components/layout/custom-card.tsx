@@ -7,17 +7,31 @@ import { cn } from "@/lib/utils";
 
 type CustomCardProps = Omit<HTMLMotionProps<"div">, "ref"> & {
   revealDelay?: number;
+  movingBorder?: boolean;
+  movingBorderVisibility?: "always" | "hover";
 };
 
 export const CustomCard = forwardRef<HTMLDivElement, CustomCardProps>(
   function CustomCard(
-    { className, children, revealDelay = 0, ...props },
+    {
+      className,
+      children,
+      revealDelay = 0,
+      movingBorder = true,
+      movingBorderVisibility = "always",
+      ...props
+    },
     forwardedRef,
   ) {
     return (
       <m.div
         ref={forwardedRef}
-        data-moving-border
+        data-moving-border={movingBorder ? "" : undefined}
+        data-moving-border-visibility={
+          movingBorder && movingBorderVisibility === "hover"
+            ? "hover"
+            : undefined
+        }
         className={cn(
           "relative flex h-full flex-col rounded-2xl border border-border/60 bg-background p-6 shadow-[0_12px_35px_-24px_rgba(15,23,42,0.42)] will-change-transform",
           className,

@@ -186,6 +186,19 @@
   animation-delay: -3.6s;
 }
 
+[data-moving-border-visibility="hover"]::before {
+  opacity: 0;
+  animation-play-state: paused;
+  transition: opacity 180ms ease-out;
+}
+
+@media (hover: hover) {
+  [data-moving-border-visibility="hover"]:hover::before {
+    opacity: 1;
+    animation-play-state: running;
+  }
+}
+
 @keyframes moving-border-orbit {
   to {
     --moving-border-angle: 360deg;
@@ -212,6 +225,14 @@
   [data-moving-border]::before {
     --moving-border-angle: 135deg;
     animation: none;
+    opacity: 0.65;
+  }
+
+  [data-moving-border-visibility="hover"]::before {
+    opacity: 0;
+  }
+
+  [data-moving-border-visibility="hover"]:hover::before {
     opacity: 0.65;
   }
 

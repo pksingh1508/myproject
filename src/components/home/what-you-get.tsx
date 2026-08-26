@@ -72,6 +72,7 @@ export function WhatYouGet() {
           {prizes.map((prize, index) => (
             <CustomCard
               key={prize.title}
+              movingBorderVisibility="hover"
               className="group border-border/50 bg-muted/30 backdrop-blur-sm"
               revealDelay={(index % 3) * 0.06}
             >
