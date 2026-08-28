@@ -16,6 +16,7 @@ import {
 } from "@/constants/site";
 import { MotionProvider } from "@/components/motion/motion-provider";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -115,6 +116,14 @@ export default function RootLayout({
       }}
     >
       <html lang="en" suppressHydrationWarning>
+        <head>
+          <Script
+            data-website-id="dfid_ZzZJw2kteo1bnGmpdN8y8"
+            data-domain="hackathonwallah.com"
+            src="https://datafa.st/js/script.js"
+            strategy="afterInteractive"
+          />
+        </head>
         <ReactLenis root>
           <body
             className={`${geistSans.variable} ${geistMono.variable} ${fontVariables} antialiased`}
