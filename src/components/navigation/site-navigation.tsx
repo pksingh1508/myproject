@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
+  AnimatePresence,
   LayoutGroup,
   m,
   useMotionValueEvent,
@@ -16,6 +17,7 @@ import {
   SignInButton,
   SignUpButton,
   UserButton,
+  useAuth,
 } from "@clerk/nextjs";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { ArrowUpRight, X } from "lucide-react";
@@ -26,17 +28,33 @@ import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { EASE_OUT } from "@/components/motion/easing";
 import { cn } from "@/lib/utils";
 
-const navigationLinks = [
+type NavigationLink = {
+  label: string;
+  href: string;
+  /** Only shown once the visitor is signed in. */
+  requiresAuth?: boolean;
+};
+
+const navigationLinks: NavigationLink[] = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Hackathons", href: "/hackathons" },
-  { label: "Notifications", href: "/notifications" },
+  { label: "Notifications", href: "/notifications", requiresAuth: true },
   { label: "Career", href: "/career" },
 ];
 
 function isActiveLink(pathname: string | null, href: string) {
   if (!pathname) return false;
   return href === "/" ? pathname === "/" : pathname.startsWith(href);
+}
+
+/**
+ * Clerk resolves auth on the client, so signed-in-only links stay hidden
+ * through SSR and hydration and appear once the session is known.
+ */
+function useIsSignedIn() {
+  const { isLoaded, isSignedIn } = useAuth();
+  return Boolean(isLoaded && isSignedIn);
 }
 
 const HIDDEN_ON = ["/sign-in", "/sign-up"];
@@ -57,6 +75,7 @@ function NavigationBar({ pathname }: { pathname: string | null }) {
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const signedIn = useIsSignedIn();
   const { scrollY, scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, {
     stiffness: 220,
@@ -110,30 +129,36 @@ function NavigationBar({ pathname }: { pathname: string | null }) {
               className="hidden items-center gap-0.5 lg:flex"
             >
               {navigationLinks.map((link) => {
-                const active = isActiveLink(pathname, link.href);
+                const item = (
+                  <DesktopNavLink
+                    link={link}
+                    active={isActiveLink(pathname, link.href)}
+                  />
+                );
+
+                if (!link.requiresAuth) {
+                  return <Fragment key={link.href}>{item}</Fragment>;
+                }
+
+                // Signed-in-only links grow into place so the neighbouring
+                // links slide over instead of jumping.
                 return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    prefetch={link.href === "/notifications" ? true : null}
-                    aria-current={active ? "page" : undefined}
-                    className={cn(
-                      "relative rounded-full px-3.5 py-2 text-[0.92rem] font-medium transition-colors duration-300",
-                      active
-                        ? "text-foreground"
-                        : "text-muted-foreground hover:text-foreground",
-                    )}
-                  >
-                    {active ? (
-                      <m.span
-                        layoutId="nav-active-pill"
-                        aria-hidden
-                        className="absolute inset-0 rounded-full bg-foreground/[0.07]"
-                        transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                      />
+                  <AnimatePresence key={link.href} initial={false}>
+                    {signedIn ? (
+                      <m.div
+                        initial={{ width: 0, opacity: 0, overflow: "hidden" }}
+                        animate={{
+                          width: "auto",
+                          opacity: 1,
+                          transitionEnd: { overflow: "visible" },
+                        }}
+                        exit={{ width: 0, opacity: 0, overflow: "hidden" }}
+                        transition={{ duration: 0.45, ease: EASE_OUT }}
+                      >
+                        {item}
+                      </m.div>
                     ) : null}
-                    <span className="relative">{link.label}</span>
-                  </Link>
+                  </AnimatePresence>
                 );
               })}
             </nav>
@@ -179,6 +204,7 @@ function NavigationBar({ pathname }: { pathname: string | null }) {
               onOpenChange={setMenuOpen}
               pathname={pathname}
               mounted={mounted}
+              links={navigationLinks.filter((link) => !link.requiresAuth || signedIn)}
             />
           </div>
         </div>
@@ -187,14 +213,47 @@ function NavigationBar({ pathname }: { pathname: string | null }) {
   );
 }
 
+function DesktopNavLink({
+  link,
+  active,
+}: {
+  link: NavigationLink;
+  active: boolean;
+}) {
+  return (
+    <Link
+      href={link.href}
+      prefetch={link.href === "/notifications" ? true : null}
+      aria-current={active ? "page" : undefined}
+      className={cn(
+        "relative block whitespace-nowrap rounded-full px-3.5 py-2 text-[0.92rem] font-medium transition-colors duration-300",
+        active
+          ? "text-foreground"
+          : "text-muted-foreground hover:text-foreground",
+      )}
+    >
+      {active ? (
+        <m.span
+          layoutId="nav-active-pill"
+          aria-hidden
+          className="absolute inset-0 rounded-full bg-foreground/[0.07]"
+          transition={{ type: "spring", stiffness: 420, damping: 34 }}
+        />
+      ) : null}
+      <span className="relative">{link.label}</span>
+    </Link>
+  );
+}
+
 type MobileMenuProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   pathname: string | null;
   mounted: boolean;
+  links: NavigationLink[];
 };
 
-function MobileMenu({ open, onOpenChange, pathname, mounted }: MobileMenuProps) {
+function MobileMenu({ open, onOpenChange, pathname, mounted, links }: MobileMenuProps) {
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Trigger asChild>
@@ -234,7 +293,7 @@ function MobileMenu({ open, onOpenChange, pathname, mounted }: MobileMenuProps) 
             <div aria-hidden className="absolute inset-0 bg-graph opacity-70" />
             <nav aria-label="Mobile" className="relative">
               <ul className="flex flex-col">
-                {navigationLinks.map((link, index) => {
+                {links.map((link, index) => {
                   const active = isActiveLink(pathname, link.href);
                   return (
                     <m.li
