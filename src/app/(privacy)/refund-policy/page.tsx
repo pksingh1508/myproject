@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { BRAND_NAME } from "@/constants/site";
-import { Reveal } from "@/components/motion/reveal";
+import { PolicyPage, type PolicySection } from "@/components/legal/policy-page";
 
 export const metadata: Metadata = {
   title: `Refund Policy | ${BRAND_NAME}`,
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
   }
 };
 
-const sections = [
+const sections: PolicySection[] = [
   {
     title: "1. Overview",
     content:
@@ -36,25 +35,25 @@ const sections = [
           Refund eligibility depends on the reason for cancellation and the
           timing of your request:
         </p>
-        <ul className="ml-5 mt-3 list-disc space-y-2 text-muted-foreground">
+        <ul>
           <li>
-            <span className="font-semibold text-foreground">
+            <strong>
               Participant-initiated cancellations:
-            </span>{" "}
+            </strong>{" "}
             requests must be submitted at least 5 days before the scheduled
             start of the hackathon to qualify for a partial refund.
           </li>
           <li>
-            <span className="font-semibold text-foreground">
+            <strong>
               Medical or emergency situations:
-            </span>{" "}
+            </strong>{" "}
             documentation may be required. If approved, a partial or full refund
             will be issued regardless of timing.
           </li>
           <li>
-            <span className="font-semibold text-foreground">
+            <strong>
               Event rescheduling or cancellation by HackathonWallah:
-            </span>{" "}
+            </strong>{" "}
             participants may choose a full refund or transfer their fee to a
             future hackathon.
           </li>
@@ -67,7 +66,7 @@ const sections = [
     content: (
       <>
         <p>Entry fees are non-refundable in the following situations:</p>
-        <ul className="ml-5 mt-3 list-disc space-y-2 text-muted-foreground">
+        <ul>
           <li>Failure to attend the hackathon without prior notice.</li>
           <li>
             Disqualification due to violation of the HackathonWallah code of
@@ -87,19 +86,19 @@ const sections = [
     content: (
       <>
         <p>Approved refunds will be processed as follows:</p>
-        <ul className="ml-5 mt-3 list-disc space-y-2 text-muted-foreground">
+        <ul>
           <li>
-            <span className="font-semibold text-foreground">Full refund:</span>{" "}
+            <strong>Full refund:</strong>{" "}
             when HackathonWallah cancels or substantially alters an event, or in
             documented emergencies approved by our support team.
           </li>
           <li>
-            <span className="font-semibold text-foreground">50% refund:</span>{" "}
+            <strong>50% refund:</strong>{" "}
             when a participant cancels at least 5 days before the event start
             time for personal reasons.
           </li>
           <li>
-            <span className="font-semibold text-foreground">No refund:</span>{" "}
+            <strong>No refund:</strong>{" "}
             when cancellations occur within 5 days of the event or after it has
             begun (unless covered by the emergency clause).
           </li>
@@ -115,20 +114,19 @@ const sections = [
           Refund requests must be submitted via email to{" "}
           <a
             href="mailto:support@hackathonwallah.com"
-            className="text-primary underline-offset-4 hover:underline"
           >
             support@hackathonwallah.com
           </a>{" "}
           with the following details:
         </p>
-        <ul className="ml-5 mt-3 list-disc space-y-2 text-muted-foreground">
+        <ul>
           <li>Registered participant name and email.</li>
           <li>Event name and date.</li>
           <li>
             Reason for refund and supporting documentation (if applicable).
           </li>
         </ul>
-        <p className="mt-3">
+        <p>
           Our team will respond within 5 business days. Once approved, refunds
           are typically processed within 7-10 business days. Depending on your
           bank or payment provider, it may take additional time for the amount
@@ -165,14 +163,13 @@ const sections = [
           For help regarding cancellations, refunds, or payment issues, reach
           out to:
         </p>
-        <div className="mt-3 text-sm text-muted-foreground">
+        <div>
           <p>HackathonWallah Support</p>
           <p>Indranagar, Gorakhpur, 273001, India</p>
           <p>
             Email:{" "}
             <a
               href="mailto:hubhackathon15@gmail.com"
-              className="text-primary underline-offset-4 hover:underline"
             >
               hubhackathon15@gmail.com
             </a>
@@ -185,67 +182,11 @@ const sections = [
 
 export default function RefundPolicyPage() {
   return (
-    <main className="bg-background text-foreground">
-      <section className="border-b border-border/60 bg-muted/10">
-        <Reveal className="mx-auto flex max-w-4xl flex-col gap-4 px-4 py-16 sm:px-6 lg:px-8">
-          <span className="inline-flex w-fit items-center rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.32em] text-primary">
-            Policy
-          </span>
-          <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-            Refund Policy
-          </h1>
-          <p className="max-w-3xl text-sm text-muted-foreground">
-            Last updated:{" "}
-            {new Date().toLocaleDateString("en-IN", {
-              day: "numeric",
-              month: "long",
-              year: "numeric"
-            })}
-            . This policy explains when you can expect refunds for hackathon
-            registration fees on HackathonWallah.
-          </p>
-        </Reveal>
-      </section>
-
-      <section className="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="space-y-10">
-          {sections.map((section, index) => (
-            <Reveal key={section.title} delay={(index % 4) * 0.03} y={14}>
-              <article
-                data-moving-border
-                className="space-y-4 rounded-2xl border border-border/60 bg-muted/20 p-6 shadow-sm"
-              >
-                <h2 className="text-xl font-semibold text-foreground">
-                  {section.title}
-                </h2>
-                <div className="space-y-3 text-sm leading-relaxed text-muted-foreground">
-                  {section.content}
-                </div>
-              </article>
-            </Reveal>
-          ))}
-        </div>
-
-        <div className="mt-12 text-sm text-muted-foreground">
-          <p>
-            Please read this policy alongside our{" "}
-            <Link
-              href="/(privacy)/cancellation-policy"
-              className="text-primary underline-offset-4 hover:underline"
-            >
-              Cancellation Policy
-            </Link>{" "}
-            and{" "}
-            <Link
-              href="/(privacy)/terms-and-conditions"
-              className="text-primary underline-offset-4 hover:underline"
-            >
-              Terms &amp; Conditions
-            </Link>{" "}
-            for complete details on participation requirements.
-          </p>
-        </div>
-      </section>
-    </main>
+    <PolicyPage
+      title="Refund Policy"
+      href="/refund-policy"
+      intro="This policy explains when you can expect refunds for hackathon registration fees on HackathonWallah."
+      sections={sections}
+    />
   );
 }

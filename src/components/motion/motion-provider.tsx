@@ -1,15 +1,17 @@
 "use client";
 
-import { LazyMotion, MotionConfig, domAnimation } from "motion/react";
+import { LazyMotion, MotionConfig, domMax } from "motion/react";
 
-const premiumEase = [0.22, 1, 0.36, 1] as const;
+import { EASE_OUT } from "./easing";
 
+// domMax (not domAnimation) so shared-layout animations (layoutId) work for
+// the nav pill, tabs, and segmented controls.
 export function MotionProvider({ children }: { children: React.ReactNode }) {
   return (
-    <LazyMotion features={domAnimation}>
+    <LazyMotion features={domMax}>
       <MotionConfig
         reducedMotion="user"
-        transition={{ duration: 0.35, ease: premiumEase }}
+        transition={{ duration: 0.45, ease: EASE_OUT }}
       >
         {children}
       </MotionConfig>

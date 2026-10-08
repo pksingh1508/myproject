@@ -5,8 +5,8 @@ import {
   HackathonCatalog,
   HackathonGridLoader,
 } from "@/components/hackathons";
-import { Badge } from "@/components/ui/badge";
-import { Reveal } from "@/components/motion/reveal";
+import { Marker } from "@/components/decor/marker";
+import { PageHero } from "@/components/layout/page-hero";
 import { BRAND_NAME } from "@/constants/site";
 
 export const metadata: Metadata = {
@@ -28,33 +28,49 @@ export const metadata: Metadata = {
   }
 };
 
-const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
-
 export default function HackathonsPage() {
   return (
-    <div
-      className="mx-auto max-w-6xl space-y-10 px-4 py-12 sm:px-6 lg:px-0"
-      style={brandDisplayStyle}
-    >
-      <Reveal className="space-y-4">
-        <Badge variant="secondary" className="uppercase">
-          Discover Hackathons
-        </Badge>
-        <div className="space-y-3">
-          <h1 className="text-4xl font-semibold tracking-tight">
-            Explore upcoming challenges and innovation sprints
-          </h1>
-          <p className="max-w-2xl text-lg text-muted-foreground">
-            Browse live and upcoming hackathons, refine by theme, and secure
-            your spot in minutes. Each listing includes full details to help
-            your team prepare.
-          </p>
-        </div>
-      </Reveal>
+    <>
+      <PageHero
+        label="hackathons"
+        title={
+          <>
+            Find your next <Marker trigger="mount" delay={0.7}>build sprint.</Marker>
+          </>
+        }
+        description="Browse live and upcoming hackathons, refine by theme, and secure your spot in minutes. Each listing includes full details to help your team prepare."
+        aside={<PlaybookNote />}
+      />
+      <section className="container-page pb-24 sm:pb-32">
+        <Suspense fallback={<HackathonGridLoader />}>
+          <HackathonCatalog />
+        </Suspense>
+      </section>
+    </>
+  );
+}
 
-      <Suspense fallback={<HackathonGridLoader />}>
-        <HackathonCatalog />
-      </Suspense>
+/** A taped-down sticky note with the three-step playbook. */
+function PlaybookNote() {
+  return (
+    <div className="relative mx-auto w-full max-w-[17rem] rotate-[2.5deg] lg:ml-auto lg:mr-0">
+      <span
+        aria-hidden
+        className="absolute -top-3 left-1/2 z-10 h-6 w-20 -translate-x-1/2 -rotate-3 rounded-[2px] bg-paper/70 shadow-sm ring-1 ring-ink/5 backdrop-blur-sm dark:bg-paper/25"
+      />
+      <div className="relative overflow-hidden rounded-[4px] bg-[oklch(0.93_0.09_92)] p-6 pt-8 text-ink shadow-lift">
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-[repeating-linear-gradient(to_bottom,transparent_0_27px,oklch(0.215_0.045_258/0.09)_27px_28px)] bg-[position:0_14px]"
+        />
+        <div className="relative font-hand text-[1.15rem] leading-[28px]">
+          <p className="font-bold">the playbook</p>
+          <p>1. pick a brief you love</p>
+          <p>2. rally your team</p>
+          <p>3. ship before the deadline</p>
+          <p className="mt-1 text-[#1b436b]">→ then celebrate!</p>
+        </div>
+      </div>
     </div>
   );
 }

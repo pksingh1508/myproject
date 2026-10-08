@@ -22,9 +22,5 @@ export default async function CashfreeReturnPage({
   const orderIdParam =
     (params.order_id ?? params.orderId ?? null) as string | null;
 
-  return (
-    <div className="px-4">
-      <CashfreeReturnHandler orderId={orderIdParam} />
-    </div>
-  );
+  return <CashfreeReturnHandler orderId={orderIdParam} />;
 }

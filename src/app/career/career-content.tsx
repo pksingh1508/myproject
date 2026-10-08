@@ -1,8 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { m } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
+import { ArrowRight, ChevronDown } from "lucide-react";
+
 import {
   Dialog,
   DialogContent,
@@ -10,12 +13,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { BrandButton } from "@/components/layout";
-import { Reveal } from "@/components/motion/reveal";
+import { Marker } from "@/components/decor/marker";
+import { BrandButton } from "@/components/layout/brand-button";
+import { PageHero } from "@/components/layout/page-hero";
+import { SectionHeading } from "@/components/layout/section-heading";
+import { EASE_OUT } from "@/components/motion/easing";
+import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { jobData } from "@/constants/jobData";
-
-const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
-const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
+import { cn } from "@/lib/utils";
 
 const hiringSteps = [
   "Participate in any ongoing hackathons.",
@@ -25,105 +30,202 @@ const hiringSteps = [
   "Get the job.",
 ];
 
+const slugify = (value: string) =>
+  value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
 export default function CareerContent() {
   const router = useRouter();
   const [selectedJobTitle, setSelectedJobTitle] = useState<string | null>(null);
+  const [openRole, setOpenRole] = useState<string | null>(jobData[0]?.title ?? null);
 
   return (
-    <main className="bg-background text-foreground" style={brandSansStyle}>
-      <Reveal className="mx-auto flex w-full max-w-6xl flex-col justify-center gap-6 px-4 pb-12 pt-20 sm:px-6 lg:px-8">
-        <span className="inline-flex w-fit items-center rounded-full border border-border/80 bg-muted/60 px-4 py-1 text-xs font-semibold uppercase tracking-[0.32em] text-muted-foreground">
-          Career
-        </span>
-        <h1
-          className="max-w-3xl text-balance text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl"
-          style={brandDisplayStyle}
-        >
-          Build your career with HackathonWallah.
-        </h1>
-        <p className="max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
-          Explore open roles and apply for the team that matches your skills.
-        </p>
-      </Reveal>
+    <>
+      <PageHero
+        label="career"
+        title={
+          <>
+            Build your career with <Marker trigger="mount" delay={0.7}>HackathonWallah.</Marker>
+          </>
+        }
+        description="Explore open roles and apply for the team that matches your skills."
+        actions={
+          <BrandButton asChild size="lg" arrow>
+            <Link href="#open-roles">See open roles</Link>
+          </BrandButton>
+        }
+      />
 
-      <section className="mx-auto grid w-full max-w-6xl gap-6 px-4 pb-24 sm:px-6 lg:px-8">
-        {jobData.map((job, index) => (
-          <m.article
-            key={job.title}
-            data-moving-border
-            className="rounded-2xl border border-border/60 bg-muted/40 p-6 shadow-sm will-change-transform"
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -3 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{
-              duration: 0.5,
-              delay: (index % 3) * 0.05,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-          >
-            <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-              <div className="space-y-3">
-                <div className="flex flex-wrap items-center gap-3">
-                  <h2
-                    className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl"
-                    style={brandDisplayStyle}
-                  >
-                    {job.title}
-                  </h2>
-                  <span className="rounded-full border border-border/70 bg-background px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                    {job.salaryRange}
-                  </span>
-                </div>
-                <p className="max-w-3xl text-sm leading-6 text-muted-foreground sm:text-base">
-                  {job.description}
-                </p>
-              </div>
-
-              <BrandButton
-                className="shrink-0 px-6 py-3 text-xs"
-                onClick={() => setSelectedJobTitle(job.title)}
+      {/* How we hire */}
+      <section className="container-page pb-20 sm:pb-28">
+        <SectionHeading
+          index="01"
+          label="how we hire"
+          title="Here is how we hire."
+          description="We hire builders the way hackathons judge them — by what they ship."
+        />
+        <Stagger className="mt-12 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5" stagger={0.09}>
+          {hiringSteps.map((step, index) => {
+            const last = index === hiringSteps.length - 1;
+            return (
+              <StaggerItem
+                key={step}
+                className={cn(
+                  "relative flex min-h-48 flex-col justify-between gap-6 rounded-[1.5rem] border p-6",
+                  last
+                    ? "border-transparent bg-signal text-ink"
+                    : "border-border bg-card shadow-soft",
+                )}
               >
-                Apply
-              </BrandButton>
-            </div>
+                <div className="flex items-center justify-between">
+                  <span
+                    className={cn(
+                      "font-mono text-xs tabular-nums",
+                      last ? "text-ink/70" : "text-muted-foreground",
+                    )}
+                  >
+                    step 0{index + 1}
+                  </span>
+                  {!last ? (
+                    <ArrowRight className="size-4 text-foreground/30" aria-hidden />
+                  ) : null}
+                </div>
+                <p
+                  className={cn(
+                    "font-display text-[1.15rem] font-semibold leading-snug tracking-[-0.02em]",
+                    last && "text-[1.6rem]",
+                  )}
+                >
+                  {step}
+                </p>
+              </StaggerItem>
+            );
+          })}
+        </Stagger>
+      </section>
 
-            <div className="mt-6 grid gap-6 lg:grid-cols-2">
-              <div>
-                <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-foreground">
-                  Responsibilities
-                </h3>
-                <ul className="mt-3 space-y-2 text-sm leading-6 text-muted-foreground">
-                  {job.responsibilities.map((responsibility) => (
-                    <li key={responsibility} className="flex gap-2">
-                      <span
-                        aria-hidden="true"
-                        className="mt-2 size-1.5 rounded-full bg-primary/70"
-                      />
-                      <span>{responsibility}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+      {/* Open roles */}
+      <section id="open-roles" className="container-page scroll-mt-28 pb-24 sm:pb-32">
+        <SectionHeading
+          index="02"
+          label="open roles"
+          title={`${jobData.length} open roles`}
+          description="Pick the role that matches your stack, then prove it with a hackathon project."
+        />
 
-              <div>
-                <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-foreground">
-                  Required Skills
-                </h3>
-                <ul className="mt-3 flex flex-wrap gap-2">
-                  {job.requiredSkills.map((skill) => (
-                    <li
-                      key={skill}
-                      className="rounded-full border border-border/70 bg-background px-3 py-1 text-sm text-muted-foreground"
-                    >
-                      {skill}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </m.article>
-        ))}
+        <Reveal delay={0.1} className="mt-8 flex flex-wrap gap-2">
+          {jobData.map((job) => (
+            <a
+              key={job.title}
+              href={`#${slugify(job.title)}`}
+              onClick={() => setOpenRole(job.title)}
+              className="rounded-full border border-border bg-background/70 px-3.5 py-1.5 text-sm text-muted-foreground transition-colors hover:border-foreground/30 hover:text-foreground"
+            >
+              {job.title}
+            </a>
+          ))}
+        </Reveal>
+
+        <ul className="mt-10 flex flex-col gap-3">
+          {jobData.map((job, index) => {
+            const open = openRole === job.title;
+            const panelId = `${slugify(job.title)}-details`;
+            return (
+              <li key={job.title} id={slugify(job.title)} className="scroll-mt-28">
+                <Reveal
+                  y={24}
+                  delay={(index % 4) * 0.05}
+                  className={cn(
+                    "overflow-hidden rounded-[1.75rem] border bg-card transition-[border-color,box-shadow] duration-500",
+                    open ? "border-foreground/20 shadow-lift" : "border-border shadow-soft hover:border-foreground/20",
+                  )}
+                >
+                  <div className="flex flex-col gap-5 p-6 sm:p-8 lg:flex-row lg:items-center">
+                    <span className="hidden font-mono text-sm text-muted-foreground tabular-nums lg:block lg:w-10">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <h3 className="font-display text-[1.6rem] font-semibold leading-tight tracking-[-0.03em] sm:text-[1.85rem]">
+                          {job.title}
+                        </h3>
+                        <span className="rounded-full bg-foreground/[0.06] px-3 py-1 font-mono text-xs text-foreground">
+                          ₹{job.salaryRange.replace(/\s*-\s*/, "–")}
+                        </span>
+                      </div>
+                      <p className="mt-2 line-clamp-2 max-w-3xl leading-relaxed text-muted-foreground">
+                        {job.description}
+                      </p>
+                    </div>
+                    <div className="flex shrink-0 items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setOpenRole(open ? null : job.title)}
+                        aria-expanded={open}
+                        aria-controls={panelId}
+                        className="inline-flex h-11 items-center gap-2 rounded-full border border-foreground/15 px-4 text-sm font-medium transition-colors hover:border-foreground/35 hover:bg-foreground/[0.04]"
+                      >
+                        Details
+                        <ChevronDown
+                          className={cn(
+                            "size-4 transition-transform duration-300",
+                            open && "rotate-180",
+                          )}
+                        />
+                      </button>
+                      <BrandButton arrow onClick={() => setSelectedJobTitle(job.title)}>
+                        Apply
+                      </BrandButton>
+                    </div>
+                  </div>
+
+                  <AnimatePresence initial={false}>
+                    {open ? (
+                      <m.div
+                        id={panelId}
+                        key="details"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.5, ease: EASE_OUT }}
+                        className="overflow-hidden"
+                      >
+                        <div className="grid grid-cols-1 gap-8 border-t border-border px-6 py-8 sm:px-8 lg:grid-cols-2 lg:pl-[4.5rem]">
+                          <div>
+                            <p className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-muted-foreground">
+                              Responsibilities
+                            </p>
+                            <div className="rich-text mt-4 text-[0.95rem]">
+                              <ul>
+                                {job.responsibilities.map((responsibility) => (
+                                  <li key={responsibility}>{responsibility}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+                          <div>
+                            <p className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-muted-foreground">
+                              Required skills
+                            </p>
+                            <ul className="mt-4 flex flex-wrap gap-2">
+                              {job.requiredSkills.map((skill) => (
+                                <li
+                                  key={skill}
+                                  className="rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground/85"
+                                >
+                                  {skill}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </m.div>
+                    ) : null}
+                  </AnimatePresence>
+                </Reveal>
+              </li>
+            );
+          })}
+        </ul>
       </section>
 
       <Dialog
@@ -134,47 +236,50 @@ export default function CareerContent() {
           }
         }}
       >
-        <DialogContent className="duration-100 sm:max-w-xl">
+        <DialogContent className="sm:max-w-xl">
           <DialogHeader>
-            <DialogTitle
-              className="text-2xl font-semibold tracking-tight"
-              style={brandDisplayStyle}
-            >
-              Here is how we hire.
-            </DialogTitle>
+            <DialogTitle>Here is how we hire.</DialogTitle>
             <DialogDescription>
-              Follow these steps for the {selectedJobTitle} role.
+              Follow these steps for the{" "}
+              <span className="font-medium text-foreground">{selectedJobTitle}</span> role.
             </DialogDescription>
           </DialogHeader>
 
-          <ol className="space-y-3">
+          <ol className="flex flex-col gap-2">
             {hiringSteps.map((step, index) => (
               <li
                 key={step}
-                data-moving-border
-                className="flex gap-3 rounded-2xl border border-border/60 bg-muted/40 p-4 text-sm leading-6 text-muted-foreground"
+                className="flex items-start gap-3 rounded-2xl border border-border bg-muted/50 p-4 text-sm leading-relaxed text-muted-foreground"
               >
-                <span className="flex size-7 shrink-0 items-center justify-center rounded-full border border-border/70 bg-background text-xs font-semibold text-foreground">
+                <span
+                  className={cn(
+                    "grid size-7 shrink-0 place-items-center rounded-full font-mono text-xs font-semibold",
+                    index === hiringSteps.length - 1
+                      ? "bg-signal text-ink"
+                      : "bg-foreground text-background",
+                  )}
+                >
                   {index + 1}
                 </span>
-                <span>{step}</span>
+                <span className="pt-0.5 text-foreground/85">{step}</span>
               </li>
             ))}
           </ol>
 
-          <div className="pt-2">
+          <div className="pt-1">
             <BrandButton
-              className="w-full px-6 py-3 text-xs sm:w-auto"
+              arrow
+              className="w-full sm:w-auto"
               onClick={() => {
                 setSelectedJobTitle(null);
                 router.push("/hackathons");
               }}
             >
-              See Ongoing hackathons
+              See ongoing hackathons
             </BrandButton>
           </div>
         </DialogContent>
       </Dialog>
-    </main>
+    </>
   );
 }

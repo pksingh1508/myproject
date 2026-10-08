@@ -2,9 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { m } from "motion/react";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { GridBackdrop } from "@/components/decor/grid-backdrop";
+import { SectionLabel } from "@/components/decor/section-label";
+import { BrandButton } from "@/components/layout/brand-button";
+import { EASE_OUT } from "@/components/motion/easing";
+import { Spinner } from "@/components/ui/spinner";
+import { cn } from "@/lib/utils";
 
 interface CashfreeReturnHandlerProps {
   orderId: string | null;
@@ -84,34 +89,92 @@ export function CashfreeReturnHandler({ orderId }: CashfreeReturnHandlerProps) {
     };
   }, [orderId]);
 
-  if (state.status === "pending") {
-    return (
-      <div className="space-y-4 py-10 text-center">
-        <h1 className="text-2xl font-semibold">Verifying payment...</h1>
-        <p className="text-sm text-muted-foreground">
-          Please hold on while we confirm the status of order {orderId ?? ""} with Cashfree.
-        </p>
-      </div>
-    );
-  }
-
   const isSuccess = state.status === "success";
+  const isPending = state.status === "pending";
 
   return (
-    <div className="mx-auto max-w-lg space-y-6 py-10">
-      <Alert variant={isSuccess ? "default" : "destructive"}>
-        <AlertTitle>{isSuccess ? "Payment confirmed" : "Payment not confirmed"}</AlertTitle>
-        <AlertDescription>{state.message}</AlertDescription>
-      </Alert>
+    <section className="relative isolate flex min-h-[80dvh] items-center justify-center overflow-hidden px-4 pb-20 pt-[calc(var(--header-h)+3rem)]">
+      <GridBackdrop spotlight />
+      <div className="w-full max-w-lg rounded-[2rem] border border-border bg-card p-8 text-center shadow-lift sm:p-10">
+        <div className="mx-auto grid size-20 place-items-center">
+          {isPending ? (
+            <Spinner className="size-12 text-signal-ink" />
+          ) : (
+            <StatusGlyph success={isSuccess} />
+          )}
+        </div>
 
-      <div className="flex flex-wrap items-center justify-center gap-3">
-        <Button asChild>
-          <Link href="/hackathons">Browse hackathons</Link>
-        </Button>
-        <Button asChild variant="outline">
-          <Link href="/">Return home</Link>
-        </Button>
+        <div className="mt-6 flex flex-col items-center gap-3">
+          <SectionLabel>payment</SectionLabel>
+          <h1 className="font-display text-[2rem] font-semibold leading-tight tracking-[-0.035em]">
+            {isPending
+              ? "Verifying payment…"
+              : isSuccess
+                ? "Payment confirmed"
+                : "Payment not confirmed"}
+          </h1>
+          <p className="max-w-sm leading-relaxed text-muted-foreground">
+            {isPending
+              ? "Hold on while we confirm the status of your order with Cashfree."
+              : state.message}
+          </p>
+          {orderId ? (
+            <p className="rounded-full bg-foreground/[0.05] px-3 py-1 font-mono text-xs text-muted-foreground">
+              order · {orderId}
+            </p>
+          ) : null}
+        </div>
+
+        {!isPending ? (
+          <m.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5, ease: EASE_OUT }}
+            className="mt-8 flex flex-wrap items-center justify-center gap-3"
+          >
+            <BrandButton asChild arrow>
+              <Link href="/hackathons">Browse hackathons</Link>
+            </BrandButton>
+            <BrandButton asChild variant="outline">
+              <Link href="/">Return home</Link>
+            </BrandButton>
+          </m.div>
+        ) : null}
       </div>
-    </div>
+    </section>
+  );
+}
+
+/** A check or a cross that draws itself inside a filled circle. */
+function StatusGlyph({ success }: { success: boolean }) {
+  const draw = (delay: number) => ({
+    initial: { pathLength: 0 },
+    animate: { pathLength: 1 },
+    transition: { duration: 0.45, delay, ease: EASE_OUT },
+  });
+
+  return (
+    <m.span
+      initial={{ scale: 0.6, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ type: "spring", stiffness: 260, damping: 18 }}
+      className={cn(
+        "grid size-20 place-items-center rounded-full",
+        success
+          ? "bg-signal text-ink shadow-[0_0_0_10px_color-mix(in_oklch,var(--signal),transparent_82%)]"
+          : "bg-destructive/12 text-destructive shadow-[0_0_0_10px_color-mix(in_oklch,var(--destructive),transparent_90%)]",
+      )}
+    >
+      <svg viewBox="0 0 24 24" className="size-9" fill="none" stroke="currentColor" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        {success ? (
+          <m.path d="M5 12.5l4.5 4.5L19 7.5" {...draw(0.2)} />
+        ) : (
+          <>
+            <m.path d="M7 7l10 10" {...draw(0.2)} />
+            <m.path d="M17 7L7 17" {...draw(0.4)} />
+          </>
+        )}
+      </svg>
+    </m.span>
   );
 }

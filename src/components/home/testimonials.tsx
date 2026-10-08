@@ -1,179 +1,94 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { m } from "motion/react";
-
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  type CarouselApi,
-} from "@/components/ui/carousel";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { TESTIMONIALS } from "@/constants/data";
+import { SectionHeading } from "@/components/layout/section-heading";
+import { LoopMarquee } from "@/components/motion/marquee";
 import { Reveal } from "@/components/motion/reveal";
-const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
-const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
-const testimonialCount: number = TESTIMONIALS.length;
-const visibleTestimonials = 3;
+import { cn } from "@/lib/utils";
 
-function withLoopBuffer<T>(items: readonly T[], bufferSize: number) {
-  if (items.length === 0) {
-    return [];
-  }
+type Testimonial = (typeof TESTIMONIALS)[number];
 
-  return [
-    ...items,
-    ...Array.from(
-      { length: bufferSize },
-      (_, index) => items[index % items.length]!,
-    ),
-  ];
+const AVATAR_TONES = [
+  "bg-signal text-ink",
+  "bg-marigold text-ink",
+  "bg-foreground text-background",
+  "bg-hilite text-ink",
+  "bg-brand text-background",
+];
+
+function initials(name: string) {
+  return name
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 }
 
-const loopedTestimonials = withLoopBuffer(TESTIMONIALS, visibleTestimonials);
-
-function truncateWords(text: string, maxWords = 200) {
-  const words = text.trim().split(/\s+/);
-  if (words.length <= maxWords) {
-    return text;
-  }
-  return `${words.slice(0, maxWords).join(" ")}...`;
-}
+const half = Math.ceil(TESTIMONIALS.length / 2);
+const rows = [TESTIMONIALS.slice(0, half), TESTIMONIALS.slice(half)];
 
 export function Testimonials() {
-  const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null);
-
-  useEffect(() => {
-    if (!carouselApi || testimonialCount === 0) {
-      return;
-    }
-
-    const resetLoop = (api: CarouselApi) => {
-      if (!api) {
-        return;
-      }
-
-      const selectedIndex = api.selectedScrollSnap();
-
-      if (selectedIndex >= testimonialCount) {
-        api.scrollTo(selectedIndex % testimonialCount, true);
-      }
-    };
-
-    carouselApi.on("select", resetLoop);
-    carouselApi.on("reInit", resetLoop);
-
-    const autoplay = window.setInterval(() => {
-      carouselApi.scrollNext();
-    }, 5000);
-
-    return () => {
-      window.clearInterval(autoplay);
-      carouselApi.off("select", resetLoop);
-      carouselApi.off("reInit", resetLoop);
-    };
-  }, [carouselApi]);
-
   return (
-    <section className="w-full bg-background pt-10" style={brandSansStyle}>
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 sm:px-6 lg:px-8">
-        <Reveal className="space-y-3 text-center sm:text-left">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-            Voices from the community
-          </p>
-          <h2
-            className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
-            style={brandDisplayStyle}
-          >
-            Builders loves Hackathon Wallah
-          </h2>
-          <p className="mx-auto max-w-2xl text-sm text-muted-foreground sm:mx-0">
-            Hear from hackers who turned weekend projects into standout
-            portfolio pieces, job offers, and investor-ready products.
-          </p>
-        </Reveal>
-
-        <div className="relative">
-          <Carousel
-            className="pb-12 px-2 sm:px-6"
-            opts={{ align: "start", loop: false }}
-            setApi={(api) => setCarouselApi(api)}
-          >
-            <CarouselContent>
-              {loopedTestimonials.map((testimonial, index) => (
-                <CarouselItem
-                  key={`${testimonial.id}-${index}`}
-                  className="basis-full sm:basis-1/2 lg:basis-1/3"
-                >
-                  <m.div
-                    className="h-full will-change-transform"
-                    initial={{ opacity: 0, y: 14 }}
-                    whileInView={{
-                      opacity: 1,
-                      y: 0,
-                      transition: {
-                        duration: 0.5,
-                        delay: (index % visibleTestimonials) * 0.06,
-                        ease: [0.22, 1, 0.36, 1],
-                      },
-                    }}
-                    whileHover={{
-                      y: -3,
-                      transition: {
-                        type: "spring",
-                        stiffness: 420,
-                        damping: 30,
-                        delay: 0,
-                      },
-                    }}
-                    viewport={{ once: true, amount: 0.25 }}
-                  >
-                    <Card
-                      movingBorder={false}
-                      className="h-full border-border/60 bg-muted/20 shadow-[0_12px_35px_-26px_rgba(15,23,42,0.45)] backdrop-blur-sm"
-                    >
-                      <CardHeader className="flex flex-row items-center gap-4 @container">
-                        <div className="relative h-12 w-12 overflow-hidden rounded-full bg-muted">
-                          <Image
-                            src={testimonial.avatar}
-                            alt={testimonial.name}
-                            unoptimized
-                            width={48}
-                            height={48}
-                            className="object-cover"
-                            sizes="48px"
-                          />
-                        </div>
-                        <div className="flex flex-col">
-                          <CardTitle className="text-base font-semibold text-foreground">
-                            {testimonial.name}
-                          </CardTitle>
-                          <CardDescription className="text-xs uppercase tracking-wide">
-                            {testimonial.role}
-                          </CardDescription>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="space-y-4 pt-0">
-                        <blockquote className="text-sm leading-relaxed text-muted-foreground">
-                          “{truncateWords(testimonial.quote)}”
-                        </blockquote>
-                      </CardContent>
-                    </Card>
-                  </m.div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
-        </div>
+    <section id="community" className="relative overflow-hidden py-20 sm:py-28">
+      <div className="container-page">
+        <SectionHeading
+          index="04"
+          label="community"
+          title="Builders love HackathonWallah."
+          description="Hear from hackers who turned weekend projects into standout portfolio pieces, job offers, and investor-ready products."
+        />
       </div>
+
+      <Reveal className="mt-14 flex flex-col gap-5 mask-fade-x" y={30}>
+        {rows.map((row, rowIndex) => (
+          <LoopMarquee key={rowIndex} reverse={rowIndex === 1} duration={rowIndex === 1 ? 70 : 60}>
+            {row.map((testimonial, index) => (
+              <TestimonialCard
+                key={testimonial.id}
+                testimonial={testimonial}
+                tone={AVATAR_TONES[(index + rowIndex * 2) % AVATAR_TONES.length]}
+              />
+            ))}
+          </LoopMarquee>
+        ))}
+      </Reveal>
     </section>
+  );
+}
+
+function TestimonialCard({
+  testimonial,
+  tone,
+}: {
+  testimonial: Testimonial;
+  tone: string;
+}) {
+  return (
+    <figure className="mr-5 flex w-[19.5rem] shrink-0 flex-col justify-between gap-8 rounded-[1.6rem] border border-border bg-card p-6 shadow-soft transition-[transform,box-shadow,border-color] duration-500 hover:-translate-y-1 hover:border-foreground/20 hover:shadow-lift sm:w-[23rem] sm:p-7">
+      <blockquote className="text-[1.02rem] leading-relaxed text-foreground/90">
+        <span aria-hidden className="mr-1 font-display text-2xl leading-none text-signal-ink">
+          “
+        </span>
+        {testimonial.quote}
+      </blockquote>
+      <figcaption className="flex items-center gap-3">
+        <span
+          aria-hidden
+          className={cn(
+            "grid size-10 shrink-0 place-items-center rounded-full font-mono text-[0.72rem] font-semibold",
+            tone,
+          )}
+        >
+          {initials(testimonial.name)}
+        </span>
+        <span className="flex flex-col">
+          <span className="font-display font-semibold tracking-[-0.01em]">
+            {testimonial.name}
+          </span>
+          <span className="font-mono text-[0.7rem] lowercase text-muted-foreground">
+            {testimonial.role}
+          </span>
+        </span>
+      </figcaption>
+    </figure>
   );
 }

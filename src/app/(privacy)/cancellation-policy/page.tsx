@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BRAND_NAME } from "@/constants/site";
-import { Reveal } from "@/components/motion/reveal";
+import { PolicyPage, type PolicySection } from "@/components/legal/policy-page";
 
 export const metadata: Metadata = {
   title: `Cancellation Policy | ${BRAND_NAME}`,
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   }
 };
 
-const sections = [
+const sections: PolicySection[] = [
   {
     title: "1. Purpose",
     content:
@@ -32,17 +32,12 @@ const sections = [
     title: "2. Participant Cancellations",
     content: (
       <>
-        <p>Participants may cancel their registration by emailing</p>
         <p>
-          <a
-            href="mailto:hubhackathon15@gmail.com"
-            className="text-primary underline-offset-4 hover:underline"
-          >
-            hubhackathon15@gmail.com
-          </a>{" "}
+          Participants may cancel their registration by emailing{" "}
+          <a href="mailto:hubhackathon15@gmail.com">hubhackathon15@gmail.com</a>{" "}
           with the subject line &ldquo;Cancellation Request&rdquo;.
         </p>
-        <ul className="ml-5 mt-3 list-disc space-y-2 text-muted-foreground">
+        <ul>
           <li>
             Include name, registered email, event name, and reason for
             cancellation.
@@ -53,7 +48,6 @@ const sections = [
             (see{" "}
             <Link
               href="/refund-policy"
-              className="text-primary underline-offset-4 hover:underline"
             >
               Refund Policy
             </Link>
@@ -90,7 +84,7 @@ const sections = [
           HackathonWallah reserves the right to cancel or reschedule events due
           to:
         </p>
-        <ul className="ml-5 mt-3 list-disc space-y-2 text-muted-foreground">
+        <ul>
           <li>Low registrations or logistical constraints.</li>
           <li>
             Unforeseen emergencies (venue issues, platform outages, health
@@ -98,7 +92,7 @@ const sections = [
           </li>
           <li>Compliance with legal or regulatory requirements.</li>
         </ul>
-        <p className="mt-3">
+        <p>
           If an event is cancelled or rescheduled by HackathonWallah, registered
           participants will be notified via email and offered either a full
           refund or complimentary transfer to another hackathon of equal value.
@@ -121,14 +115,13 @@ const sections = [
     content: (
       <>
         <p>For cancellation-related support, reach us at:</p>
-        <div className="mt-3 text-sm text-muted-foreground">
+        <div>
           <p>HackathonWallah Support</p>
           <p>Indranagar, Gorakhpur, 273001, India</p>
           <p>
             Email:{" "}
             <a
               href="mailto:hubhackathon15@gmail.com"
-              className="text-primary underline-offset-4 hover:underline"
             >
               hubhackathon15@gmail.com
             </a>
@@ -141,67 +134,11 @@ const sections = [
 
 export default function CancellationPolicyPage() {
   return (
-    <main className="bg-background text-foreground">
-      <section className="border-b border-border/60 bg-muted/10">
-        <Reveal className="mx-auto flex max-w-4xl flex-col gap-4 px-4 py-16 sm:px-6 lg:px-8">
-          <span className="inline-flex w-fit items-center rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.32em] text-primary">
-            Policy
-          </span>
-          <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-            Cancellation Policy
-          </h1>
-          <p className="max-w-3xl text-sm text-muted-foreground">
-            Last updated:{" "}
-            {new Date().toLocaleDateString("en-IN", {
-              day: "numeric",
-              month: "long",
-              year: "numeric"
-            })}
-            . This policy explains how to cancel hackathon registrations and how
-            HackathonWallah handles cancellations of its events.
-          </p>
-        </Reveal>
-      </section>
-
-      <section className="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="space-y-10">
-          {sections.map((section, index) => (
-            <Reveal key={section.title} delay={(index % 4) * 0.03} y={14}>
-              <article
-                data-moving-border
-                className="space-y-4 rounded-2xl border border-border/60 bg-muted/20 p-6 shadow-sm"
-              >
-                <h2 className="text-xl font-semibold text-foreground">
-                  {section.title}
-                </h2>
-                <div className="space-y-3 text-sm leading-relaxed text-muted-foreground">
-                  {section.content}
-                </div>
-              </article>
-            </Reveal>
-          ))}
-        </div>
-
-        <div className="mt-12 text-sm text-muted-foreground">
-          <p>
-            Please review this policy along with our{" "}
-            <Link
-              href="/refund-policy"
-              className="text-primary underline-offset-4 hover:underline"
-            >
-              Refund Policy
-            </Link>{" "}
-            and{" "}
-            <Link
-              href="/terms-and-conditions"
-              className="text-primary underline-offset-4 hover:underline"
-            >
-              Terms &amp; Conditions
-            </Link>{" "}
-            to understand the complete set of event guidelines.
-          </p>
-        </div>
-      </section>
-    </main>
+    <PolicyPage
+      title="Cancellation Policy"
+      href="/cancellation-policy"
+      intro="This policy explains how to cancel hackathon registrations and how HackathonWallah handles cancellations of its events."
+      sections={sections}
+    />
   );
 }

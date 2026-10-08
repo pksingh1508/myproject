@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BRAND_NAME } from "@/constants/site";
-import { Reveal } from "@/components/motion/reveal";
+import { PolicyPage, type PolicySection } from "@/components/legal/policy-page";
 
 export const metadata: Metadata = {
   title: `Privacy Policy | ${BRAND_NAME}`,
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   }
 };
 
-const sections = [
+const sections: PolicySection[] = [
   {
     title: "1. Overview",
     content: (
@@ -35,7 +35,7 @@ const sections = [
           information when you register on the platform, participate in a
           hackathon, or interact with our services.
         </p>
-        <p className="mt-3 text-sm text-muted-foreground">
+        <p>
           This policy applies to all websites, applications, and services
           operated by HackathonWallah. By using our platform, you consent to the
           practices described here.
@@ -50,32 +50,32 @@ const sections = [
         <p>
           We collect personal and usage information in the following categories:
         </p>
-        <ul className="ml-5 mt-3 list-disc space-y-2 text-muted-foreground">
+        <ul>
           <li>
-            <span className="font-semibold text-foreground">
+            <strong>
               Account details:
-            </span>{" "}
+            </strong>{" "}
             name, email, phone number, age, institution, and location to verify
             eligibility and personalise your experience.
           </li>
           <li>
-            <span className="font-semibold text-foreground">
+            <strong>
               Hackathon data:
-            </span>{" "}
+            </strong>{" "}
             submissions, team information, project descriptions, and
             participation history so we can administer events and award prizes.
           </li>
           <li>
-            <span className="font-semibold text-foreground">
+            <strong>
               Payment information:
-            </span>{" "}
+            </strong>{" "}
             transaction identifiers processed via trusted payment gateways. We
             do not store full card or bank details on our servers.
           </li>
           <li>
-            <span className="font-semibold text-foreground">
+            <strong>
               Usage metrics:
-            </span>{" "}
+            </strong>{" "}
             log data, device information, cookies, and analytics to improve
             platform performance and security.
           </li>
@@ -86,7 +86,7 @@ const sections = [
   {
     title: "3. How We Use Your Information",
     content: (
-      <ul className="ml-5 list-disc space-y-2 text-muted-foreground">
+      <ul>
         <li>
           To register you for hackathons, form teams, and communicate important
           event updates.
@@ -117,32 +117,32 @@ const sections = [
           We respect your privacy and only share information in the situations
           described below:
         </p>
-        <ul className="ml-5 mt-3 list-disc space-y-2 text-muted-foreground">
+        <ul>
           <li>
-            <span className="font-semibold text-foreground">
+            <strong>
               Service providers:
-            </span>{" "}
+            </strong>{" "}
             trusted vendors that help with payments, analytics, communication,
             and infrastructure strictly follow our confidentiality requirements.
           </li>
           <li>
-            <span className="font-semibold text-foreground">
+            <strong>
               Event partners &amp; judges:
-            </span>{" "}
+            </strong>{" "}
             limited details (name, email, submission information) may be shared
             to facilitate mentorship, evaluation, or prize distribution.
           </li>
           <li>
-            <span className="font-semibold text-foreground">
+            <strong>
               Legal compliance:
-            </span>{" "}
+            </strong>{" "}
             we may disclose data if required by law, regulation, or authorised
             government request.
           </li>
           <li>
-            <span className="font-semibold text-foreground">
+            <strong>
               Business transfers:
-            </span>{" "}
+            </strong>{" "}
             if HackathonWallah undergoes a merger, acquisition, or
             reorganisation, your information may be transferred as part of that
             transaction but will remain protected.
@@ -176,7 +176,6 @@ const sections = [
           request deletion of your account and associated data{" "}
           <Link
             href="/contact"
-            className="text-primary underline-offset-4 hover:underline"
           >
             by contacting us
           </Link>
@@ -204,7 +203,7 @@ const sections = [
     content: (
       <>
         <p>You may have the following rights depending on your jurisdiction:</p>
-        <ul className="ml-5 mt-3 list-disc space-y-2 text-muted-foreground">
+        <ul>
           <li>Access the personal information we hold about you.</li>
           <li>Request corrections to inaccurate or incomplete data.</li>
           <li>
@@ -213,10 +212,9 @@ const sections = [
           </li>
           <li>Withdraw consent for marketing communications at any time.</li>
         </ul>
-        <p className="mt-3">
+        <p>
           To exercise these rights, email us at{" "}
           <a
-            className="text-primary underline-offset-4 hover:underline"
             href="mailto:privacy@hackathonwallah.com"
           >
             privacy@hackathonwallah.com
@@ -249,14 +247,13 @@ const sections = [
           If you have questions, concerns, or complaints about how we handle
           your data, contact us at:
         </p>
-        <div className="mt-3 text-sm text-muted-foreground">
+        <div>
           <p>HackathonWallah Privacy Office</p>
           <p>Indranagar, Gorakhpur, 273001, India</p>
           <p>
             Email:{" "}
             <a
               href="mailto:hubhackathon15@gmail.com"
-              className="text-primary underline-offset-4 hover:underline"
             >
               hubhackathon15@gmail.com
             </a>
@@ -269,48 +266,11 @@ const sections = [
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="bg-background text-foreground">
-      <section className="border-b border-border/60 bg-muted/10">
-        <Reveal className="mx-auto flex max-w-4xl flex-col gap-4 px-4 py-16 sm:px-6 lg:px-8">
-          <span className="inline-flex w-fit items-center rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.32em] text-primary">
-            Policy
-          </span>
-          <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-            Privacy Policy
-          </h1>
-          <p className="max-w-3xl text-sm text-muted-foreground">
-            Last updated:{" "}
-            {new Date().toLocaleDateString("en-IN", {
-              day: "numeric",
-              month: "long",
-              year: "numeric"
-            })}
-            . This Privacy Policy describes how HackathonWallah collects, uses,
-            and protects your personal information when you participate in
-            hackathons, workshops, or services hosted on our platform.
-          </p>
-        </Reveal>
-      </section>
-
-      <section className="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="space-y-10">
-          {sections.map((section, index) => (
-            <Reveal key={section.title} delay={(index % 4) * 0.03} y={14}>
-              <article
-                data-moving-border
-                className="space-y-4 rounded-2xl border border-border/60 bg-muted/20 p-6 shadow-sm"
-              >
-                <h2 className="text-xl font-semibold text-foreground">
-                  {section.title}
-                </h2>
-                <div className="space-y-3 text-sm leading-relaxed text-muted-foreground">
-                  {section.content}
-                </div>
-              </article>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-    </main>
+    <PolicyPage
+      title="Privacy Policy"
+      href="/privacy-policy"
+      intro="This Privacy Policy describes how HackathonWallah collects, uses, and protects your personal information when you participate in hackathons, workshops, or services hosted on our platform."
+      sections={sections}
+    />
   );
 }

@@ -4,16 +4,11 @@ import { useCallback, useMemo, useState } from "react";
 
 import { toast } from "sonner";
 
+import { AlertCircle, Check } from "lucide-react";
+
 import { ProfileForm } from "@/components/registration/profile-form";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Spinner } from "@/components/ui/spinner";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card";
 import type { UserProfileRecord } from "@/lib/auth/require-user-profile";
 import type { UserProfileUpdateInput } from "@/lib/validation/users";
 
@@ -129,55 +124,141 @@ export function ProfilePageClient({ profile }: ProfilePageClientProps) {
     [currentProfile]
   );
 
+  const totalFields = Object.keys(FIELD_LABELS).length;
+  const completion = Math.round(
+    ((totalFields - missingFields.length) / totalFields) * 100
+  );
+
   return (
-    <Card className="border-border/60">
-      <CardHeader>
-        <CardTitle>Personal information</CardTitle>
-        <CardDescription>
-          These details help organisers contact you and confirm your eligibility.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {missingFields.length > 0 ? (
-          <Alert>
-            <AlertTitle>Your profile is incomplete</AlertTitle>
-            <AlertDescription>
-              Please provide your{" "}
-              {missingFields
-                .map(
-                  (field) => FIELD_LABELS[field as PersonalInfoField] ?? field
-                )
-                .join(", ")}{" "}
-              so we can keep you in the loop for hackathon updates.
-            </AlertDescription>
-          </Alert>
-        ) : null}
+    <div className="flex flex-col gap-5">
+      <ProfileSummary profile={currentProfile} completion={completion} />
 
-        {error ? (
-          <Alert variant="destructive">
-            <AlertTitle>Profile update failed</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        ) : null}
+      <div className="rounded-[1.75rem] border border-border bg-card p-6 shadow-soft sm:p-9">
+        <div className="flex flex-col gap-1.5 border-b border-border pb-6">
+          <h2 className="font-display text-2xl font-semibold tracking-[-0.03em]">
+            Personal information
+          </h2>
+          <p className="text-sm leading-relaxed text-muted-foreground">
+            These details help organisers contact you and confirm your
+            eligibility.
+          </p>
+        </div>
 
-        <ProfileForm
-          defaultValues={defaultValues}
-          submitting={submitting}
-          onSubmit={handleSubmit}
-          fullWidthSubmitButton={false}
-          submitButtonClassName="px-8"
-          renderSubmitContent={({ submitting: isSubmitting }) =>
-            isSubmitting ? (
-              <>
-                <Spinner className="size-4" />
-                <span>Submitting...</span>
-              </>
-            ) : (
-              <span>Save profile</span>
-            )
-          }
-        />
-      </CardContent>
-    </Card>
+        <div className="mt-7 flex flex-col gap-6">
+          {missingFields.length > 0 ? (
+            <Alert className="border-marigold/50 bg-marigold/10">
+              <AlertCircle className="text-marigold-ink" />
+              <AlertTitle>Your profile is incomplete</AlertTitle>
+              <AlertDescription>
+                Please provide your{" "}
+                {missingFields
+                  .map(
+                    (field) => FIELD_LABELS[field as PersonalInfoField] ?? field
+                  )
+                  .join(", ")}{" "}
+                so we can keep you in the loop for hackathon updates.
+              </AlertDescription>
+            </Alert>
+          ) : null}
+
+          {error ? (
+            <Alert variant="destructive">
+              <AlertTitle>Profile update failed</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          ) : null}
+
+          <ProfileForm
+            defaultValues={defaultValues}
+            submitting={submitting}
+            onSubmit={handleSubmit}
+            fullWidthSubmitButton={false}
+            submitButtonClassName="h-12 px-7"
+            renderSubmitContent={({ submitting: isSubmitting }) =>
+              isSubmitting ? (
+                <>
+                  <Spinner className="size-4" />
+                  <span>Saving…</span>
+                </>
+              ) : (
+                <span>Save profile</span>
+              )
+            }
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function initialsOf(name: string) {
+  return (
+    name
+      .split(" ")
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0])
+      .join("")
+      .toUpperCase() || "HW"
+  );
+}
+
+/** Identity card with a completion ring around the profile's progress. */
+function ProfileSummary({
+  profile,
+  completion
+}: {
+  profile: UserProfileRecord;
+  completion: number;
+}) {
+  const radius = 26;
+  const circumference = 2 * Math.PI * radius;
+  const complete = completion >= 100;
+  const meta = [profile.college_name, profile.branch, profile.year_of_study]
+    .filter(Boolean)
+    .join(" · ");
+
+  return (
+    <div className="relative flex flex-col gap-6 overflow-hidden rounded-[1.75rem] bg-foreground p-6 text-background shadow-lift sm:flex-row sm:items-center sm:p-8">
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-graph mask-fade-edges [--grid-line:color-mix(in_oklch,var(--background),transparent_90%)]"
+      />
+      <span className="relative grid size-16 shrink-0 place-items-center rounded-full bg-signal font-display text-xl font-semibold text-ink">
+        {initialsOf(profile.name ?? "")}
+      </span>
+      <div className="relative min-w-0 flex-1">
+        <p className="truncate font-display text-2xl font-semibold tracking-[-0.03em]">
+          {profile.name || "Unnamed builder"}
+        </p>
+        <p className="truncate font-mono text-xs text-background/60">{profile.email}</p>
+        {meta ? <p className="mt-2 text-sm text-background/75">{meta}</p> : null}
+      </div>
+      <div className="relative flex items-center gap-3">
+        <svg viewBox="0 0 64 64" className="size-16 -rotate-90" aria-hidden>
+          <circle cx="32" cy="32" r={radius} fill="none" strokeWidth="6" className="stroke-background/15" />
+          <circle
+            cx="32"
+            cy="32"
+            r={radius}
+            fill="none"
+            strokeWidth="6"
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            strokeDashoffset={circumference * (1 - completion / 100)}
+            className="stroke-signal transition-[stroke-dashoffset] duration-1000 ease-out"
+          />
+        </svg>
+        <div>
+          <p className="font-display text-2xl font-semibold leading-none tracking-tight">
+            {completion}%
+          </p>
+          <p className="mt-1 flex items-center gap-1 font-mono text-[0.7rem] text-background/60">
+            {complete ? <Check className="size-3 text-signal" strokeWidth={3} /> : null}
+            {complete ? "complete" : "profile complete"}
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }

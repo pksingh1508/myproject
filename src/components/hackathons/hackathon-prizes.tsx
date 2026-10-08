@@ -1,63 +1,67 @@
+import { Trophy } from "lucide-react";
+
 import type { Hackathon } from "@/types/database";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SectionLabel } from "@/components/decor/section-label";
+import { cn } from "@/lib/utils";
+import { formatInr } from "./hackathon-utils";
 
 interface HackathonPrizesProps {
   hackathon: Hackathon;
 }
 
 function formatPrize(value?: number | null) {
-  if (value === null || value === undefined) {
-    return "Not announced";
-  }
-
-  return `INR ${value.toLocaleString("en-IN")}`;
+  if (value === null || value === undefined) return "TBA";
+  return formatInr(value);
 }
 
+/** Total pool plus a podium: 2nd · 1st · 3rd, like the real thing. */
 export function HackathonPrizes({ hackathon }: HackathonPrizesProps) {
-  const prizeData = [
-    { label: "First Prize", value: hackathon.first_prize },
-    { label: "Second Prize", value: hackathon.second_prize },
-    { label: "Third Prize", value: hackathon.third_prize }
+  const podium = [
+    { place: "2nd", value: hackathon.second_prize, height: "h-20", tone: "bg-foreground/[0.08] text-foreground" },
+    { place: "1st", value: hackathon.first_prize, height: "h-28", tone: "bg-marigold text-ink" },
+    { place: "3rd", value: hackathon.third_prize, height: "h-14", tone: "bg-foreground/[0.05] text-foreground" },
   ];
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Prizes & Recognition</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div data-moving-border className="rounded-lg border px-4 py-3">
-          <div className="text-xs uppercase tracking-wide text-muted-foreground">
-            Total Prize Pool
-          </div>
-          <div className="text-2xl font-semibold">
-            INR {hackathon.prize_pool.toLocaleString("en-IN")}
-          </div>
-        </div>
+    <div className="relative overflow-hidden rounded-[1.75rem] border border-border bg-card p-6 shadow-soft">
+      <div aria-hidden className="absolute -right-12 -top-12 size-44 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--marigold),transparent_75%),transparent_70%)]" />
+      <div className="relative">
+        <SectionLabel>prizes &amp; recognition</SectionLabel>
+        <p className="mt-5 font-mono text-[0.66rem] uppercase tracking-[0.18em] text-muted-foreground">
+          Total prize pool
+        </p>
+        <p className="mt-1 font-display text-[2.6rem] font-semibold leading-none tracking-[-0.045em]">
+          {formatInr(hackathon.prize_pool)}
+        </p>
 
-        <div className="grid gap-3 md:grid-cols-3">
-          {prizeData.map((item) => (
-            <div
-              key={item.label}
-              data-moving-border
-              className="rounded-lg border px-4 py-3 text-center"
-            >
-              <div className="text-xs uppercase tracking-wide text-muted-foreground">
-                {item.label}
-              </div>
-              <div className="text-lg font-semibold">
-                {formatPrize(item.value)}
+        <div className="mt-7 grid grid-cols-3 items-end gap-2">
+          {podium.map((step) => (
+            <div key={step.place} className="flex flex-col items-center gap-2 text-center">
+              <span className="font-display text-[0.95rem] font-semibold tracking-tight">
+                {formatPrize(step.value)}
+              </span>
+              <div
+                className={cn(
+                  "flex w-full flex-col items-center justify-start rounded-t-xl pt-2.5",
+                  step.height,
+                  step.tone,
+                )}
+              >
+                {step.place === "1st" ? (
+                  <Trophy className="mb-1 size-4" strokeWidth={2.4} />
+                ) : null}
+                <span className="font-mono text-[0.7rem] font-semibold">{step.place}</span>
               </div>
             </div>
           ))}
         </div>
+        <div className="h-px bg-border" />
 
-        <p className="text-sm text-muted-foreground">
-          In addition to cash prizes, top teams often gain access to fast-track
-          interviews, cloud credits, and community recognition. Details will be
-          shared with finalists.
+        <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
+          Beyond cash prizes, top teams often unlock fast-track interviews, cloud
+          credits, and community recognition. Details are shared with finalists.
         </p>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

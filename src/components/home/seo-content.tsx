@@ -10,8 +10,6 @@ import {
 } from "@/constants/site";
 import { FAQ as FAQ_ENTRIES } from "@/constants/data";
 
-const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
-
 const structuredDataGeneratedAt = new Date().toISOString();
 
 const talkingPoints = [
@@ -147,46 +145,46 @@ export function SeoContent() {
 
   return (
     <section
-      className="w-full bg-background py-16 sm:py-20"
+      className="container-page py-20 sm:py-28"
       aria-labelledby="seo-content-heading"
-      style={brandDisplayStyle}
     >
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-10 px-4 sm:px-6 lg:px-8">
-        <div className="space-y-4 text-center sm:text-left">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-            Why builders choose HackathonWallah
-          </p>
-          <h2
-            id="seo-content-heading"
-            className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
-          >
-            India&apos;s home for student-led innovation and real-world
-            hackathons
-          </h2>
-          <p className="text-base leading-relaxed text-muted-foreground">
-            {BRAND_DESCRIPTION} From tier-1 colleges to emerging campuses, we
-            help teams discover themed hackathons, learn from mentors,
-            collaborate with investors, and turn every shipped project into a
-            celebrated milestone.
-          </p>
-        </div>
+      <div className="flex max-w-3xl flex-col gap-5">
+        <p className="font-mono text-[0.8rem] lowercase text-muted-foreground">
+          <span className="text-signal-ink">{"// "}</span>
+          why builders choose hackathonwallah
+        </p>
+        <h2
+          id="seo-content-heading"
+          className="font-display text-[clamp(2.25rem,4.4vw,3.75rem)] font-semibold leading-[1] tracking-[-0.035em]"
+        >
+          India&apos;s home for student-led innovation and real-world
+          hackathons
+        </h2>
+        <p className="text-[1.0625rem] leading-relaxed text-muted-foreground">
+          {BRAND_DESCRIPTION} From tier-1 colleges to emerging campuses, we
+          help teams discover themed hackathons, learn from mentors,
+          collaborate with investors, and turn every shipped project into a
+          celebrated milestone.
+        </p>
+      </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
-          {talkingPoints.map((point) => (
-            <article
-              key={point.title}
-              data-moving-border
-              className="rounded-3xl border border-border/70 bg-muted/30 p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
-            >
-              <h3 className="text-lg font-semibold text-foreground">
-                {point.title}
-              </h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                {point.description}
-              </p>
-            </article>
-          ))}
-        </div>
+      <div className="mt-12 grid grid-cols-1 gap-4 md:grid-cols-2">
+        {talkingPoints.map((point, index) => (
+          <article
+            key={point.title}
+            className="rounded-[1.75rem] border border-border bg-card p-7 shadow-soft transition-[transform,box-shadow] duration-500 hover:-translate-y-1 hover:shadow-lift"
+          >
+            <span className="font-mono text-xs text-signal-ink">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <h3 className="mt-3 font-display text-xl font-semibold tracking-[-0.02em]">
+              {point.title}
+            </h3>
+            <p className="mt-3 leading-relaxed text-muted-foreground">
+              {point.description}
+            </p>
+          </article>
+        ))}
       </div>
 
       <script

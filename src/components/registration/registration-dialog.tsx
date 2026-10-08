@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import type { VariantProps } from "class-variance-authority";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Spinner } from "@/components/ui/spinner";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
@@ -530,18 +531,22 @@ export function HackathonRegistrationDialog({
         onOpenChange={setRegistrationDialogOpen}
       >
 
-      <DialogContent
-        data-moving-border-scope="off"
-        className="max-h-[90vh] overflow-y-auto sm:max-w-2xl"
-      >
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
         <DialogHeader>
+          <p className="font-mono text-[0.75rem] lowercase text-muted-foreground">
+            <span className="text-signal-ink">{"// "}</span>registration
+          </p>
           <DialogTitle>Register for {hackathon.title}</DialogTitle>
+          <DialogDescription>
+            A few quick steps and your team is in.
+          </DialogDescription>
         </DialogHeader>
 
         {loading ? (
-          <p className="text-sm text-muted-foreground">
-            Loading registration details...
-          </p>
+          <div className="flex items-center gap-3 py-8 text-sm text-muted-foreground">
+            <Spinner className="size-5 text-signal-ink" />
+            Loading registration details…
+          </div>
         ) : (
           <div className="space-y-6 py-2">
             {error ? (
@@ -552,7 +557,7 @@ export function HackathonRegistrationDialog({
             ) : null}
 
             {success ? (
-              <Alert>
+              <Alert variant="success">
                 <AlertTitle>Success</AlertTitle>
                 <AlertDescription>{success}</AlertDescription>
               </Alert>
@@ -582,17 +587,17 @@ export function HackathonRegistrationDialog({
                 {!paymentSettled ? (
                   <>
                     {paymentDetails ? (
-                      <div
-                        data-moving-border
-                        className="space-y-4 rounded-md border bg-muted/30 p-4"
-                      >
+                      <div className="space-y-4 rounded-2xl border border-border bg-muted/50 p-5">
                         <div className="space-y-1 text-sm text-muted-foreground">
                           <p>
                             Complete the INR {paymentDetails.amount.toFixed(0)} payment on the secure
                             Cashfree page. Use the buttons below to launch checkout, verify status, or cancel.
                           </p>
                           <p>
-                            Order reference: <span className="font-medium text-foreground">{paymentDetails.orderId}</span>
+                            Order reference:{" "}
+                            <span className="font-mono text-xs font-medium text-foreground">
+                              {paymentDetails.orderId}
+                            </span>
                           </p>
                         </div>
                         <div className="flex flex-wrap gap-2">
@@ -650,7 +655,7 @@ export function HackathonRegistrationDialog({
                 {needsProfile ? (
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <h3 className="text-lg font-semibold">
+                      <h3 className="font-display text-xl font-semibold tracking-tight">
                         Complete your profile
                       </h3>
                       <p className="text-sm text-muted-foreground">
@@ -667,7 +672,9 @@ export function HackathonRegistrationDialog({
                 ) : (
                   <div className="space-y-6">
                     <div className="space-y-2">
-                      <h3 className="text-lg font-semibold">Team details</h3>
+                      <h3 className="font-display text-xl font-semibold tracking-tight">
+                        Team details
+                      </h3>
                       <p className="text-sm text-muted-foreground">
                         Provide your team information. You can invite teammates
                         later, but make sure you meet the minimum team size of{" "}

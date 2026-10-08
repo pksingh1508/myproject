@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BRAND_NAME } from "@/constants/site";
-import { Reveal } from "@/components/motion/reveal";
+import { PolicyPage, type PolicySection } from "@/components/legal/policy-page";
 
 export const metadata: Metadata = {
   title: `Terms & Conditions | ${BRAND_NAME}`,
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   }
 };
 
-const sections = [
+const sections: PolicySection[] = [
   {
     title: "1. Acceptance of Terms",
     content:
@@ -43,7 +43,7 @@ const sections = [
           full through the supported payment methods before your participation
           is confirmed.
         </p>
-        <ul className="ml-5 mt-3 list-disc space-y-2 text-muted-foreground">
+        <ul>
           <li>
             Fees are non-transferable between events unless otherwise stated.
           </li>
@@ -68,7 +68,7 @@ const sections = [
           Participants must uphold professional conduct throughout the entire
           hackathon. The following behaviour is prohibited:
         </p>
-        <ul className="ml-5 mt-3 list-disc space-y-2 text-muted-foreground">
+        <ul>
           <li>Harassment, discrimination, or abusive language of any kind.</li>
           <li>
             Submission of plagiarised, stolen, or previously published work.
@@ -78,7 +78,7 @@ const sections = [
             disrupt other participants.
           </li>
         </ul>
-        <p className="mt-3">
+        <p>
           Violation of the code of conduct may result in immediate
           disqualification, removal from the event, and forfeiture of fees and
           prizes.
@@ -97,7 +97,7 @@ const sections = [
           and the organising partners a non-exclusive licence to showcase your
           work for marketing, judging, and archival purposes.
         </p>
-        <p className="mt-3">
+        <p>
           Some hackathons may include sponsor-specific IP terms. Any additional
           clauses will be clearly mentioned on the registration page and must be
           accepted before participation.
@@ -113,7 +113,7 @@ const sections = [
           HackathonWallah offers rewards for every valid submission and tiered
           prizes for top-performing teams. To remain eligible for prizes:
         </p>
-        <ul className="ml-5 mt-3 list-disc space-y-2 text-muted-foreground">
+        <ul>
           <li>You must submit your project before the official deadline.</li>
           <li>
             Your solution must be your team’s original work created during the
@@ -124,7 +124,7 @@ const sections = [
             requirements outlined in the event brief.
           </li>
         </ul>
-        <p className="mt-3">
+        <p>
           Prizes are typically disbursed within 30 business days after final
           results are announced. HackathonWallah may request tax information or
           identity verification if required by law prior to releasing awards.
@@ -141,8 +141,7 @@ const sections = [
           registration is completed. Exceptions may be granted under the
           circumstances described in our{" "}
           <Link
-            href="/(privacy)/refund-policy"
-            className="text-primary underline-offset-4 hover:underline"
+            href="/refund-policy"
           >
             Refund Policy
           </Link>
@@ -150,7 +149,7 @@ const sections = [
           however, refunds are granted at the sole discretion of
           HackathonWallah.
         </p>
-        <p className="mt-3">
+        <p>
           HackathonWallah reserves the right to cancel or reschedule events. In
           such cases, affected participants will be notified promptly and
           offered refunds or transfer options to future hackathons.
@@ -168,7 +167,7 @@ const sections = [
           credentials and for any activities that occur under your account.
           Notify us immediately of any unauthorised access or suspected breach.
         </p>
-        <p className="mt-3">
+        <p>
           We may suspend or terminate accounts that violate these terms or
           exhibit suspicious behaviour that threatens the integrity of the
           platform or community.
@@ -186,7 +185,7 @@ const sections = [
           we do not guarantee that access to the platform or event resources
           will be free from errors, bugs, or downtime.
         </p>
-        <p className="mt-3">
+        <p>
           We are not liable for any direct, indirect, incidental, or
           consequential damages arising from your participation, inability to
           participate, or decisions based on information presented during the
@@ -210,15 +209,14 @@ const sections = [
     content: (
       <>
         <p>For questions or support regarding these terms, reach out to:</p>
-        <div className="mt-3 text-sm text-muted-foreground">
+        <div>
           <p>HackathonWallah</p>
           <p>Workspace 42, Indiranagar</p>
           <p>Indranagar, Gorakhpur, 273001, India</p>
-          <p className="mt-2">
+          <p>
             Email:{" "}
             <a
               href="mailto:hubhackathon15@gmail.com"
-              className="text-primary underline-offset-4 hover:underline"
             >
               hubhackathon15@gmail.com
             </a>
@@ -231,48 +229,11 @@ const sections = [
 
 export default function TermsAndConditionsPage() {
   return (
-    <main className="bg-background text-foreground">
-      <section className="border-b border-border/60 bg-muted/10">
-        <Reveal className="mx-auto flex max-w-4xl flex-col gap-4 px-4 py-16 sm:px-6 lg:px-8">
-          <span className="inline-flex w-fit items-center rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.32em] text-primary">
-            Policy
-          </span>
-          <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-            Terms &amp; Conditions
-          </h1>
-          <p className="max-w-3xl text-sm text-muted-foreground">
-            Last updated:{" "}
-            {new Date().toLocaleDateString("en-IN", {
-              day: "numeric",
-              month: "long",
-              year: "numeric"
-            })}
-            . These Terms &amp; Conditions govern the hackathons and services
-            provided by HackathonWallah. Please read them carefully before
-            registering or participating.
-          </p>
-        </Reveal>
-      </section>
-
-      <section className="mx-auto w-full max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="space-y-10">
-          {sections.map((section, index) => (
-            <Reveal key={section.title} delay={(index % 4) * 0.03} y={14}>
-              <article
-                data-moving-border
-                className="space-y-4 rounded-2xl border border-border/60 bg-muted/20 p-6 shadow-sm"
-              >
-                <h2 className="text-xl font-semibold text-foreground">
-                  {section.title}
-                </h2>
-                <div className="space-y-3 text-sm leading-relaxed text-muted-foreground">
-                  {section.content}
-                </div>
-              </article>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-    </main>
+    <PolicyPage
+      title="Terms & Conditions"
+      href="/terms-and-conditions"
+      intro="These Terms & Conditions govern the hackathons and services provided by HackathonWallah. Please read them carefully before registering or participating."
+      sections={sections}
+    />
   );
 }

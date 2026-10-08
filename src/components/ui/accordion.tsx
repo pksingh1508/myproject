@@ -3,7 +3,7 @@
 import * as React from "react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import { animate as animateValue, m, useReducedMotion } from "motion/react";
-import { ChevronDownIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -56,7 +56,7 @@ function AccordionItem({
       <AccordionPrimitive.Item
         ref={itemRef}
         data-slot="accordion-item"
-        className={cn("border-b last:border-b-0", className)}
+        className={cn("border-b border-border last:border-b-0", className)}
         {...props}
       />
     </AccordionItemStateContext.Provider>
@@ -76,7 +76,7 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          "focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-[color,background-color] duration-300 outline-none hover:underline focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50",
+          "group/trigger flex flex-1 items-start justify-between gap-6 rounded-xl py-5 text-left text-[0.98rem] font-medium transition-colors duration-300 outline-none focus-visible:ring-[3px] focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
           className
         )}
         {...props}
@@ -84,22 +84,19 @@ function AccordionTrigger({
         {children}
         <m.span
           aria-hidden="true"
-          className="pointer-events-none flex size-9 shrink-0 items-center justify-center rounded-full border border-border/70 bg-background/80 text-muted-foreground shadow-sm"
-          animate={
-            prefersReducedMotion
-              ? { rotate: isOpen ? 180 : 0 }
-              : {
-                  rotate: isOpen ? 180 : 0,
-                  scale: isOpen ? 1.05 : 1,
-                  y: isOpen ? -1 : 0
-                }
-          }
+          className={cn(
+            "pointer-events-none grid size-8 shrink-0 place-items-center rounded-full border transition-colors duration-300",
+            isOpen
+              ? "border-transparent bg-foreground text-background"
+              : "border-border bg-background text-foreground group-hover/trigger:border-foreground/30",
+          )}
+          animate={{ rotate: isOpen ? 135 : 0 }}
           transition={{
             duration: prefersReducedMotion ? 0.18 : 0.28,
             ease: [0.22, 1, 0.36, 1]
           }}
         >
-          <ChevronDownIcon className="size-4" />
+          <PlusIcon className="size-4" strokeWidth={2} />
         </m.span>
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>

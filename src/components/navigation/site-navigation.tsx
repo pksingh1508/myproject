@@ -15,246 +15,309 @@ import {
   SignedOut,
   SignInButton,
   SignUpButton,
-  UserButton
+  UserButton,
 } from "@clerk/nextjs";
-import { Menu } from "lucide-react";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { ArrowUpRight, X } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
+import { BrandLogo } from "@/components/brand/brand-logo";
+import { BrandButton } from "@/components/layout/brand-button";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
+import { EASE_OUT } from "@/components/motion/easing";
+import { cn } from "@/lib/utils";
 
 const navigationLinks = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Hackathons", href: "/hackathons" },
-  { label: "Notification", href: "/notifications" },
-  { label: "Career", href: "/career" }
+  { label: "Notifications", href: "/notifications" },
+  { label: "Career", href: "/career" },
 ];
+
+function isActiveLink(pathname: string | null, href: string) {
+  if (!pathname) return false;
+  return href === "/" ? pathname === "/" : pathname.startsWith(href);
+}
+
+const HIDDEN_ON = ["/sign-in", "/sign-up"];
 
 export function SiteNavigation() {
   const pathname = usePathname();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+
+  // Auth pages have their own focused, full-screen layout.
+  if (HIDDEN_ON.some((route) => pathname?.startsWith(route))) {
+    return null;
+  }
+
+  return <NavigationBar pathname={pathname} />;
+}
+
+function NavigationBar({ pathname }: { pathname: string | null }) {
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { scrollY, scrollYProgress } = useScroll();
-  const smoothScrollProgress = useSpring(scrollYProgress, {
-    stiffness: 160,
-    damping: 30,
-    mass: 0.25,
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 220,
+    damping: 40,
+    mass: 0.3,
   });
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    setIsScrolled(latest > 12);
+    const previous = scrollY.getPrevious() ?? 0;
+    setScrolled(latest > 24);
+    if (latest > 420 && latest > previous + 2) setHidden(true);
+    else if (latest < previous - 2 || latest <= 420) setHidden(false);
   });
 
   useEffect(() => {
-    setIsMounted(true);
-    setIsScrolled(scrollY.get() > 12);
-  }, [scrollY]);
+    setMounted(true);
+    setScrolled(window.scrollY > 24);
+  }, []);
+
+  // Close the mobile menu after navigating.
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 w-full border-b border-transparent transition-all duration-300 ease-out",
-        isScrolled
-          ? "border-border bg-background/80 shadow-sm backdrop-blur-lg"
-          : "bg-background/95"
-      )}
-    >
+    <>
       <m.div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-px origin-left bg-primary/70"
-        style={{ scaleX: smoothScrollProgress }}
+        aria-hidden
+        className="fixed inset-x-0 top-0 z-[60] h-[2px] origin-left bg-signal"
+        style={{ scaleX: progress }}
       />
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <m.div whileHover={{ y: -1 }} whileTap={{ scale: 0.98 }}>
-          <Link
-            href="/"
-            className="group flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-3 py-1.5 text-lg font-semibold tracking-tight text-foreground"
-          >
-            <span>Hackathonwallah</span>
-          </Link>
-        </m.div>
-
-        <LayoutGroup id="site-navigation">
-          <nav className="hidden gap-1 rounded-full border border-border/60 bg-muted/40 px-3 py-1.5 text-sm font-medium md:flex">
-            {navigationLinks.map((link) => {
-              const isActive =
-                pathname === link.href ||
-                (link.href !== "/" && pathname?.startsWith(link.href));
-
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  prefetch={link.href === "/notifications" ? true : null}
-                  className={cn(
-                    "relative rounded-full px-4 py-2 transition-colors duration-200 hover:text-foreground",
-                    isActive ? "text-foreground" : "text-muted-foreground",
-                  )}
-                >
-                  <span className="relative z-10">{link.label}</span>
-                  {isActive ? (
-                    <m.span
-                      layoutId="active-navigation-pill"
-                      aria-hidden="true"
-                      className="absolute inset-0 rounded-full border border-border/70 bg-background shadow-sm"
-                      transition={{ type: "spring", stiffness: 420, damping: 34 }}
-                    />
-                  ) : null}
-                </Link>
-              );
-            })}
-          </nav>
-        </LayoutGroup>
-
-        <div className="hidden items-center gap-2 md:flex">
-          <ThemeToggle />
-          {isMounted ? (
-            <>
-              <SignedOut>
-                <div className="flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-3 py-1.5">
-                  <SignInButton mode="modal">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="rounded-full transition-all duration-300 hover:bg-foreground hover:text-background"
-                    >
-                      Log in
-                    </Button>
-                  </SignInButton>
-                  <SignUpButton mode="modal">
-                    <Button size="sm" className="rounded-full">
-                      Sign up
-                    </Button>
-                  </SignUpButton>
-                </div>
-              </SignedOut>
-              <SignedIn>
-                <div className="flex items-center gap-2 rounded-full border border-border/60 bg-muted/40 px-3 py-1.5">
-                  <Button asChild variant="ghost" size="sm">
-                    <Link href="/profile">Profile</Link>
-                  </Button>
-                  <UserButton
-                    appearance={{
-                      elements: {
-                        userButtonAvatarBox: "size-9",
-                        userButtonOuterIdentifier: "text-sm"
-                      }
-                    }}
-                    afterSignOutUrl="/"
-                  />
-                </div>
-              </SignedIn>
-            </>
-          ) : (
-            <div
-              aria-hidden="true"
-              className="h-11 w-[188px] rounded-full border border-border/60 bg-muted/30"
-            />
+      <m.header
+        className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4"
+        initial={false}
+        animate={{ y: hidden && !menuOpen ? "-130%" : "0%" }}
+        transition={{ duration: 0.5, ease: EASE_OUT }}
+      >
+        <div
+          className={cn(
+            "mx-auto flex h-14 items-center justify-between gap-3 rounded-full border pl-2 pr-2 transition-[max-width,background-color,border-color,box-shadow,padding] duration-500 ease-out-quint sm:pl-4 lg:pl-6",
+            scrolled
+              ? "max-w-5xl border-border bg-background/80 shadow-soft backdrop-blur-xl backdrop-saturate-150 lg:pl-4"
+              : "max-w-[80rem] border-transparent bg-transparent",
           )}
+        >
+          <BrandLogo animated />
+
+          <LayoutGroup id="site-navigation">
+            <nav
+              aria-label="Primary"
+              className="hidden items-center gap-0.5 lg:flex"
+            >
+              {navigationLinks.map((link) => {
+                const active = isActiveLink(pathname, link.href);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    prefetch={link.href === "/notifications" ? true : null}
+                    aria-current={active ? "page" : undefined}
+                    className={cn(
+                      "relative rounded-full px-3.5 py-2 text-[0.92rem] font-medium transition-colors duration-300",
+                      active
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:text-foreground",
+                    )}
+                  >
+                    {active ? (
+                      <m.span
+                        layoutId="nav-active-pill"
+                        aria-hidden
+                        className="absolute inset-0 rounded-full bg-foreground/[0.07]"
+                        transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                      />
+                    ) : null}
+                    <span className="relative">{link.label}</span>
+                  </Link>
+                );
+              })}
+            </nav>
+          </LayoutGroup>
+
+          <div className="flex items-center gap-1.5">
+            <ThemeToggle />
+            <div className="hidden items-center gap-1.5 sm:flex">
+              {mounted ? (
+                <>
+                  <SignedOut>
+                    <SignInButton mode="modal">
+                      <BrandButton variant="ghost" size="sm">
+                        Log in
+                      </BrandButton>
+                    </SignInButton>
+                    <SignUpButton mode="modal">
+                      <BrandButton size="sm" arrow>
+                        Sign up
+                      </BrandButton>
+                    </SignUpButton>
+                  </SignedOut>
+                  <SignedIn>
+                    <BrandButton asChild variant="ghost" size="sm">
+                      <Link href="/profile">Profile</Link>
+                    </BrandButton>
+                    <span className="grid size-9 place-items-center">
+                      <UserButton
+                        appearance={{
+                          elements: { userButtonAvatarBox: "size-8" },
+                        }}
+                        afterSignOutUrl="/"
+                      />
+                    </span>
+                  </SignedIn>
+                </>
+              ) : (
+                <span aria-hidden className="h-9 w-[10.5rem] rounded-full skeleton" />
+              )}
+            </div>
+            <MobileMenu
+              open={menuOpen}
+              onOpenChange={setMenuOpen}
+              pathname={pathname}
+              mounted={mounted}
+            />
+          </div>
         </div>
+      </m.header>
+    </>
+  );
+}
 
-        <div className="flex items-center gap-2 md:hidden">
-          <ThemeToggle />
-          {isMounted ? (
-            <SignedIn>
-              <div className="flex items-center gap-2">
-                <Button asChild variant="ghost" size="sm">
-                  <Link href="/profile">Profile</Link>
-                </Button>
-                <UserButton
-                  appearance={{
-                    elements: {
-                      userButtonAvatarBox: "size-8",
-                      userButtonOuterIdentifier: "text-sm"
-                    }
-                  }}
-                  afterSignOutUrl="/"
-                />
-              </div>
-            </SignedIn>
-          ) : null}
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full border border-border/60 bg-background/80 shadow-sm backdrop-blur transition-transform duration-300 ease-out active:scale-95"
-              >
-                <Menu className="size-5" />
-                <span className="sr-only">Open navigation</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-full max-w-xs px-0">
-              <SheetTitle className="sr-only">Site navigation</SheetTitle>
-              <SheetDescription className="sr-only">
-                Navigate HackathonWallah or access your account.
-              </SheetDescription>
-              <div className="flex flex-col gap-6 p-6">
-                <Link href="/" className="text-lg font-semibold">
-                  Hackathonwallah
-                </Link>
-                <nav className="flex flex-col gap-2">
-                  {navigationLinks.map((link) => {
-                    const isActive =
-                      pathname === link.href ||
-                      (link.href !== "/" && pathname?.startsWith(link.href));
+type MobileMenuProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  pathname: string | null;
+  mounted: boolean;
+};
 
-                    return (
+function MobileMenu({ open, onOpenChange, pathname, mounted }: MobileMenuProps) {
+  return (
+    <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
+      <DialogPrimitive.Trigger asChild>
+        <button
+          type="button"
+          aria-label="Open menu"
+          className="group/menu relative grid size-9 place-items-center rounded-full border border-border bg-background/70 backdrop-blur transition-colors hover:border-foreground/30 lg:hidden"
+        >
+          <span className="flex w-4 flex-col gap-[5px]">
+            <span className="h-[1.5px] w-full rounded-full bg-foreground transition-transform duration-300 group-hover/menu:translate-x-0.5" />
+            <span className="h-[1.5px] w-2/3 rounded-full bg-foreground transition-[width] duration-300 group-hover/menu:w-full" />
+          </span>
+        </button>
+      </DialogPrimitive.Trigger>
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Overlay className="fixed inset-0 z-[70] bg-ink/30 backdrop-blur-sm data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0" />
+        <DialogPrimitive.Content
+          data-lenis-prevent
+          className="fixed inset-x-3 top-3 z-[80] max-h-[calc(100dvh-1.5rem)] overflow-y-auto rounded-[2rem] border border-border bg-background p-3 shadow-lift outline-none duration-300 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-4 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:slide-in-from-top-6"
+        >
+          <DialogPrimitive.Title className="sr-only">Menu</DialogPrimitive.Title>
+          <DialogPrimitive.Description className="sr-only">
+            Navigate HackathonWallah or access your account.
+          </DialogPrimitive.Description>
+
+          <div className="flex h-12 items-center justify-between pl-3">
+            <BrandLogo onNavigate={() => onOpenChange(false)} />
+            <DialogPrimitive.Close
+              aria-label="Close menu"
+              className="grid size-10 place-items-center rounded-full border border-border transition-colors hover:bg-foreground/5"
+            >
+              <X className="size-4" />
+            </DialogPrimitive.Close>
+          </div>
+
+          <div className="relative mt-3 overflow-hidden rounded-[1.5rem] border border-border bg-surface px-5 py-4">
+            <div aria-hidden className="absolute inset-0 bg-graph opacity-70" />
+            <nav aria-label="Mobile" className="relative">
+              <ul className="flex flex-col">
+                {navigationLinks.map((link, index) => {
+                  const active = isActiveLink(pathname, link.href);
+                  return (
+                    <m.li
+                      key={link.href}
+                      initial={{ opacity: 0, y: 18 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.06 + index * 0.05, ease: EASE_OUT }}
+                      className="border-b border-border last:border-b-0"
+                    >
                       <Link
-                        key={link.href}
                         href={link.href}
-                        prefetch={link.href === "/notifications" ? true : null}
-                        className={cn(
-                          "rounded-lg px-3 py-2 text-base font-medium transition-colors duration-200",
-                          isActive
-                            ? "bg-primary/10 text-foreground"
-                            : "text-muted-foreground hover:bg-muted"
-                        )}
+                        onClick={() => onOpenChange(false)}
+                        aria-current={active ? "page" : undefined}
+                        className="group/item flex items-center justify-between py-3.5"
                       >
-                        {link.label}
+                        <span className="flex items-baseline gap-4">
+                          <span className="font-mono text-xs text-muted-foreground tabular-nums">
+                            0{index + 1}
+                          </span>
+                          <span
+                            className={cn(
+                              "font-display text-[2rem] font-semibold leading-none tracking-[-0.04em] transition-colors",
+                              active ? "text-foreground" : "text-foreground/55 group-hover/item:text-foreground",
+                            )}
+                          >
+                            {link.label}
+                          </span>
+                        </span>
+                        {active ? (
+                          <span className="size-2.5 rounded-full bg-signal shadow-[0_0_0_4px_color-mix(in_oklch,var(--signal),transparent_75%)]" />
+                        ) : (
+                          <ArrowUpRight className="size-5 text-muted-foreground transition-transform duration-300 group-hover/item:-translate-y-0.5 group-hover/item:translate-x-0.5" />
+                        )}
                       </Link>
-                    );
-                  })}
-                </nav>
-                <div className="flex flex-col gap-3">
-                  {isMounted ? (
-                    <>
-                      <SignedOut>
-                        <SignInButton mode="modal">
-                          <Button variant="outline" className="w-full">
-                            Log in
-                          </Button>
-                        </SignInButton>
-                        <SignUpButton mode="modal">
-                          <Button className="w-full">Sign up</Button>
-                        </SignUpButton>
-                      </SignedOut>
-                      <SignedIn>
-                        <p className="text-sm text-muted-foreground">
-                          Use the avatar above to view your account or sign out.
-                        </p>
-                      </SignedIn>
-                    </>
-                  ) : (
-                    <div
-                      aria-hidden="true"
-                      className="h-20 rounded-xl border border-border/50 bg-muted/20"
-                    />
-                  )}
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
-      </div>
-    </header>
+                    </m.li>
+                  );
+                })}
+              </ul>
+            </nav>
+          </div>
+
+          <m.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.35, ease: EASE_OUT }}
+            className="flex flex-col gap-3 p-3 pt-4"
+          >
+            {mounted ? (
+              <>
+                <SignedOut>
+                  <div className="grid grid-cols-2 gap-2">
+                    <SignInButton mode="modal">
+                      <BrandButton variant="outline" size="lg" className="w-full">
+                        Log in
+                      </BrandButton>
+                    </SignInButton>
+                    <SignUpButton mode="modal">
+                      <BrandButton size="lg" className="w-full">
+                        Sign up
+                      </BrandButton>
+                    </SignUpButton>
+                  </div>
+                </SignedOut>
+                <SignedIn>
+                  <div className="flex items-center justify-between gap-3 rounded-full border border-border py-1.5 pl-5 pr-1.5">
+                    <Link
+                      href="/profile"
+                      onClick={() => onOpenChange(false)}
+                      className="text-sm font-medium"
+                    >
+                      Your profile
+                    </Link>
+                    <UserButton afterSignOutUrl="/" />
+                  </div>
+                </SignedIn>
+              </>
+            ) : null}
+            <p className="text-center font-mono text-[0.7rem] text-muted-foreground">
+              Build · Submit · Win
+            </p>
+          </m.div>
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
   );
 }

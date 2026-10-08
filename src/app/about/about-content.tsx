@@ -1,134 +1,70 @@
 "use client";
 
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import {
-  animate,
-  m,
-  useInView,
-  useMotionValue,
-  useMotionValueEvent,
-} from "motion/react";
-import {
-  ArrowRight,
-  MapPinned,
-  Rocket,
-  ShieldCheck,
-  Sparkles,
-  Target,
-  Trophy,
-  Users,
-  type LucideIcon,
-} from "lucide-react";
+import { ArrowRight, Bell } from "lucide-react";
 
-import { BrandButton } from "@/components/layout";
-import { Footer } from "@/components/home/footer";
-import { Reveal } from "@/components/motion/reveal";
-import { cn } from "@/lib/utils";
+import { BrandMark } from "@/components/brand/brand-mark";
+import { GridBackdrop } from "@/components/decor/grid-backdrop";
+import { Marker } from "@/components/decor/marker";
+import { RotatingBadge } from "@/components/decor/rotating-badge";
+import { ScribbleUnderline } from "@/components/decor/scribbles";
+import { SectionLabel } from "@/components/decor/section-label";
+import { StatsBand } from "@/components/home/stats-band";
+import { BrandButton } from "@/components/layout/brand-button";
+import { PageHero } from "@/components/layout/page-hero";
+import { SectionHeading } from "@/components/layout/section-heading";
+import { Parallax } from "@/components/motion/parallax";
+import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 
-type StatDescriptor = {
-  label: string;
-  target: number;
-  icon: LucideIcon;
-  prefix?: string;
-  suffix?: string;
-  format: "integer" | "compact" | "decimal";
-};
-
-type FeatureDescriptor = {
-  title: string;
-  description: string;
-  icon: LucideIcon;
-};
-
-type MilestoneDescriptor = {
-  year: string;
-  title: string;
-  description: string;
-};
-
-const stats: StatDescriptor[] = [
-  {
-    label: "Hackathons hosted",
-    target: 50,
-    icon: Trophy,
-    suffix: "+",
-    format: "integer",
-  },
-  {
-    label: "Projects submitted",
-    target: 1_000,
-    icon: Rocket,
-    suffix: "+",
-    format: "compact",
-  },
-  {
-    label: "Prize money won",
-    target: 20,
-    icon: Sparkles,
-    prefix: "₹",
-    suffix: " Lakhs+",
-    format: "integer",
-  },
-  {
-    label: "Campuses joined",
-    target: 40,
-    icon: MapPinned,
-    suffix: "+",
-    format: "integer",
-  },
-];
-
-const focusAreas: FeatureDescriptor[] = [
+const focusAreas = [
   {
     title: "Clear opportunities",
     description:
       "Students should know what to build, how to join, and what comes next without digging through ten different links.",
-    icon: Target,
   },
   {
     title: "Real support",
     description:
       "A good hackathon feels less scary when you can find teammates, ask questions, and get unstuck quickly.",
-    icon: Users,
   },
   {
     title: "Fair recognition",
     description:
       "Winning matters, but so does showing up and shipping something real. We want effort to count too.",
-    icon: ShieldCheck,
   },
 ];
 
-const studentPromises: FeatureDescriptor[] = [
+const reasons = [
+  {
+    title: "Find events fast",
+    description: "No need to hunt through scattered groups and random posts.",
+  },
+  {
+    title: "Build with people",
+    description: "Meet teammates who want to learn and finish something real.",
+  },
+  {
+    title: "Get a fair shot",
+    description: "First-time builders should feel welcome, not out of place.",
+  },
+];
+
+const studentPromises = [
   {
     title: "Less confusion",
-    description:
-      "Simple steps, clear timelines, and fewer last-minute surprises.",
-    icon: Sparkles,
+    description: "Simple steps, clear timelines, and fewer last-minute surprises.",
   },
   {
     title: "More confidence",
-    description:
-      "Helpful nudges before submission day so first-time teams feel ready.",
-    icon: Rocket,
+    description: "Helpful nudges before submission day so first-time teams feel ready.",
   },
   {
     title: "Momentum after the event",
-    description:
-      "The next teammate, project, or hackathon should be easier to find.",
-    icon: ArrowRight,
+    description: "The next teammate, project, or hackathon should be easier to find.",
   },
 ];
 
-const milestones: MilestoneDescriptor[] = [
+const milestones = [
   {
     year: "2019",
     title: "Started by students",
@@ -149,397 +85,227 @@ const milestones: MilestoneDescriptor[] = [
   },
 ];
 
-const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
-const brandDisplayStyle = { fontFamily: "var(--font-brand-display)" } as const;
-
-const cardClassName =
-  "rounded-2xl border border-border/60 bg-muted/40 p-6 shadow-sm";
-
-function formatStatValue(
-  value: number,
-  stat: Pick<StatDescriptor, "format" | "prefix" | "suffix">,
-  compactFormatter: Intl.NumberFormat,
-) {
-  switch (stat.format) {
-    case "compact":
-      return `${compactFormatter.format(Math.round(value))}${stat.suffix ?? ""}`;
-    case "decimal":
-      return `${stat.prefix ?? ""}${value.toFixed(1)}${stat.suffix ?? ""}`;
-    default:
-      return `${stat.prefix ?? ""}${Math.round(value)}${stat.suffix ?? ""}`;
-  }
-}
-
-function CountUpNumber({
-  target,
-  prefix,
-  suffix,
-  format,
-}: Pick<StatDescriptor, "target" | "prefix" | "suffix" | "format">) {
-  const ref = useRef<HTMLParagraphElement | null>(null);
-  const count = useMotionValue(0);
-  const isInView = useInView(ref, { once: true, margin: "0px 0px -12% 0px" });
-  const compactFormatter = useMemo(
-    () =>
-      Intl.NumberFormat("en-IN", {
-        notation: "compact",
-        maximumFractionDigits: 1,
-      }),
-    [],
-  );
-  const statFormat = useMemo(
-    () => ({ format, prefix, suffix }),
-    [format, prefix, suffix],
-  );
-  const [displayValue, setDisplayValue] = useState(() =>
-    formatStatValue(0, statFormat, compactFormatter),
-  );
-
-  useMotionValueEvent(count, "change", (latest) => {
-    setDisplayValue(formatStatValue(latest, statFormat, compactFormatter));
-  });
-
-  useEffect(() => {
-    if (!isInView) return;
-
-    const controls = animate(count, target, {
-      duration: 1.5,
-      ease: "easeOut",
-    });
-
-    return () => controls.stop();
-  }, [count, isInView, target]);
-
-  return (
-    <p
-      ref={ref}
-      className="text-3xl font-semibold text-foreground sm:text-4xl"
-      style={brandDisplayStyle}
-    >
-      {displayValue}
-    </p>
-  );
-}
-
-function StaticIcon({
-  icon: Icon,
-  className,
-}: {
-  icon: LucideIcon;
-  className?: string;
-}) {
-  return (
-    <div
-      className={cn(
-        "flex size-12 items-center justify-center rounded-2xl border border-border/80 bg-background text-foreground shadow-sm",
-        className,
-      )}
-    >
-      <Icon className="size-5" strokeWidth={2.1} />
-    </div>
-  );
-}
-
-function AboutCard({
-  className,
-  children,
-  movingBorder = true,
-  movingBorderVisibility = "always",
-}: {
-  className?: string;
-  children: ReactNode;
-  movingBorder?: boolean;
-  movingBorderVisibility?: "always" | "hover";
-}) {
-  return (
-    <m.div
-      data-moving-border={movingBorder ? "" : undefined}
-      data-moving-border-visibility={
-        movingBorder && movingBorderVisibility === "hover"
-          ? "hover"
-          : undefined
-      }
-      className={cn(cardClassName, "will-change-transform", className)}
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -3 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-    >
-      {children}
-    </m.div>
-  );
-}
-
 export default function AboutContent() {
-  const router = useRouter();
-
   return (
-    <main className="bg-background text-foreground" style={brandSansStyle}>
-      <section className="bg-background">
-        <Reveal className="mx-auto flex min-h-[58vh] w-full max-w-6xl flex-col justify-center gap-6 px-4 pt-20 sm:px-6 lg:px-8 lg:pt-24">
-          <span className="inline-flex w-fit items-center rounded-full border border-border/80 bg-muted/60 px-4 py-1 text-xs font-semibold uppercase tracking-[0.32em] text-muted-foreground">
-            About HackathonWallah
-          </span>
-
-          <h1
-            className="max-w-4xl text-balance text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl"
-            style={brandDisplayStyle}
-          >
-            We built this for students who want a fair chance to try, build, and
-            ship.
-          </h1>
-
-          <p className="max-w-3xl text-base leading-7 text-muted-foreground sm:text-lg">
-            HackathonWallah started with a simple thought: good students get
-            missed all the time just because they are not from the right
-            college, city, or circle. We wanted one place where they could find
-            real hackathons, build with others, and feel good enough to submit
-            their work.
-          </p>
-
-          <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:items-center">
-            <BrandButton
-              className="px-8 py-3 text-xs"
-              onClick={() => router.push("/hackathons")}
-            >
-              Explore hackathons
+    <>
+      <PageHero
+        label="about hackathonwallah"
+        title={
+          <>
+            We built this for students who want a{" "}
+            <Marker trigger="mount" delay={0.8}>
+              fair chance
+            </Marker>{" "}
+            to try, build, and ship.
+          </>
+        }
+        description="HackathonWallah started with a simple thought: good students get missed all the time just because they are not from the right college, city, or circle. We wanted one place where they could find real hackathons, build with others, and feel good enough to submit their work."
+        actions={
+          <>
+            <BrandButton asChild size="lg" arrow>
+              <Link href="/hackathons">Explore hackathons</Link>
             </BrandButton>
-            <BrandButton
-              className="border border-border/60 bg-muted/40 px-8 py-3 text-xs"
-              onClick={() => router.push("/notifications")}
-            >
-              Stay updated
-            </BrandButton>
-          </div>
-        </Reveal>
-      </section>
-
-      <section className="mx-auto grid w-full max-w-6xl gap-6 px-4 py-14 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
-        {stats.map((stat) => (
-          <AboutCard key={stat.label} className="h-full">
-            <div className="flex h-full flex-col gap-5">
-              <StaticIcon icon={stat.icon} />
-              <div className="space-y-2">
-                <CountUpNumber
-                  target={stat.target}
-                  prefix={stat.prefix}
-                  suffix={stat.suffix}
-                  format={stat.format}
-                />
-                <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
-                  {stat.label}
-                </p>
-              </div>
-            </div>
-          </AboutCard>
-        ))}
-      </section>
-
-      <section className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-        <Reveal className="max-w-3xl space-y-4">
-          <h2
-            className="text-3xl font-semibold tracking-tight sm:text-4xl"
-            style={brandDisplayStyle}
-          >
-            What we are trying to fix
-          </h2>
-          <p className="text-base leading-7 text-muted-foreground">
-            A lot of good students never get started because hackathons can feel
-            noisy, confusing, or made for people who already know the system. We
-            want the whole experience to feel simpler from day one.
-          </p>
-        </Reveal>
-
-        <div className="mt-8 grid gap-6 lg:grid-cols-3">
-          {focusAreas.map((item) => (
-            <AboutCard
-              key={item.title}
-              movingBorderVisibility="hover"
-              className="h-full"
-            >
-              <div className="flex h-full flex-col gap-5">
-                <StaticIcon icon={item.icon} />
-                <div className="space-y-2">
-                  <h3
-                    className="text-xl font-semibold text-foreground"
-                    style={brandDisplayStyle}
-                  >
-                    {item.title}
-                  </h3>
-                  <p className="text-sm leading-6 text-muted-foreground">
-                    {item.description}
-                  </p>
-                </div>
-              </div>
-            </AboutCard>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-          <AboutCard movingBorder={false} className="h-full">
-            <div className="flex h-full flex-col gap-6">
-              <StaticIcon icon={Users} className="size-14 rounded-3xl" />
-              <div className="space-y-4">
-                <h2
-                  className="text-3xl font-semibold tracking-tight sm:text-4xl"
-                  style={brandDisplayStyle}
-                >
-                  Why we started this
-                </h2>
-                <p className="text-base leading-7 text-muted-foreground">
-                  We kept seeing smart students hold back because they felt
-                  late, underprepared, or not connected enough. That feeling is
-                  real, especially in tier-2 and tier-3 colleges. So we built a
-                  space that feels more welcoming and less intimidating.
-                </p>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-3">
-                <div className="rounded-2xl border border-border/70 bg-background p-4">
-                  <p className="text-sm font-semibold text-foreground">
-                    Find events fast
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                    No need to hunt through scattered groups and random posts.
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-border/70 bg-background p-4">
-                  <p className="text-sm font-semibold text-foreground">
-                    Build with people
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                    Meet teammates who want to learn and finish something real.
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-border/70 bg-background p-4">
-                  <p className="text-sm font-semibold text-foreground">
-                    Get a fair shot
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                    First-time builders should feel welcome, not out of place.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </AboutCard>
-
-          <div className="grid gap-6">
-            {studentPromises.map((item) => (
-              <AboutCard
-                key={item.title}
-                movingBorder={false}
-                className="h-full bg-background"
-              >
-                <div className="flex h-full items-start gap-4">
-                  <StaticIcon
-                    icon={item.icon}
-                    className="size-11 rounded-[1.15rem]"
-                  />
-                  <div className="space-y-2">
-                    <h3
-                      className="text-lg font-semibold text-foreground"
-                      style={brandDisplayStyle}
-                    >
-                      {item.title}
-                    </h3>
-                    <p className="text-sm leading-6 text-muted-foreground">
-                      {item.description}
-                    </p>
-                  </div>
-                </div>
-              </AboutCard>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-        <Reveal className="mx-auto max-w-3xl space-y-4 text-center">
-          <h2
-            className="text-3xl font-semibold tracking-tight sm:text-4xl"
-            style={brandDisplayStyle}
-          >
-            How we got here
-          </h2>
-          <p className="text-base leading-7 text-muted-foreground">
-            The story has grown over time, but the goal has stayed the same:
-            make it easier for students to build and actually put their work out
-            there.
-          </p>
-        </Reveal>
-
-        <div className="mt-8 grid gap-6 lg:grid-cols-3">
-          {milestones.map((milestone) => (
-            <AboutCard
-              key={milestone.year}
-              movingBorder={false}
-              className="h-full"
-            >
-              <div className="flex h-full flex-col gap-5">
-                <StaticIcon icon={Sparkles} className="size-11 rounded-2xl" />
-                <div className="space-y-3">
-                  <p className="text-xs font-semibold uppercase tracking-[0.28em] text-muted-foreground">
-                    {milestone.year}
-                  </p>
-                  <h3
-                    className="text-xl font-semibold text-foreground"
-                    style={brandDisplayStyle}
-                  >
-                    {milestone.title}
-                  </h3>
-                  <p className="text-sm leading-6 text-muted-foreground">
-                    {milestone.description}
-                  </p>
-                </div>
-              </div>
-            </AboutCard>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto w-full max-w-6xl px-4 pb-16 pt-10 sm:px-6 lg:px-8">
-        <Reveal
-          data-moving-border
-          className="rounded-2xl border border-border/60 bg-muted/40 p-6 shadow-sm sm:p-10"
-        >
-          <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
-            <div className="space-y-4">
-              <h2
-                className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl"
-                style={brandDisplayStyle}
-              >
-                Ready to build your next project?
-              </h2>
-              <p className="text-sm leading-6 text-muted-foreground sm:text-base">
-                Join students who are learning in public, building with real
-                intent, and getting better one submission at a time.
-              </p>
-            </div>
-
-            <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <BrandButton
-                className="px-8 py-3 text-xs"
-                onClick={() => router.push("/hackathons")}
-              >
-                Explore live hackathons
-              </BrandButton>
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-primary/40 bg-background px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-foreground shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
-                style={brandSansStyle}
-              >
-                Partner with us
-                <ArrowRight className="size-4" />
+            <BrandButton asChild size="lg" variant="outline">
+              <Link href="/notifications">
+                <Bell className="size-4" />
+                Stay updated
               </Link>
+            </BrandButton>
+          </>
+        }
+        aside={
+          <div className="relative mx-auto grid size-56 place-items-center lg:ml-auto lg:mr-6">
+            <Parallax distance={60}>
+              <RotatingBadge
+                text="Since 2019 • Built for every campus • "
+                className="size-56 rounded-full bg-background text-foreground shadow-lift ring-1 ring-border"
+              >
+                <span className="grid size-24 place-items-center rounded-full bg-foreground">
+                  <BrandMark tone="inverse" className="size-12" />
+                </span>
+              </RotatingBadge>
+            </Parallax>
+          </div>
+        }
+      />
+
+      <section className="container-page pb-6">
+        <StatsBand />
+      </section>
+
+      {/* What we are trying to fix */}
+      <section className="container-page grid grid-cols-1 gap-12 py-20 sm:py-28 lg:grid-cols-12">
+        <div className="lg:col-span-5">
+          <div className="lg:sticky lg:top-32">
+            <SectionHeading
+              index="01"
+              label="the problem"
+              title="What we are trying to fix"
+              description="A lot of good students never get started because hackathons can feel noisy, confusing, or made for people who already know the system. We want the whole experience to feel simpler from day one."
+            />
+          </div>
+        </div>
+        <Stagger className="flex flex-col lg:col-span-7" stagger={0.12}>
+          {focusAreas.map((area, index) => (
+            <StaggerItem
+              key={area.title}
+              className="group grid grid-cols-[3.5rem_1fr] gap-4 border-b border-border py-9 first:border-t sm:grid-cols-[5rem_1fr]"
+            >
+              <span className="font-display text-[2.6rem] font-semibold leading-none tracking-[-0.05em] text-foreground/15 transition-colors duration-500 group-hover:text-signal sm:text-[3.4rem]">
+                0{index + 1}
+              </span>
+              <div>
+                <h3 className="font-display text-[1.75rem] font-semibold leading-tight tracking-[-0.03em]">
+                  {area.title}
+                </h3>
+                <p className="mt-3 max-w-lg text-[1.02rem] leading-relaxed text-muted-foreground">
+                  {area.description}
+                </p>
+              </div>
+            </StaggerItem>
+          ))}
+        </Stagger>
+      </section>
+
+      {/* Manifesto */}
+      <section className="container-page pb-20 sm:pb-28">
+        <Reveal y={40}>
+          <div className="relative isolate overflow-hidden rounded-[2rem] bg-foreground p-8 text-background shadow-lift sm:p-12 lg:p-16">
+            <div
+              aria-hidden
+              className="absolute inset-0 -z-10 bg-graph mask-fade-edges [--grid-line:color-mix(in_oklch,var(--background),transparent_90%)]"
+            />
+            <div
+              aria-hidden
+              className="absolute -right-24 -top-24 -z-10 size-96 rounded-full bg-[radial-gradient(circle,color-mix(in_oklch,var(--signal),transparent_70%),transparent_65%)]"
+            />
+            <SectionLabel index="02" tone="inverse">
+              why we started this
+            </SectionLabel>
+
+            <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-12">
+              <div className="lg:col-span-7">
+                <p className="font-display text-[clamp(1.75rem,3.4vw,2.75rem)] font-semibold leading-[1.12] tracking-[-0.035em]">
+                  “We kept seeing smart students hold back because they felt late,
+                  underprepared, or not connected enough. That feeling is real,
+                  especially in{" "}
+                  <span className="relative whitespace-nowrap text-hilite dark:text-[oklch(0.45_0.13_142)]">
+                    tier-2 and tier-3 colleges.
+                    <ScribbleUnderline className="absolute -bottom-2 left-0 h-3 w-full" />
+                  </span>
+                  ”
+                </p>
+                <p className="mt-6 max-w-xl leading-relaxed text-background/70">
+                  So we built a space that feels more welcoming and less
+                  intimidating.
+                </p>
+
+                <div className="mt-10 grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  {reasons.map((reason) => (
+                    <div
+                      key={reason.title}
+                      className="rounded-2xl border border-background/12 bg-background/[0.04] p-5"
+                    >
+                      <p className="font-display font-semibold tracking-[-0.01em]">
+                        {reason.title}
+                      </p>
+                      <p className="mt-2 text-sm leading-relaxed text-background/65">
+                        {reason.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="lg:col-span-5">
+                <p className="font-mono text-[0.72rem] uppercase tracking-[0.18em] text-background/50">
+                  What students can expect
+                </p>
+                <ul className="mt-5 flex flex-col">
+                  {studentPromises.map((promise) => (
+                    <li
+                      key={promise.title}
+                      className="flex gap-4 border-b border-background/12 py-5 last:border-b-0"
+                    >
+                      <span className="mt-1.5 grid size-5 shrink-0 place-items-center rounded-full bg-signal text-ink">
+                        <ArrowRight className="size-3" strokeWidth={3} />
+                      </span>
+                      <div>
+                        <p className="font-display text-lg font-semibold tracking-[-0.02em]">
+                          {promise.title}
+                        </p>
+                        <p className="mt-1 text-sm leading-relaxed text-background/65">
+                          {promise.description}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </Reveal>
       </section>
 
-      <Footer />
-    </main>
+      {/* Story */}
+      <section className="container-page pb-20 sm:pb-28">
+        <SectionHeading
+          index="03"
+          label="our story"
+          title="How we got here"
+          description="The story has grown over time, but the goal has stayed the same: make it easier for students to build and actually put their work out there."
+        />
+        <ol className="relative mt-16 grid grid-cols-1 gap-12 lg:grid-cols-3 lg:gap-8">
+          <span
+            aria-hidden
+            className="absolute left-0 right-0 top-[0.375rem] hidden border-t border-dashed border-foreground/25 lg:block"
+          />
+          {milestones.map((milestone, index) => (
+            <li key={milestone.year} className="relative lg:pt-10">
+              <span
+                aria-hidden
+                className="absolute left-0 top-0 hidden size-3 rounded-full bg-signal ring-4 ring-background lg:block"
+              />
+              <Reveal delay={index * 0.12} y={30}>
+                <span className="block font-display text-[5.5rem] font-bold leading-none tracking-[-0.06em] text-foreground/[0.08] [-webkit-text-stroke:1.5px_var(--foreground)] [font-stretch:85%] sm:text-[6.5rem]">
+                  {milestone.year}
+                </span>
+                <h3 className="mt-6 font-display text-2xl font-semibold tracking-[-0.03em]">
+                  {milestone.title}
+                </h3>
+                <p className="mt-3 max-w-sm leading-relaxed text-muted-foreground">
+                  {milestone.description}
+                </p>
+              </Reveal>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* CTA */}
+      <section className="container-page pb-24 sm:pb-32">
+        <Reveal y={30}>
+          <div className="relative isolate overflow-hidden rounded-[2rem] border border-border bg-card px-6 py-16 text-center shadow-soft sm:px-12 sm:py-20">
+            <GridBackdrop spotlight />
+            <SectionLabel>your move</SectionLabel>
+            <h2 className="mx-auto mt-5 max-w-3xl font-display text-[clamp(2.25rem,5vw,3.75rem)] font-semibold leading-[1] tracking-[-0.04em]">
+              Ready to build your next project?
+            </h2>
+            <p className="mx-auto mt-5 max-w-xl leading-relaxed text-muted-foreground">
+              Join students who are learning in public, building with real
+              intent, and getting better one submission at a time.
+            </p>
+            <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+              <BrandButton asChild size="lg" arrow>
+                <Link href="/hackathons">Explore live hackathons</Link>
+              </BrandButton>
+              <BrandButton asChild size="lg" variant="outline">
+                <Link href="/contact">Partner with us</Link>
+              </BrandButton>
+            </div>
+          </div>
+        </Reveal>
+      </section>
+    </>
   );
 }

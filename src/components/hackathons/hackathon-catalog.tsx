@@ -3,14 +3,14 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, RotateCcw } from "lucide-react";
+import { LayoutGroup, m } from "motion/react";
 
 import type { Hackathon } from "@/types/database";
 import { HackathonGrid } from "./hackathon-grid";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Spinner } from "@/components/ui/spinner";
+import { cn } from "@/lib/utils";
 
 const DEFAULT_STATUS = "published,ongoing";
 
@@ -18,8 +18,6 @@ const STATUS_PRESETS = [
   { label: "Ongoing", value: DEFAULT_STATUS },
   { label: "Completed", value: "completed" },
 ] as const;
-
-const brandSansStyle = { fontFamily: "var(--font-brand-sans)" } as const;
 
 type HackathonsResponse = {
   data?: Hackathon[];
@@ -85,32 +83,66 @@ export function HackathonCatalog() {
   }, [requestQuery, requestVersion]);
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-wrap items-center gap-2">
-        {STATUS_PRESETS.map((preset) => {
-          const isActive = preset.value === activeStatus;
-          const href = new URLSearchParams(paramsString);
-          href.set("status", preset.value);
+    <div className="space-y-10">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-6">
+        <LayoutGroup id="catalog-filter">
+          <div
+            role="tablist"
+            aria-label="Filter hackathons"
+            className="inline-flex rounded-full border border-border bg-foreground/[0.03] p-1"
+          >
+            {STATUS_PRESETS.map((preset) => {
+              const isActive = preset.value === activeStatus;
+              const href = new URLSearchParams(paramsString);
+              href.set("status", preset.value);
 
-          return (
-            <Button
-              key={preset.value}
-              asChild
-              variant={isActive ? "default" : "outline"}
-              size="sm"
-            >
-              <Link href={`/hackathons?${href.toString()}`} scroll={false}>
-                {preset.label}
-              </Link>
-            </Button>
-          );
-        })}
+              return (
+                <Link
+                  key={preset.value}
+                  role="tab"
+                  aria-selected={isActive}
+                  href={`/hackathons?${href.toString()}`}
+                  scroll={false}
+                  className={cn(
+                    "relative rounded-full px-5 py-2 text-sm font-medium transition-colors duration-300",
+                    isActive ? "text-background" : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  {isActive ? (
+                    <m.span
+                      layoutId="catalog-filter-pill"
+                      aria-hidden
+                      className="absolute inset-0 rounded-full bg-foreground"
+                      transition={{ type: "spring", stiffness: 420, damping: 34 }}
+                    />
+                  ) : null}
+                  <span className="relative">{preset.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </LayoutGroup>
+
+        <p className="font-mono text-[0.78rem] text-muted-foreground" aria-live="polite">
+          {isLoading ? (
+            "fetching…"
+          ) : error ? (
+            "offline"
+          ) : (
+            <>
+              <span className="text-foreground tabular-nums">
+                {String(hackathons.length).padStart(2, "0")}
+              </span>{" "}
+              {hackathons.length === 1 ? "hackathon" : "hackathons"}
+            </>
+          )}
+        </p>
       </div>
 
       {isLoading ? (
         <HackathonGridLoader />
       ) : error ? (
-        <Alert className="items-center py-5">
+        <Alert variant="destructive" className="items-center py-5">
           <AlertCircle className="size-4" />
           <AlertTitle>Could not load hackathons</AlertTitle>
           <AlertDescription className="gap-3">
@@ -121,6 +153,7 @@ export function HackathonCatalog() {
               size="sm"
               onClick={() => setRequestVersion((version) => version + 1)}
             >
+              <RotateCcw />
               Try again
             </Button>
           </AlertDescription>
@@ -130,13 +163,12 @@ export function HackathonCatalog() {
           hackathons={hackathons}
           sortByCreatedAt
           emptyState={
-            <div className="text-center" style={brandSansStyle}>
-              <h3 className="text-lg font-semibold">
-                No hackathons match filters
+            <div>
+              <h3 className="font-display text-xl font-semibold tracking-tight">
+                No hackathons match these filters
               </h3>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Try adjusting the filters or check back soon for newly published
-                events.
+              <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
+                Try another filter, or check back soon for newly published events.
               </p>
             </div>
           }
@@ -148,44 +180,36 @@ export function HackathonCatalog() {
 
 export function HackathonGridLoader() {
   return (
-    <div
-      role="status"
-      aria-live="polite"
-      aria-busy="true"
-      className="space-y-5"
-    >
-      <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-        <Spinner className="size-4" />
-        <span>Loading hackathons...</span>
-      </div>
-
-      <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
+    <div role="status" aria-live="polite" aria-busy="true">
+      <span className="sr-only">Hackathon results are loading.</span>
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
         {Array.from({ length: 3 }).map((_, index) => (
-          <Card
+          <div
             key={index}
             aria-hidden="true"
-            className="min-h-[330px] overflow-hidden"
+            className="flex flex-col overflow-hidden rounded-[1.75rem] border border-border bg-card shadow-soft"
+            style={{ animationDelay: `${index * 120}ms` }}
           >
-            <CardHeader className="space-y-4">
-              <div className="h-5 w-28 animate-pulse rounded-full bg-muted motion-reduce:animate-none" />
-              <div className="h-7 w-4/5 animate-pulse rounded-md bg-muted motion-reduce:animate-none" />
-              <div className="space-y-2">
-                <div className="h-4 w-full animate-pulse rounded bg-muted motion-reduce:animate-none" />
-                <div className="h-4 w-3/4 animate-pulse rounded bg-muted motion-reduce:animate-none" />
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="h-4 w-2/3 animate-pulse rounded bg-muted motion-reduce:animate-none" />
+            <div className="h-44 skeleton rounded-none" />
+            <div className="flex flex-col gap-3 p-6">
               <div className="flex gap-2">
-                <div className="h-6 w-20 animate-pulse rounded-full bg-muted motion-reduce:animate-none" />
-                <div className="h-6 w-24 animate-pulse rounded-full bg-muted motion-reduce:animate-none" />
+                <div className="h-5 w-14 skeleton rounded-full" />
+                <div className="h-5 w-20 skeleton rounded-full" />
               </div>
-              <div className="h-4 w-1/2 animate-pulse rounded bg-muted motion-reduce:animate-none" />
-            </CardContent>
-          </Card>
+              <div className="h-7 w-4/5 skeleton" />
+              <div className="h-4 w-full skeleton" />
+              <div className="h-4 w-2/3 skeleton" />
+              <div className="mt-4 h-4 w-1/2 skeleton" />
+            </div>
+            <div className="perforation mx-6 text-foreground/15" />
+            <div className="flex items-center gap-6 p-6">
+              <div className="h-9 w-28 skeleton" />
+              <div className="h-9 w-16 skeleton" />
+              <div className="ml-auto size-11 skeleton rounded-full" />
+            </div>
+          </div>
         ))}
       </div>
-      <span className="sr-only">Hackathon results are loading.</span>
     </div>
   );
 }

@@ -1,25 +1,18 @@
 import { SignUp } from "@clerk/nextjs";
 
+import { AuthShell } from "@/components/auth/auth-shell";
+import { clerkAuthAppearance } from "@/components/auth/clerk-appearance";
+
 export default function SignUpPage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4">
+    <AuthShell label="create account">
       <SignUp
-        appearance={{
-          elements: {
-            card: "shadow-lg border border-border bg-card text-card-foreground",
-            headerTitle: "text-2xl font-semibold",
-            headerSubtitle: "text-muted-foreground",
-            socialButtonsBlockButton:
-              "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-            formButtonPrimary:
-              "bg-primary text-primary-foreground hover:bg-primary/90"
-          }
-        }}
+        appearance={clerkAuthAppearance}
         routing="path"
         path="/sign-up"
         signInUrl="/sign-in"
         fallbackRedirectUrl="/"
       />
-    </div>
+    </AuthShell>
   );
 }

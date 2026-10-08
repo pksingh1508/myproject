@@ -2,17 +2,12 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-type CardProps = React.ComponentProps<"div"> & {
-  movingBorder?: boolean
-}
-
-function Card({ className, movingBorder = true, ...props }: CardProps) {
+function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card"
-      data-moving-border={movingBorder ? "" : undefined}
       className={cn(
-        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        "bg-card text-card-foreground flex flex-col gap-6 rounded-[1.5rem] border border-border py-6 shadow-soft",
         className
       )}
       {...props}
@@ -37,7 +32,10 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-title"
-      className={cn("leading-none font-semibold", className)}
+      className={cn(
+        "font-display text-lg font-semibold leading-tight tracking-[-0.02em]",
+        className
+      )}
       {...props}
     />
   )
@@ -47,7 +45,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-description"
-      className={cn("text-muted-foreground text-sm", className)}
+      className={cn("text-muted-foreground text-sm leading-relaxed", className)}
       {...props}
     />
   )

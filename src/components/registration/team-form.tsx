@@ -98,22 +98,31 @@ export function TeamForm({
         className="space-y-6"
         onSubmit={form.handleSubmit(submitHandler)}
       >
-        <Card>
-          <CardContent className="space-y-3 py-6 text-sm text-muted-foreground">
-            <p>
-              Teams for this hackathon must include between{" "}
-              <span className="font-medium text-foreground">{minSize}</span> and{" "}
-              <span className="font-medium text-foreground">{maxSize}</span>{" "}
-              members (including you).
-            </p>
-            <p>
-              Current team size:{" "}
-              <span className="font-medium text-foreground">
-                {totalTeamSizePreview}
-              </span>
-            </p>
-          </CardContent>
-        </Card>
+        <div className="flex flex-col gap-4 rounded-2xl border border-border bg-muted/50 p-5 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            Teams must include between{" "}
+            <span className="font-medium text-foreground">{minSize}</span> and{" "}
+            <span className="font-medium text-foreground">{maxSize}</span>{" "}
+            members (including you).
+          </p>
+          <div className="flex items-center gap-3">
+            <div className="flex -space-x-1.5" aria-hidden>
+              {Array.from({ length: Math.max(maxSize, 1) }, (_, seat) => (
+                <span
+                  key={seat}
+                  className={
+                    seat < totalTeamSizePreview
+                      ? "size-6 rounded-full border-2 border-background bg-signal"
+                      : "size-6 rounded-full border-2 border-dashed border-foreground/25 bg-background"
+                  }
+                />
+              ))}
+            </div>
+            <span className="font-mono text-xs text-foreground">
+              {totalTeamSizePreview}/{maxSize}
+            </span>
+          </div>
+        </div>
 
         <FormField
           control={form.control}
@@ -158,11 +167,11 @@ export function TeamForm({
 
           <div className="space-y-4">
             {fields.map((field, index) => (
-              <Card key={field.id}>
-                <CardContent className="space-y-3 py-4">
+              <Card key={field.id} className="gap-0 py-0 shadow-none">
+                <CardContent className="space-y-3 py-5">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-muted-foreground">
-                      Teammate {index + 1}
+                    <span className="font-mono text-xs text-muted-foreground">
+                      teammate 0{index + 1}
                     </span>
                     <Button
                       type="button"
@@ -188,7 +197,7 @@ export function TeamForm({
                     )}
                   />
 
-                  <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <FormField
                       control={form.control}
                       name={`teamMembers.${index}.email`}

@@ -1,13 +1,14 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Analytics } from "@vercel/analytics/next";
+import ReactLenis from "lenis/react";
+
 import { PostHogProvider } from "./provider";
 import "./globals.css";
-import { SiteNavigation } from "@/components/navigation/site-navigation";
-import { Toaster } from "sonner";
-import ReactLenis from "lenis/react";
 import { fontVariables } from "./fonts";
+import { SiteNavigation } from "@/components/navigation/site-navigation";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { Toaster } from "@/components/ui/sonner";
 import {
   BRAND_DESCRIPTION,
   BRAND_NAME,
@@ -16,17 +17,6 @@ import {
 } from "@/constants/site";
 import { MotionProvider } from "@/components/motion/motion-provider";
 import { ThemeProvider } from "@/components/theme/theme-provider";
-import Script from "next/script";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -92,6 +82,15 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fcf9f5" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a1424" },
+  ],
+};
+
+const clerkFont = "var(--font-hanken), ui-sans-serif, system-ui, sans-serif";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -112,24 +111,41 @@ export default function RootLayout({
           colorPrimaryForeground: "var(--primary-foreground)",
           colorBorder: "var(--border)",
           colorRing: "var(--ring)",
+          colorDanger: "var(--destructive)",
+          colorSuccess: "var(--signal-ink)",
+          fontFamily: clerkFont,
+          fontFamilyButtons: clerkFont,
+          borderRadius: "0.75rem",
+        },
+        elements: {
+          cardBox: "shadow-lift rounded-[1.5rem] border border-border",
+          headerTitle: "font-display text-2xl tracking-tight",
+          formButtonPrimary: "rounded-full shadow-none",
+          socialButtonsBlockButton: "rounded-full",
+          footerActionLink: "text-brand",
         },
       }}
     >
-      <html lang="en" suppressHydrationWarning>
-        <ReactLenis root>
-          <body
-            className={`${geistSans.variable} ${geistMono.variable} ${fontVariables} antialiased`}
-          >
+      <html lang="en" suppressHydrationWarning className={fontVariables}>
+        <ReactLenis root options={{ lerp: 0.1, anchors: { offset: -96 } }}>
+          <body>
             <ThemeProvider>
               <MotionProvider>
                 <PostHogProvider>
-                  <div className="flex min-h-screen flex-col bg-background text-foreground">
-                    <SiteNavigation />
-                    <main className="flex-1">
+                  <a
+                    href="#main"
+                    className="fixed left-4 top-3 z-[100] -translate-y-20 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-lift transition-transform focus-visible:translate-y-0"
+                  >
+                    Skip to content
+                  </a>
+                  <SiteNavigation />
+                  <div className="relative flex min-h-dvh flex-col">
+                    <main id="main" className="flex-1">
                       {children}
-                      <Toaster richColors position="top-right" />
                     </main>
+                    <SiteFooter />
                   </div>
+                  <Toaster position="bottom-right" />
                 </PostHogProvider>
               </MotionProvider>
             </ThemeProvider>

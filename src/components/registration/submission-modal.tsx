@@ -2,7 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -95,12 +95,15 @@ export function SubmissionModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent
-        data-moving-border-scope="off"
-        className="sm:max-w-lg"
-      >
+      <DialogContent className="sm:max-w-lg">
         <DialogHeader>
+          <p className="font-mono text-[0.75rem] lowercase text-muted-foreground">
+            <span className="text-signal-ink">{"// "}</span>submission
+          </p>
           <DialogTitle>Submit your project for {hackathonTitle}</DialogTitle>
+          <DialogDescription>
+            Share a repo or live link. You can update it until the deadline.
+          </DialogDescription>
         </DialogHeader>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
@@ -111,7 +114,7 @@ export function SubmissionModal({
           ) : null}
 
           {success ? (
-            <Alert>
+            <Alert variant="success">
               <AlertDescription>{success}</AlertDescription>
             </Alert>
           ) : null}
@@ -139,7 +142,7 @@ export function SubmissionModal({
             />
           </div>
 
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-2 pt-2">
             <Button
               type="button"
               variant="outline"

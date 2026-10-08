@@ -4,7 +4,7 @@ import { flushSync } from "react-dom";
 import { useEffect, useRef, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { animateView } from "motion";
-import { m, useReducedMotion } from "motion/react";
+import { AnimatePresence, m, useReducedMotion } from "motion/react";
 import { useTheme } from "next-themes";
 
 import { cn } from "@/lib/utils";
@@ -14,7 +14,7 @@ type ThemeToggleProps = {
 };
 
 const revealTransition = {
-  duration: 0.64,
+  duration: 0.7,
   ease: [0.22, 1, 0.36, 1] as const,
 };
 
@@ -32,7 +32,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
     const nextTheme = isDark ? "light" : "dark";
     const button = buttonRef.current;
 
-    if (!button || shouldReduceMotion) {
+    if (!button || shouldReduceMotion || !("startViewTransition" in document)) {
       setTheme(nextTheme);
       return;
     }
@@ -65,37 +65,36 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
       });
   };
 
+  const label = isDark ? "Switch to light mode" : "Switch to dark mode";
+
   return (
     <button
       ref={buttonRef}
       type="button"
       onClick={changeTheme}
-      aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      aria-pressed={isDark}
-      title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      aria-label={label}
+      title={label}
       className={cn(
-        "group relative inline-flex h-9 w-[3.75rem] shrink-0 items-center rounded-full border border-border/80 bg-muted/70 p-1 shadow-inner outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "relative grid size-9 shrink-0 place-items-center overflow-hidden rounded-full border border-border bg-background/70 text-foreground backdrop-blur transition-colors hover:border-foreground/30 hover:bg-foreground/[0.04]",
         className,
       )}
     >
-      <span className="sr-only">
-        {isDark ? "Light mode" : "Dark mode"}
-      </span>
-      <m.span
-        aria-hidden="true"
-        className="relative flex size-7 items-center justify-center rounded-full border border-border/70 bg-background text-foreground shadow-sm"
-        animate={{ x: isDark ? 24 : 0 }}
-        transition={{ type: "spring", stiffness: 520, damping: 34 }}
-      >
+      <AnimatePresence mode="popLayout" initial={false}>
         <m.span
-          key={mounted ? resolvedTheme : "loading"}
-          initial={mounted ? { opacity: 0, rotate: -45, scale: 0.7 } : false}
-          animate={{ opacity: 1, rotate: 0, scale: 1 }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
+          key={mounted ? (isDark ? "dark" : "light") : "pending"}
+          className="grid place-items-center"
+          initial={{ y: 14, rotate: -60, opacity: 0 }}
+          animate={{ y: 0, rotate: 0, opacity: 1 }}
+          exit={{ y: -14, rotate: 60, opacity: 0 }}
+          transition={{ type: "spring", stiffness: 380, damping: 26 }}
         >
-          {isDark ? <Moon className="size-3.5" /> : <Sun className="size-3.5" />}
+          {isDark ? (
+            <Moon className="size-[1.05rem]" strokeWidth={1.8} />
+          ) : (
+            <Sun className="size-[1.05rem]" strokeWidth={1.8} />
+          )}
         </m.span>
-      </m.span>
+      </AnimatePresence>
     </button>
   );
 }

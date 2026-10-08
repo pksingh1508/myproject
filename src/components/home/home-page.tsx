@@ -1,19 +1,21 @@
 import { HeroSection } from "./hero-section";
-import { WhatYouGet } from "./what-you-get";
+import { TracksMarquee } from "./tracks-marquee";
 import { HowItWork } from "./how-it-work";
+import { WhatYouGet } from "./what-you-get";
 import { WhyChooseUs } from "./why-choose-us";
 import { Testimonials } from "./testimonials";
-import { Footer } from "./footer";
+import { ClosingCta } from "./closing-cta";
 
-export async function HomePage() {
+export function HomePage() {
   return (
-    <main className="bg-background">
+    <>
       <HeroSection />
+      <TracksMarquee />
       <HowItWork />
       <WhatYouGet />
       <WhyChooseUs />
       <Testimonials />
-      <Footer />
-    </main>
+      <ClosingCta />
+    </>
   );
 }
